@@ -12,7 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.utopia.pmc.data.constants.Gender;
+import com.utopia.pmc.data.constants.others.Gender;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,4 +46,6 @@ public class User {
     private Role role;
     @OneToMany(mappedBy = "user")
     private List<Regiment> regiments;
+    @OneToMany(mappedBy = "user")
+    private List<History> histories;
 }

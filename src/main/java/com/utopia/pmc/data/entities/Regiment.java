@@ -1,5 +1,6 @@
 package com.utopia.pmc.data.entities;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -13,7 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.utopia.pmc.data.constants.Period;
+import com.utopia.pmc.data.constants.others.Period;
+import com.utopia.pmc.data.constants.statuses.RegimentStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,9 +39,15 @@ public class Regiment {
     private Integer doseRegiment;
     @Column(name = "peroid")
     private Period period; 
+    @Column(name = "status")
+    private RegimentStatus status;
+    @Column(name = "created_date")
+    private LocalDate createdDate;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
     @OneToMany(mappedBy = "regiment")
     private List<RegimentDetail> regimentDetails;
+    @OneToMany(mappedBy = "regiment")
+    private List<History> histories;
 }

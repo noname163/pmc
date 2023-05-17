@@ -12,7 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.utopia.pmc.data.constants.ConsumerWay;
+import com.utopia.pmc.data.constants.others.ConsumerWay;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,4 +41,6 @@ public class Medicine {
     private String describe;
     @OneToMany(mappedBy = "medicine")
     private List<RegimentDetail> regimentDetails;
+    @OneToMany(mappedBy = "medicine")
+    private List<History> histories;
 }
