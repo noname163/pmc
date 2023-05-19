@@ -2,7 +2,6 @@ package com.utopia.pmc.data.entities;
 
 import java.util.List;
 
-import javax.management.relation.Role;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,8 +12,10 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.utopia.pmc.data.constants.others.Gender;
+import com.utopia.pmc.data.constants.others.Role;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +24,7 @@ import lombok.Setter;
 @Table(name = "User")
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
