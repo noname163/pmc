@@ -21,8 +21,8 @@ public class SecurityContextServiceImpl implements SecurityContextService {
     private UserRepository userRepository;
 
     @Override
-    public void setSecurityContext(String username) {
-        Optional<User> userOptional = userRepository.findByUsername(username);
+    public void setSecurityContext(String phonenumber) {
+        Optional<User> userOptional = userRepository.findByPhone(phonenumber);
         if (userOptional.isEmpty()) {
             throw new ForbiddenException("Invalid username in JWT.");
         }
