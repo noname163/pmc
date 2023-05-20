@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import com.utopia.pmc.data.constants.others.Dose;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +24,7 @@ import lombok.Setter;
 @Table(name = "Regiment_Detail")
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegimentDetail {
