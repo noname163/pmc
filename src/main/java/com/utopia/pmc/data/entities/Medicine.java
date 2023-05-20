@@ -32,6 +32,8 @@ public class Medicine {
     private long id;
     @Column(name = "name")
     private String name;
+    @Column(name = "image")
+    private String image;
     @Column(name = "expried_tiem")
     private Integer expiredTime;
     @Column(name = "consumer_way")

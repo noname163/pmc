@@ -21,7 +21,7 @@ public class UserMapper {
                 .build();
     }
 
-    public List<User> mapDtoToEntity(List<NewUserRequest> newUserRequests) {
+    public List<User> mapDtosToEntities(List<NewUserRequest> newUserRequests) {
         return newUserRequests
                 .stream()
                 .map(this::mapDtoToEntity)

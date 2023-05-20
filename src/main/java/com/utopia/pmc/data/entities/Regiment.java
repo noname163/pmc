@@ -18,12 +18,14 @@ import com.utopia.pmc.data.constants.others.Period;
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "Regiment")
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
