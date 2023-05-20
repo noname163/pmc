@@ -7,7 +7,7 @@ public class RegimentServiceImpl implements RegimentService{
 
     @Override
     public void createRegiment(RegimentRequest regimentRequest) {
-
+        
         
     }
     
