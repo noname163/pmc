@@ -1,14 +1,43 @@
 package com.utopia.pmc.services.regiment.impl;
 
+import java.time.LocalDate;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.utopia.pmc.data.dto.request.RegimentRequest;
+import com.utopia.pmc.data.entities.Regiment;
+import com.utopia.pmc.data.entities.User;
+import com.utopia.pmc.data.repositories.RegimentRepository;
+import com.utopia.pmc.mappers.RegimentMapper;
+import com.utopia.pmc.services.authenticate.SecurityContextService;
 import com.utopia.pmc.services.regiment.RegimentService;
+import com.utopia.pmc.services.regimentDetail.RegimentDetailService;
 
-public class RegimentServiceImpl implements RegimentService{
+@Service
+public class RegimentServiceImpl implements RegimentService {
 
+    @Autowired
+    private RegimentRepository regimentRepository;
+    @Autowired
+    private SecurityContextService securityContextService;
+    @Autowired
+    private RegimentMapper regimentMapper;
+    @Autowired
+    private RegimentDetailService regimentDetailService;
+
+    @Transactional
     @Override
     public void createRegiment(RegimentRequest regimentRequest) {
-        
-        
+        User user = securityContextService.getCurrentUser();
+        Regiment regiment = regimentMapper.mapDtoToEntity(regimentRequest);
+        regiment.setUser(user);
+        regiment.setCreatedDate(LocalDate.now());
+        regiment = regimentRepository.save(regiment);
+        regimentRequest.setId(regiment.getId());
+        regimentDetailService.createRegimentDetails(regimentRequest);
     }
-    
+
 }

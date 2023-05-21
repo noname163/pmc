@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.utopia.pmc.exceptions.BadRequestException;
@@ -16,10 +19,11 @@ import com.utopia.pmc.exceptions.ForbiddenException;
 import com.utopia.pmc.services.authenticate.SecurityContextService;
 import com.utopia.pmc.utils.JwtTokenUtil;
 
-import org.springframework.util.StringUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 
+@Configuration
+@EnableWebSecurity
 public class AuthenticationFilter extends OncePerRequestFilter {
     public static final String AUTHORIZATION = "Authorization";
     public static final String BEARER = "Bearer ";
@@ -33,6 +37,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         if (request.getRequestURI().startsWith("/swagger-ui")
                 || request.getRequestURI().startsWith("/v3/api-docs")
+                || request.getRequestURI().startsWith("/api/regiments")
                 || request.getRequestURI().startsWith("/api/login")) {
             filterChain.doFilter(request, response);
         } else {
