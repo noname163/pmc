@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -38,16 +39,19 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(
-            HttpSecurity httpSecurity, AuthenticationFilter authenticationFilter, ExceptionHandlerFilter exceptionHandlerFilter) throws Exception {        httpSecurity.csrf(withDefaults()).cors(withDefaults());
+            HttpSecurity httpSecurity, AuthenticationFilter authenticationFilter, ExceptionHandlerFilter exceptionHandlerFilter) throws Exception {
+        httpSecurity.csrf(withDefaults()).cors(withDefaults());
         httpSecurity.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        httpSecurity.authorizeHttpRequests().anyRequest().permitAll();
+        httpSecurity.authorizeHttpRequests().antMatchers(HttpMethod.POST, "/api/users").permitAll();
+        httpSecurity.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
         httpSecurity.addFilterBefore(exceptionHandlerFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
+    
 
     
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().antMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api/regiments");
+        return web -> web.ignoring().antMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api/login", "/api/users","/api/regiments");
     }
 }

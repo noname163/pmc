@@ -8,7 +8,7 @@ public class Message {
         return objectName + " name " + value + " already exist.";
     }
 
-    public String objectNotFoundByIdMessage(String objectName, Long value) {
+    public String objectNotFoundByIdMessage(String objectName, Object value) {
         return objectName + " id " + value + " not found.";
     }
 
