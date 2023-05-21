@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.utopia.pmc.data.dto.request.NewUserRequest;
 import com.utopia.pmc.data.dto.request.RegimentRequest;
 import com.utopia.pmc.exceptions.BadRequestException;
 import com.utopia.pmc.services.regiment.RegimentService;
@@ -29,8 +28,7 @@ public class RegimentController {
 
     @Operation(summary = "Create new regiment")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Created successfull.", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = RegimentRequest.class))}),
+            @ApiResponse(responseCode = "201", description = "Created successfull."),
             @ApiResponse(responseCode = "400", description = "Regiment information not valid.", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = BadRequestException.class))})
     })

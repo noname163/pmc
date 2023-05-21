@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -22,9 +23,8 @@ import com.utopia.pmc.utils.JwtTokenUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 
-@Configuration
-@EnableWebSecurity
-public class AuthenticationFilter extends OncePerRequestFilter {
+
+public class AuthenticationFilter extends OncePerRequestFilter{
     public static final String AUTHORIZATION = "Authorization";
     public static final String BEARER = "Bearer ";
 
@@ -32,13 +32,15 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
     private SecurityContextService securityContextService;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         if (request.getRequestURI().startsWith("/swagger-ui")
                 || request.getRequestURI().startsWith("/v3/api-docs")
-                || request.getRequestURI().startsWith("/api/regiments")
-                || request.getRequestURI().startsWith("/api/login")) {
+                // || request.getRequestURI().startsWith("/api/regiments")
+                || request.getRequestURI().startsWith("/api/users")
+                || request.getRequestURI().startsWith("/api/authentication")) {
             filterChain.doFilter(request, response);
         } else {
             final Optional<String> requestTokenHeaderOpt = getJwtFromRequest(request);
