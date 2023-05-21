@@ -9,6 +9,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.utopia.pmc.data.dto.request.RegimentDetailRequest;
 import com.utopia.pmc.data.dto.request.RegimentRequest;
@@ -23,6 +24,7 @@ import com.utopia.pmc.exceptions.message.Message;
 import com.utopia.pmc.mappers.RegimentDetailMapper;
 import com.utopia.pmc.services.regimentDetail.RegimentDetailService;
 
+@Service
 public class RegimentDetailServiceImpl implements RegimentDetailService {
     @Autowired
     private RegimentDetailRepository regimentDetailRepository;

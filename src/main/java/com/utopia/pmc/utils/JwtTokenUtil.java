@@ -5,6 +5,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.utopia.pmc.data.entities.User;
 
@@ -13,6 +14,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+@Component
 public class JwtTokenUtil {
     @Value("${jwt.secret-key}")
     private String jwtSecret;
