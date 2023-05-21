@@ -28,8 +28,8 @@ public class UserController {
 
     @Operation(summary = "Create new basic user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Created successfull.", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = NewUserRequest.class))}),
+            @ApiResponse(responseCode = "201", description = "Created successfull.", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))}),
             @ApiResponse(responseCode = "400", description = "User not valid.", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = BadRequestException.class))})
     })

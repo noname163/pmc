@@ -4,6 +4,7 @@ import java.util.Optional;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.utopia.pmc.data.constants.others.Role;
@@ -24,6 +25,8 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     @Autowired
     private Message message;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Override
     public void createUser(NewUserRequest newUserRequest) {
         Optional<User> userOtp = userRepository.findByPhone(newUserRequest.getPhone());
@@ -32,6 +35,7 @@ public class UserServiceImpl implements UserService {
         }
         User user = userMapper.mapDtoToEntity(newUserRequest);
         user.setRole(Role.USER_LEVEL_1);
+        user.setPassword(passwordEncoder.encode(newUserRequest.getPassword()));
         userRepository.save(user);
     }
     
