@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -23,10 +23,8 @@ import com.utopia.pmc.utils.JwtTokenUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 
-@Configuration
-@EnableWebSecurity
 
-public class AuthenticationFilter extends OncePerRequestFilter implements Ordered{
+public class AuthenticationFilter extends OncePerRequestFilter{
     public static final String AUTHORIZATION = "Authorization";
     public static final String BEARER = "Bearer ";
 
@@ -35,11 +33,6 @@ public class AuthenticationFilter extends OncePerRequestFilter implements Ordere
     @Autowired
     private SecurityContextService securityContextService;
 
-    @Override
-    public int getOrder() {
-        // Set the order value according to your needs
-        return 1;
-    }
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
