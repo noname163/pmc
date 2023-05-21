@@ -15,12 +15,14 @@ import javax.persistence.Table;
 import com.utopia.pmc.data.constants.others.ConsumerWay;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "Medicine")
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor

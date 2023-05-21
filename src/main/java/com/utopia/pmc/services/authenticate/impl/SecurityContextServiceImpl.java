@@ -7,6 +7,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
 import com.utopia.pmc.config.CustomUserDetails;
 import com.utopia.pmc.data.entities.User;
@@ -14,6 +15,7 @@ import com.utopia.pmc.data.repositories.UserRepository;
 import com.utopia.pmc.exceptions.ForbiddenException;
 import com.utopia.pmc.services.authenticate.SecurityContextService;
 
+@Service
 public class SecurityContextServiceImpl implements SecurityContextService {
     @Autowired
     private SecurityContext securityContext;
