@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.utopia.pmc.data.constants.statuses.RegimentStatus;
 import com.utopia.pmc.data.dto.request.RegimentRequest;
 import com.utopia.pmc.data.entities.Regiment;
 import com.utopia.pmc.data.entities.User;
@@ -35,6 +36,7 @@ public class RegimentServiceImpl implements RegimentService {
         Regiment regiment = regimentMapper.mapDtoToEntity(regimentRequest);
         regiment.setUser(user);
         regiment.setCreatedDate(LocalDate.now());
+        regiment.setStatus(RegimentStatus.ENABLE);
         regiment = regimentRepository.save(regiment);
         regimentRequest.setId(regiment.getId());
         regimentDetailService.createRegimentDetails(regimentRequest);
