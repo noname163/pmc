@@ -44,7 +44,7 @@ public class SecurityConfig {
         httpSecurity.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         httpSecurity.authorizeHttpRequests().antMatchers(HttpMethod.POST, "/api/users").permitAll();
         httpSecurity.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        httpSecurity.addFilterBefore(exceptionHandlerFilter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(exceptionHandlerFilter, AuthenticationFilter.class);
         return httpSecurity.build();
     }
     

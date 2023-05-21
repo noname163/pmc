@@ -28,8 +28,7 @@ public class RegimentController {
 
     @Operation(summary = "Create new regiment")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Created successfull.", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = RegimentRequest.class))}),
+            @ApiResponse(responseCode = "201", description = "Created successfull."),
             @ApiResponse(responseCode = "400", description = "Regiment information not valid.", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = BadRequestException.class))})
     })
