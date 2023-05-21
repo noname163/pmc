@@ -1,7 +1,5 @@
 package com.utopia.pmc.data.dto.request;
 
-import java.time.LocalTime;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.utopia.pmc.data.constants.others.Dose;
 import com.utopia.pmc.data.constants.others.Validation;

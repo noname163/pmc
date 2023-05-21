@@ -9,7 +9,7 @@ public class Validation {
     public static final String TIME_FORMAT = "HH:ss";
     public static final String PHONE_REGEX = "^\\d{10}$";
     public static final String ONLY_ALPHABET_REGEX = "^.*[A-Za-z].*$";
-    public static final String EMAIL_REGEX = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
+    public static final String EMAIL_REGEX = "^[A-Za-z0-9._]+@gmail\\.[A-Za-z]{2,3}$";
     public static final String ONLY_ALPHABET_AND_SPACE_REGEX = "^.*[A-Za-z].*[\\s]?+.*$";
     public static final String ONLY_ALPHABET_AND_NUMBER_REGEX = "^[a-zA-Z0-9]*$";
     public static final String ONLY_ALPHABET_AND_NUMBER_AND_SPACE_REGEX = "^[a-zA-Z0-9 ]*$";
