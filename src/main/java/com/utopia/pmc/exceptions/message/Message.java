@@ -12,6 +12,9 @@ public class Message {
         return objectName + " id " + value + " not found.";
     }
 
+    public String emptyList(String listName){
+        return "Cannot found any " + listName +" in database";
+    }
     public String badValue(String objectName) {
         return "The " + objectName + " not valid";
     }

@@ -14,7 +14,9 @@ public class RegimentMapper {
         return Regiment
                 .builder()
                 .name(regimentRequest.getName())
+                .image(regimentRequest.getImage())
                 .doseRegiment(regimentRequest.getDoseRegiment())
+                .deviceToken(regimentRequest.getDeviceToken())
                 .period(regimentRequest.getPeriod())
                 .build();
     }

@@ -1,5 +1,6 @@
 package com.utopia.pmc.services.regimentDetail.impl;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,8 +12,10 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.utopia.pmc.data.constants.statuses.RegimentStatus;
 import com.utopia.pmc.data.dto.request.RegimentDetailRequest;
 import com.utopia.pmc.data.dto.request.RegimentRequest;
+import com.utopia.pmc.data.dto.response.regimentDetail.RegimentDetailResponse;
 import com.utopia.pmc.data.entities.Medicine;
 import com.utopia.pmc.data.entities.Regiment;
 import com.utopia.pmc.data.entities.RegimentDetail;
@@ -20,6 +23,7 @@ import com.utopia.pmc.data.repositories.MedicineRepository;
 import com.utopia.pmc.data.repositories.RegimentDetailRepository;
 import com.utopia.pmc.data.repositories.RegimentRepository;
 import com.utopia.pmc.exceptions.BadRequestException;
+import com.utopia.pmc.exceptions.EmptyException;
 import com.utopia.pmc.exceptions.message.Message;
 import com.utopia.pmc.mappers.RegimentDetailMapper;
 import com.utopia.pmc.services.regimentDetail.RegimentDetailService;
@@ -71,4 +75,18 @@ public class RegimentDetailServiceImpl implements RegimentDetailService {
         }
         regimentDetailRepository.saveAll(regimentDetails);
     }
+
+    @Override
+    public List<RegimentDetailResponse> getRegimentDetailResponsesByStatusAndTime(
+            RegimentStatus regimentStatus,
+            LocalTime starTime, LocalTime endTime) {
+        List<RegimentDetail> regimentDetailResponses = regimentDetailRepository.findByStatusAndTime(
+                regimentStatus,
+                starTime, endTime);
+        if (regimentDetailResponses.isEmpty()) {
+            throw new EmptyException(message.emptyList("Regiment"));
+        }
+        return regimentDetailMapper.mapEntityToDtos(regimentDetailResponses);
+    }
+
 }

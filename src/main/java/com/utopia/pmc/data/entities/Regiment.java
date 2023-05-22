@@ -37,6 +37,8 @@ public class Regiment {
     private long id;
     @Column(name = "name")
     private String name;
+    @Column(name ="image")
+    private String image;
     @Column(name = "dose_regiment")
     private Integer doseRegiment;
     @Column(name = "peroid")
@@ -45,8 +47,10 @@ public class Regiment {
     private RegimentStatus status;
     @Column(name = "created_date")
     private LocalDate createdDate;
-    @Column(name = "created_date")
+    @Column(name = "start_date")
     private LocalDate startDate;
+    @Column(name="device_token")
+    private String deviceToken;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
