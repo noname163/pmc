@@ -45,6 +45,8 @@ public class Regiment {
     private RegimentStatus status;
     @Column(name = "created_date")
     private LocalDate createdDate;
+    @Column(name = "created_date")
+    private LocalDate startDate;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

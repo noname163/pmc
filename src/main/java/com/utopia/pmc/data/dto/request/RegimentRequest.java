@@ -16,5 +16,6 @@ public class RegimentRequest {
     private String name;
     private Period period;
     private Integer doseRegiment;
+    private Boolean startNow;
     private List<RegimentDetailRequest> regimentDetailRequests;
 }
