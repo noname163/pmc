@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,16 +39,21 @@ public class Regiment {
     private long id;
     @Column(name = "name")
     private String name;
+    @Column(name ="image")
+    private String image;
     @Column(name = "dose_regiment")
     private Integer doseRegiment;
     @Column(name = "peroid")
     private Period period; 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private RegimentStatus status;
     @Column(name = "created_date")
     private LocalDate createdDate;
-    @Column(name = "created_date")
+    @Column(name = "start_date")
     private LocalDate startDate;
+    @Column(name="device_token")
+    private String deviceToken;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
