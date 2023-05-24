@@ -14,7 +14,10 @@ import lombok.Setter;
 public class RegimentRequest {
     private Long id;
     private String name;
+    private String image;
     private Period period;
     private Integer doseRegiment;
+    private Boolean startNow;
+    private String deviceToken;
     private List<RegimentDetailRequest> regimentDetailRequests;
 }

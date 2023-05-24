@@ -41,7 +41,7 @@ public class Medicine {
     @Column(name = "consumer_way")
     private ConsumerWay consumerWay;
     @Column(name = "describe")
-    @Lob
+    // @Lob
     private String describe;
     @OneToMany(mappedBy = "medicine")
     private List<RegimentDetail> regimentDetails;

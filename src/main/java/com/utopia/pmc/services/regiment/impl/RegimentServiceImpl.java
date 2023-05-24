@@ -36,10 +36,16 @@ public class RegimentServiceImpl implements RegimentService {
         Regiment regiment = regimentMapper.mapDtoToEntity(regimentRequest);
         regiment.setUser(user);
         regiment.setCreatedDate(LocalDate.now());
-        regiment.setStatus(RegimentStatus.ENABLE);
+        regiment.setStatus(Boolean.TRUE.equals(regimentRequest.getStartNow()) ? RegimentStatus.INPROCESS : RegimentStatus.ENABLE);
         regiment = regimentRepository.save(regiment);
         regimentRequest.setId(regiment.getId());
         regimentDetailService.createRegimentDetails(regimentRequest);
+    }
+
+    @Override
+    public void updateRegiment(Long regimentId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateRegiment'");
     }
 
 }
