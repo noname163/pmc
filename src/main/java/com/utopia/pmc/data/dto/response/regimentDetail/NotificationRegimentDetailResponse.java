@@ -1,5 +1,6 @@
 package com.utopia.pmc.data.dto.response.regimentDetail;
 
+import java.time.LocalTime;
 import java.util.List;
 
 import lombok.Builder;
@@ -16,5 +17,5 @@ public class NotificationRegimentDetailResponse {
     private String period; 
     private String regimentImage;
     private String userDeviceToken;
-    private List<RegimentDetailResponse> regimentDetailResponses;
+    private Long regimentId;
 }

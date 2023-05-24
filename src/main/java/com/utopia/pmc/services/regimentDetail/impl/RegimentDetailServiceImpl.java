@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
 import com.utopia.pmc.data.dto.request.RegimentDetailRequest;
 import com.utopia.pmc.data.dto.request.RegimentRequest;
-import com.utopia.pmc.data.dto.response.regimentDetail.RegimentDetailResponse;
+import com.utopia.pmc.data.dto.response.regimentDetail.NotificationRegimentDetailResponse;
 import com.utopia.pmc.data.entities.Medicine;
 import com.utopia.pmc.data.entities.Regiment;
 import com.utopia.pmc.data.entities.RegimentDetail;
@@ -27,6 +27,7 @@ import com.utopia.pmc.exceptions.EmptyException;
 import com.utopia.pmc.exceptions.message.Message;
 import com.utopia.pmc.mappers.RegimentDetailMapper;
 import com.utopia.pmc.services.regimentDetail.RegimentDetailService;
+import com.utopia.pmc.utils.DetermineTakenTime;
 
 @Service
 public class RegimentDetailServiceImpl implements RegimentDetailService {
@@ -40,6 +41,8 @@ public class RegimentDetailServiceImpl implements RegimentDetailService {
     private RegimentDetailMapper regimentDetailMapper;
     @Autowired
     private Message message;
+    @Autowired
+    private DetermineTakenTime determineTakenTime;
 
     @Override
     @Transactional
@@ -77,16 +80,38 @@ public class RegimentDetailServiceImpl implements RegimentDetailService {
     }
 
     @Override
-    public List<RegimentDetailResponse> getRegimentDetailResponsesByStatusAndTime(
+    public Map<Long, NotificationRegimentDetailResponse> getRegimentDetailResponsesByStatusAndTime(
             RegimentStatus regimentStatus,
-            LocalTime starTime, LocalTime endTime) {
-        List<RegimentDetail> regimentDetailResponses = regimentDetailRepository.findByStatusAndTime(
+            LocalTime startTime, LocalTime endTime) {
+
+        List<RegimentDetail> regimentDetails = regimentDetailRepository.findByStatusAndTime(
                 regimentStatus,
-                starTime, endTime);
-        if (regimentDetailResponses.isEmpty()) {
-            throw new EmptyException(message.emptyList("Regiment"));
+                startTime, endTime);
+
+        if (regimentDetails.isEmpty()) {
+            throw new BadRequestException(message.emptyList("Regiment"));
         }
-        return regimentDetailMapper.mapEntityToDtos(regimentDetailResponses);
+        System.out.println("Get data success");
+        Map<Long, NotificationRegimentDetailResponse> result = new HashMap<>();
+        for (RegimentDetail regimentDetail : regimentDetails) {
+            Regiment regiment = regimentDetail.getRegiment();
+
+            NotificationRegimentDetailResponse notificationResponse = result.get(regiment.getId());
+            if (notificationResponse == null) {
+                notificationResponse = NotificationRegimentDetailResponse.builder()
+                        .regimentName(regiment.getName())
+                        .regimentImage(regiment.getImage())
+                        .doseRegiment(regiment.getDoseRegiment())
+                        .userDeviceToken(regiment.getDeviceToken())
+                        .regimentId(regiment.getId())
+                        .takenTime(determineTakenTime.determineTakenTime(regimentDetail).toString())
+                        .build();
+                result.put(regiment.getId(), notificationResponse);
+            }
+            result.put(regiment.getId(), notificationResponse);
+        }
+
+        return result;
     }
 
 }

@@ -25,25 +25,21 @@ public class NotificationServiceImpl implements NotificationService {
     private RegimentDetailService regimentDetailService;
 
     @Override
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 1000)
     public void remindMedicineScheduler() {
-        System.out.println("Auto get data");
 
         RegimentStatus regimentStatus = RegimentStatus.INPROCESS;
         LocalTime starTime = LocalTime.now();
-        LocalTime endTime = starTime.plusMinutes(10);
+        LocalTime endTime = starTime.plusSeconds(1);
 
         Map<Long, NotificationRegimentDetailResponse> regimentResponse = regimentDetailService
                 .getRegimentDetailResponsesByStatusAndTime(regimentStatus,
                         starTime, endTime);
 
-        String title = "Take medicine notification";
-        String message = "";
         try {
-            System.out.println("Sending notification");
-            sendNotificationService.sendNotifications(title, message, regimentResponse);
+            sendNotificationService.sendNotifications( regimentResponse);
         } catch (PushClientException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
 
     }

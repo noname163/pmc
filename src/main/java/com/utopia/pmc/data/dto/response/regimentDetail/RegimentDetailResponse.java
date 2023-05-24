@@ -10,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RegimentDetailResponse {
+    private Long regimentId;
     private Integer quantity;
     private String dose;
     private LocalTime takenTime;

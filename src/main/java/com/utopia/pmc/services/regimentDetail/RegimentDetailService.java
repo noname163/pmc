@@ -1,16 +1,16 @@
 package com.utopia.pmc.services.regimentDetail;
 
 import java.time.LocalTime;
-import java.util.List;
+import java.util.Map;
 
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
 import com.utopia.pmc.data.dto.request.RegimentRequest;
-import com.utopia.pmc.data.dto.response.regimentDetail.RegimentDetailResponse;
+import com.utopia.pmc.data.dto.response.regimentDetail.NotificationRegimentDetailResponse;
 
 public interface RegimentDetailService {
     public void createRegimentDetails(RegimentRequest regimentRequest);
 
-    public List<RegimentDetailResponse> getRegimentDetailResponsesByStatusAndTime(
+    public Map<Long, NotificationRegimentDetailResponse> getRegimentDetailResponsesByStatusAndTime(
             RegimentStatus regimentStatus,
             LocalTime starTime,
             LocalTime endTime);

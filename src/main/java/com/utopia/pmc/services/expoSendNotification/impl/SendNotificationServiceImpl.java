@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.utopia.pmc.data.dto.response.regimentDetail.NotificationRegimentDetailResponse;
+import com.utopia.pmc.data.dto.response.regimentDetail.RegimentDetailResponse;
 import com.utopia.pmc.services.expoSendNotification.LogNotificationStatus;
 import com.utopia.pmc.services.expoSendNotification.SendNotificationService;
 
@@ -34,15 +35,19 @@ public class SendNotificationServiceImpl implements SendNotificationService {
 
     @Override
     public void sendNotifications(
-            String title,
-            String message,
             Map<Long, NotificationRegimentDetailResponse> data) throws PushClientException {
         List<ExpoPushMessage> expoPushMessages = new ArrayList<>();
-
+        String title = "";
+        String message = "";
         if (!data.isEmpty()) {
             for (NotificationRegimentDetailResponse notificationRegimentDetailResponse : data.values()) {
                 Map<String, Object> dataSend = new HashMap<>();
-                dataSend.put("regiment", notificationRegimentDetailResponse);
+                NotificationRegimentDetailResponse notificationData = notificationRegimentDetailResponse;
+                dataSend.put("regiment", notificationData);
+                title = "You Have An Dose Regiment At " + notificationData.getTakenTime().toString();
+                message = "Regiment Name " + notificationData.getRegimentName() + "\n"
+                        + "Taken in " + notificationData.getDoseRegiment() + " " +
+                        notificationData.getPeriod();
                 ExpoPushMessage expoPushMessage = setExpoPushMessage(
                         notificationRegimentDetailResponse.getUserDeviceToken(),
                         title,
@@ -55,7 +60,6 @@ public class SendNotificationServiceImpl implements SendNotificationService {
         PushClient client = new PushClient();
         List<List<ExpoPushMessage>> chunks = client.chunkPushNotifications(expoPushMessages);
         List<CompletableFuture<List<ExpoPushTicket>>> messageRepliesFutures = new ArrayList<>();
-
         for (List<ExpoPushMessage> chunk : chunks) {
             messageRepliesFutures.add(client.sendPushNotificationsAsync(chunk));
         }

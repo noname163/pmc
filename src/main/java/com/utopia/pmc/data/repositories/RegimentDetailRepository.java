@@ -20,7 +20,8 @@ public interface RegimentDetailRepository extends JpaRepository<RegimentDetail, 
             "    OR rd.secondTime BETWEEN :startTime AND :endTime" +
             "    OR rd.thirdTime BETWEEN :startTime AND :endTime" +
             "    OR rd.fourthTime BETWEEN :startTime AND :endTime" +
-            " )")
+            " )"
+            )
     List<RegimentDetail> findByStatusAndTime(
             @Param("regimentStatus") RegimentStatus regimentStatus,
             @Param("startTime") LocalTime startTime,

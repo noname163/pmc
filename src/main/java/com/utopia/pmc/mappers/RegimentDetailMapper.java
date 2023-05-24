@@ -13,12 +13,14 @@ import com.utopia.pmc.data.dto.response.regimentDetail.RegimentDetailResponse;
 import com.utopia.pmc.data.entities.Medicine;
 import com.utopia.pmc.data.entities.RegimentDetail;
 import com.utopia.pmc.utils.ConvertStringToLocalTime;
+import com.utopia.pmc.utils.DetermineTakenTime;
 
 @Component
 public class RegimentDetailMapper {
     @Autowired
     private ConvertStringToLocalTime convertStringToLocalTime;
-
+    @Autowired
+    private DetermineTakenTime determineTakenTime;
     public RegimentDetail mapDtoToEntity(RegimentDetailRequest regimentDetailRequest) {
         LocalTime firstTime = convertStringToLocalTime.convertStringToLocalTime(Validation.TIME_FORMAT,
                 regimentDetailRequest.getFirstTime());
@@ -48,10 +50,11 @@ public class RegimentDetailMapper {
 
     public RegimentDetailResponse mapEntityToDto(RegimentDetail regimentDetail) {
         Medicine medicine = regimentDetail.getMedicine();
-        LocalTime takenTime = determineTakenTime(regimentDetail);
+        LocalTime takenTime = determineTakenTime.determineTakenTime(regimentDetail);
 
         return RegimentDetailResponse.builder()
                 .dose(regimentDetail.getDose().toString())
+                .regimentId(regimentDetail.getRegiment().getId())
                 .takenTime(takenTime)
                 .quantity(regimentDetail.getQuantity())
                 .medicineImage(medicine.getImage())
@@ -59,21 +62,7 @@ public class RegimentDetailMapper {
                 .build();
     }
 
-    private LocalTime determineTakenTime(RegimentDetail regimentDetail) {
-        if (regimentDetail.getFirstTime() != null) {
-            return regimentDetail.getFirstTime();
-        }
-        if (regimentDetail.getSecondTime() != null) {
-            return regimentDetail.getSecondTime();
-        }
-        if (regimentDetail.getThirdTime() != null) {
-            return regimentDetail.getThirdTime();
-        }
-        if (regimentDetail.getFourthTime() != null) {
-            return regimentDetail.getFourthTime();
-        }
-        return null;
-    }
+    
 
     public List<RegimentDetailResponse> mapEntityToDtos(List<RegimentDetail> regimentDetails) {
         return regimentDetails.stream().map(this::mapEntityToDto).collect(Collectors.toList());

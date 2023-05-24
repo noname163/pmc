@@ -10,7 +10,5 @@ public interface SendNotificationService {
     public void sendNotification(String recipient, String title, String message, String data);
 
     public void sendNotifications(
-            String title,
-            String message,
             Map<Long, NotificationRegimentDetailResponse> data) throws PushClientException;
 }
