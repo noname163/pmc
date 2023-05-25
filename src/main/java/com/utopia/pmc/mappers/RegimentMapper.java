@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import com.utopia.pmc.data.dto.request.RegimentRequest;
+import com.utopia.pmc.data.dto.request.regiment.RegimentRequest;
 import com.utopia.pmc.data.entities.Regiment;
 
 @Component

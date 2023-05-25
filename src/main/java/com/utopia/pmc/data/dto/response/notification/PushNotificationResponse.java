@@ -1,6 +1,4 @@
-package com.utopia.pmc.data.dto.response;
-
-import org.springframework.stereotype.Component;
+package com.utopia.pmc.data.dto.response.notification;
 
 import com.google.auto.value.AutoValue.Builder;
 
@@ -10,7 +8,6 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-@Component
 public class PushNotificationResponse {
     private int status;
     private String message;

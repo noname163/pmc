@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
-import com.utopia.pmc.data.dto.request.RegimentRequest;
+import com.utopia.pmc.data.dto.request.regiment.RegimentRequest;
 import com.utopia.pmc.data.entities.Regiment;
 import com.utopia.pmc.data.entities.User;
 import com.utopia.pmc.data.repositories.RegimentRepository;

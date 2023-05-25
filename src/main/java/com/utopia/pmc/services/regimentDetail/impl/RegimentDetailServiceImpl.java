@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
-import com.utopia.pmc.data.dto.request.RegimentDetailRequest;
-import com.utopia.pmc.data.dto.request.RegimentRequest;
-import com.utopia.pmc.data.dto.response.regimentDetail.NotificationRegimentDetailResponse;
+import com.utopia.pmc.data.dto.request.regiment.RegimentRequest;
+import com.utopia.pmc.data.dto.request.regimentdetail.RegimentDetailRequest;
+import com.utopia.pmc.data.dto.response.regiment.RegimentNotifiactionResponse;
 import com.utopia.pmc.data.entities.Medicine;
 import com.utopia.pmc.data.entities.Regiment;
 import com.utopia.pmc.data.entities.RegimentDetail;
@@ -80,7 +80,7 @@ public class RegimentDetailServiceImpl implements RegimentDetailService {
     }
 
     @Override
-    public Map<Long, NotificationRegimentDetailResponse> getRegimentDetailResponsesByStatusAndTime(
+    public Map<Long, RegimentNotifiactionResponse> getRegimentDetailResponsesByStatusAndTime(
             RegimentStatus regimentStatus,
             LocalTime startTime, LocalTime endTime) {
 
@@ -91,14 +91,13 @@ public class RegimentDetailServiceImpl implements RegimentDetailService {
         if (regimentDetails.isEmpty()) {
             throw new BadRequestException(message.emptyList("Regiment"));
         }
-        System.out.println("Get data success");
-        Map<Long, NotificationRegimentDetailResponse> result = new HashMap<>();
+        Map<Long, RegimentNotifiactionResponse> result = new HashMap<>();
         for (RegimentDetail regimentDetail : regimentDetails) {
             Regiment regiment = regimentDetail.getRegiment();
 
-            NotificationRegimentDetailResponse notificationResponse = result.get(regiment.getId());
+            RegimentNotifiactionResponse notificationResponse = result.get(regiment.getId());
             if (notificationResponse == null) {
-                notificationResponse = NotificationRegimentDetailResponse.builder()
+                notificationResponse = RegimentNotifiactionResponse.builder()
                         .regimentName(regiment.getName())
                         .regimentImage(regiment.getImage())
                         .doseRegiment(regiment.getDoseRegiment())

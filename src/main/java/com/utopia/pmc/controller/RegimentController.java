@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.utopia.pmc.data.dto.request.RegimentRequest;
+import com.utopia.pmc.data.dto.request.regiment.RegimentRequest;
 import com.utopia.pmc.exceptions.BadRequestException;
 import com.utopia.pmc.services.regiment.RegimentService;
 

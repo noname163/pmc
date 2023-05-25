@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.utopia.pmc.data.dto.request.UserLoginRequest;
-import com.utopia.pmc.data.dto.response.UserLoginResponse;
+import com.utopia.pmc.data.dto.request.user.UserLoginRequest;
+import com.utopia.pmc.data.dto.response.user.UserLoginResponse;
 import com.utopia.pmc.data.entities.User;
 import com.utopia.pmc.data.repositories.UserRepository;
 import com.utopia.pmc.exceptions.BadRequestException;

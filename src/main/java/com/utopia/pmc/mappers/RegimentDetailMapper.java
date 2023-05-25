@@ -8,8 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.utopia.pmc.data.constants.others.Validation;
-import com.utopia.pmc.data.dto.request.RegimentDetailRequest;
-import com.utopia.pmc.data.dto.response.regimentDetail.RegimentDetailResponse;
+import com.utopia.pmc.data.dto.request.regimentdetail.RegimentDetailRequest;
 import com.utopia.pmc.data.entities.Medicine;
 import com.utopia.pmc.data.entities.RegimentDetail;
 import com.utopia.pmc.utils.ConvertStringToLocalTime;
@@ -48,23 +47,4 @@ public class RegimentDetailMapper {
                 .collect(Collectors.toList());
     }
 
-    public RegimentDetailResponse mapEntityToDto(RegimentDetail regimentDetail) {
-        Medicine medicine = regimentDetail.getMedicine();
-        LocalTime takenTime = determineTakenTime.determineTakenTime(regimentDetail);
-
-        return RegimentDetailResponse.builder()
-                .dose(regimentDetail.getDose().toString())
-                .regimentId(regimentDetail.getRegiment().getId())
-                .takenTime(takenTime)
-                .quantity(regimentDetail.getQuantity())
-                .medicineImage(medicine.getImage())
-                .medicinename(medicine.getName())
-                .build();
-    }
-
-    
-
-    public List<RegimentDetailResponse> mapEntityToDtos(List<RegimentDetail> regimentDetails) {
-        return regimentDetails.stream().map(this::mapEntityToDto).collect(Collectors.toList());
-    }
 }

@@ -1,4 +1,4 @@
-package com.utopia.pmc.data.dto.request;
+package com.utopia.pmc.data.dto.request.regimentdetail;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.utopia.pmc.data.constants.others.Dose;
