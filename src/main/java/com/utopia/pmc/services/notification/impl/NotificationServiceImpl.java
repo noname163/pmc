@@ -9,7 +9,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
-import com.utopia.pmc.data.dto.response.regimentDetail.NotificationRegimentDetailResponse;
+import com.utopia.pmc.data.dto.response.notification.NotificationResponse;
+import com.utopia.pmc.data.dto.response.regiment.RegimentNotifiactionResponse;
 import com.utopia.pmc.services.expoSendNotification.SendNotificationService;
 import com.utopia.pmc.services.notification.NotificationService;
 import com.utopia.pmc.services.regimentDetail.RegimentDetailService;
@@ -32,12 +33,25 @@ public class NotificationServiceImpl implements NotificationService {
         LocalTime starTime = LocalTime.now();
         LocalTime endTime = starTime.plusSeconds(1);
 
-        Map<Long, NotificationRegimentDetailResponse> regimentResponse = regimentDetailService
+        Map<Long, RegimentNotifiactionResponse> regimentResponse = regimentDetailService
                 .getRegimentDetailResponsesByStatusAndTime(regimentStatus,
                         starTime, endTime);
 
+        Map<String, NotificationResponse> notificationResponses = new HashMap<>();
+
+        for (RegimentNotifiactionResponse regimentDetailResponse : regimentResponse.values()) {
+            NotificationResponse notificationResponse = NotificationResponse
+                    .builder()
+                    .data(regimentDetailResponse)
+                    .title("You Have An Dose Regiment At " + regimentDetailResponse.getTakenTime())
+                    .message("Regiment Name " + regimentDetailResponse.getRegimentName() + "\n"
+                            + "Taken in " + regimentDetailResponse.getDoseRegiment() + " " +
+                            regimentDetailResponse.getPeriod())
+                    .build();
+            notificationResponses.put(regimentDetailResponse.getUserDeviceToken(), notificationResponse);
+        }
         try {
-            sendNotificationService.sendNotifications( regimentResponse);
+            sendNotificationService.sendNotifications(notificationResponses);
         } catch (PushClientException e) {
             e.getMessage();
         }

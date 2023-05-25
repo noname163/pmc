@@ -31,7 +31,7 @@ public class SecurityConfig {
     public SecurityContext securityContext() {
         return SecurityContextHolder.getContext();
     }
-    
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -39,19 +39,18 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(
-            HttpSecurity httpSecurity, AuthenticationFilter authenticationFilter, ExceptionHandlerFilter exceptionHandlerFilter) throws Exception {
+            HttpSecurity httpSecurity, AuthenticationFilter authenticationFilter,
+            ExceptionHandlerFilter exceptionHandlerFilter) throws Exception {
         httpSecurity.csrf(withDefaults()).cors(withDefaults());
         httpSecurity.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        httpSecurity.authorizeHttpRequests().antMatchers(HttpMethod.POST, "/api/users").permitAll();
         httpSecurity.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
         httpSecurity.addFilterBefore(exceptionHandlerFilter, AuthenticationFilter.class);
         return httpSecurity.build();
     }
-    
 
-    
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().antMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api/authentication", "/api/users","/api/regiments");
+        return web -> web.ignoring().antMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api/authentication",
+                "/api/users", "/api/regiments");
     }
 }

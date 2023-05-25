@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
-import com.utopia.pmc.data.dto.request.RegimentDetailRequest;
-import com.utopia.pmc.data.dto.request.RegimentRequest;
-import com.utopia.pmc.data.dto.response.regimentDetail.NotificationRegimentDetailResponse;
+import com.utopia.pmc.data.dto.request.regiment.RegimentRequest;
+import com.utopia.pmc.data.dto.request.regimentdetail.RegimentDetailRequest;
+import com.utopia.pmc.data.dto.response.regiment.RegimentNotifiactionResponse;
 import com.utopia.pmc.data.entities.Medicine;
 import com.utopia.pmc.data.entities.Regiment;
 import com.utopia.pmc.data.entities.RegimentDetail;
@@ -26,6 +26,7 @@ import com.utopia.pmc.exceptions.BadRequestException;
 import com.utopia.pmc.exceptions.EmptyException;
 import com.utopia.pmc.exceptions.message.Message;
 import com.utopia.pmc.mappers.RegimentDetailMapper;
+import com.utopia.pmc.services.payment.PaymentPlansService;
 import com.utopia.pmc.services.regimentDetail.RegimentDetailService;
 import com.utopia.pmc.utils.DetermineTakenTime;
 
@@ -38,11 +39,14 @@ public class RegimentDetailServiceImpl implements RegimentDetailService {
     @Autowired
     private MedicineRepository medicineRepository;
     @Autowired
+    private PaymentPlansService paymentPlansService;
+    @Autowired
     private RegimentDetailMapper regimentDetailMapper;
     @Autowired
     private Message message;
     @Autowired
     private DetermineTakenTime determineTakenTime;
+
 
     @Override
     @Transactional
@@ -54,6 +58,7 @@ public class RegimentDetailServiceImpl implements RegimentDetailService {
         if (regimentOtp.isEmpty()) {
             throw new BadRequestException(message.objectNotFoundByIdMessage("Regiment", regimentId));
         }
+        paymentPlansService.checkUserPlan(regimentOtp.get().getUser());
         for (RegimentDetailRequest regimentDetailRequest : regimentRequest.getRegimentDetailRequests()) {
             if (medicineRequests.containsKey(regimentDetailRequest.getMedicineId())) {
                 throw new BadRequestException("Duplicate medicine " + regimentDetailRequest.getMedicineId());
@@ -80,7 +85,7 @@ public class RegimentDetailServiceImpl implements RegimentDetailService {
     }
 
     @Override
-    public Map<Long, NotificationRegimentDetailResponse> getRegimentDetailResponsesByStatusAndTime(
+    public Map<Long, RegimentNotifiactionResponse> getRegimentDetailResponsesByStatusAndTime(
             RegimentStatus regimentStatus,
             LocalTime startTime, LocalTime endTime) {
 
@@ -91,14 +96,13 @@ public class RegimentDetailServiceImpl implements RegimentDetailService {
         if (regimentDetails.isEmpty()) {
             throw new BadRequestException(message.emptyList("Regiment"));
         }
-        System.out.println("Get data success");
-        Map<Long, NotificationRegimentDetailResponse> result = new HashMap<>();
+        Map<Long, RegimentNotifiactionResponse> result = new HashMap<>();
         for (RegimentDetail regimentDetail : regimentDetails) {
             Regiment regiment = regimentDetail.getRegiment();
 
-            NotificationRegimentDetailResponse notificationResponse = result.get(regiment.getId());
+            RegimentNotifiactionResponse notificationResponse = result.get(regiment.getId());
             if (notificationResponse == null) {
-                notificationResponse = NotificationRegimentDetailResponse.builder()
+                notificationResponse = RegimentNotifiactionResponse.builder()
                         .regimentName(regiment.getName())
                         .regimentImage(regiment.getImage())
                         .doseRegiment(regiment.getDoseRegiment())

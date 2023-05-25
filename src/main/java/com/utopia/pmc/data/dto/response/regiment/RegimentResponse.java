@@ -1,7 +1,7 @@
-package com.utopia.pmc.data.dto.response;
+package com.utopia.pmc.data.dto.response.regiment;
 
-import com.google.auto.value.AutoValue.Builder;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 

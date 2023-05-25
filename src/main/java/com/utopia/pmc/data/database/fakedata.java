@@ -40,7 +40,7 @@ public class fakedata {
                         .phone("012345679")
                         .password("baseuser12345")
                         .gender(Gender.MALE)
-                        .role(Role.USER_LEVEL_1)
+                        .role(Role.USER)
                         .build();
                 users.add(baseUser);
                 users.add(admin);

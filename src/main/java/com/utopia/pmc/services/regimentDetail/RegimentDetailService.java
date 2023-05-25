@@ -4,13 +4,13 @@ import java.time.LocalTime;
 import java.util.Map;
 
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
-import com.utopia.pmc.data.dto.request.RegimentRequest;
-import com.utopia.pmc.data.dto.response.regimentDetail.NotificationRegimentDetailResponse;
+import com.utopia.pmc.data.dto.request.regiment.RegimentRequest;
+import com.utopia.pmc.data.dto.response.regiment.RegimentNotifiactionResponse;
 
 public interface RegimentDetailService {
     public void createRegimentDetails(RegimentRequest regimentRequest);
 
-    public Map<Long, NotificationRegimentDetailResponse> getRegimentDetailResponsesByStatusAndTime(
+    public Map<Long, RegimentNotifiactionResponse> getRegimentDetailResponsesByStatusAndTime(
             RegimentStatus regimentStatus,
             LocalTime starTime,
             LocalTime endTime);

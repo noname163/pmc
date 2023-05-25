@@ -10,8 +10,8 @@ import java.util.concurrent.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.utopia.pmc.data.dto.response.regimentDetail.NotificationRegimentDetailResponse;
-import com.utopia.pmc.data.dto.response.regimentDetail.RegimentDetailResponse;
+import com.utopia.pmc.data.dto.response.notification.NotificationResponse;
+import com.utopia.pmc.data.dto.response.regiment.RegimentNotifiactionResponse;
 import com.utopia.pmc.services.expoSendNotification.LogNotificationStatus;
 import com.utopia.pmc.services.expoSendNotification.SendNotificationService;
 
@@ -35,21 +35,17 @@ public class SendNotificationServiceImpl implements SendNotificationService {
 
     @Override
     public void sendNotifications(
-            Map<Long, NotificationRegimentDetailResponse> data) throws PushClientException {
+            Map<String, NotificationResponse> data) throws PushClientException {
         List<ExpoPushMessage> expoPushMessages = new ArrayList<>();
         String title = "";
         String message = "";
         if (!data.isEmpty()) {
-            for (NotificationRegimentDetailResponse notificationRegimentDetailResponse : data.values()) {
+            for (String deviceToken : data.keySet()) {
                 Map<String, Object> dataSend = new HashMap<>();
-                NotificationRegimentDetailResponse notificationData = notificationRegimentDetailResponse;
-                dataSend.put("regiment", notificationData);
-                title = "You Have An Dose Regiment At " + notificationData.getTakenTime().toString();
-                message = "Regiment Name " + notificationData.getRegimentName() + "\n"
-                        + "Taken in " + notificationData.getDoseRegiment() + " " +
-                        notificationData.getPeriod();
+                NotificationResponse notificationResponse = data.get(deviceToken);
+                dataSend.put("data", notificationResponse.getData());
                 ExpoPushMessage expoPushMessage = setExpoPushMessage(
-                        notificationRegimentDetailResponse.getUserDeviceToken(),
+                        deviceToken,
                         title,
                         message,
                         dataSend);

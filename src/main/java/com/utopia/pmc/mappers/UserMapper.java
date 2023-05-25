@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import com.utopia.pmc.data.dto.request.NewUserRequest;
+import com.utopia.pmc.data.dto.request.user.NewUserRequest;
 import com.utopia.pmc.data.entities.User;
 
 @Component

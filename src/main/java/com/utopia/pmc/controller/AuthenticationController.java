@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.utopia.pmc.data.dto.request.UserLoginRequest;
-import com.utopia.pmc.data.dto.response.UserLoginResponse;
+import com.utopia.pmc.data.dto.request.user.UserLoginRequest;
+import com.utopia.pmc.data.dto.response.user.UserLoginResponse;
 import com.utopia.pmc.exceptions.BadRequestException;
 import com.utopia.pmc.exceptions.ForbiddenException;
 import com.utopia.pmc.services.authenticate.AuthenticationService;

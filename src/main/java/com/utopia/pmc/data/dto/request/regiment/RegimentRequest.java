@@ -1,8 +1,9 @@
-package com.utopia.pmc.data.dto.request;
+package com.utopia.pmc.data.dto.request.regiment;
 
 import java.util.List;
 
 import com.utopia.pmc.data.constants.others.Period;
+import com.utopia.pmc.data.dto.request.regimentdetail.RegimentDetailRequest;
 
 import lombok.Builder;
 import lombok.Getter;
