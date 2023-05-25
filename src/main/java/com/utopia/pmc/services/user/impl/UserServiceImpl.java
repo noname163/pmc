@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException(message.objectExistMessage("Phonenumber", newUserRequest.getPhone()));
         }
         User user = userMapper.mapDtoToEntity(newUserRequest);
-        user.setRole(Role.USER_LEVEL_1);
+        user.setRole(Role.USER);
         user.setPassword(passwordEncoder.encode(newUserRequest.getPassword()));
         userRepository.save(user);
     }

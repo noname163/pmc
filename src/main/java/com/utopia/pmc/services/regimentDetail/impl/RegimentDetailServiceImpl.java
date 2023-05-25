@@ -26,6 +26,7 @@ import com.utopia.pmc.exceptions.BadRequestException;
 import com.utopia.pmc.exceptions.EmptyException;
 import com.utopia.pmc.exceptions.message.Message;
 import com.utopia.pmc.mappers.RegimentDetailMapper;
+import com.utopia.pmc.services.payment.PaymentPlansService;
 import com.utopia.pmc.services.regimentDetail.RegimentDetailService;
 import com.utopia.pmc.utils.DetermineTakenTime;
 
@@ -38,11 +39,14 @@ public class RegimentDetailServiceImpl implements RegimentDetailService {
     @Autowired
     private MedicineRepository medicineRepository;
     @Autowired
+    private PaymentPlansService paymentPlansService;
+    @Autowired
     private RegimentDetailMapper regimentDetailMapper;
     @Autowired
     private Message message;
     @Autowired
     private DetermineTakenTime determineTakenTime;
+
 
     @Override
     @Transactional
@@ -54,6 +58,7 @@ public class RegimentDetailServiceImpl implements RegimentDetailService {
         if (regimentOtp.isEmpty()) {
             throw new BadRequestException(message.objectNotFoundByIdMessage("Regiment", regimentId));
         }
+        paymentPlansService.checkUserPlan(regimentOtp.get().getUser());
         for (RegimentDetailRequest regimentDetailRequest : regimentRequest.getRegimentDetailRequests()) {
             if (medicineRequests.containsKey(regimentDetailRequest.getMedicineId())) {
                 throw new BadRequestException("Duplicate medicine " + regimentDetailRequest.getMedicineId());

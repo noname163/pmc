@@ -14,6 +14,7 @@ import com.utopia.pmc.data.entities.User;
 import com.utopia.pmc.data.repositories.RegimentRepository;
 import com.utopia.pmc.mappers.RegimentMapper;
 import com.utopia.pmc.services.authenticate.SecurityContextService;
+import com.utopia.pmc.services.payment.PaymentPlansService;
 import com.utopia.pmc.services.regiment.RegimentService;
 import com.utopia.pmc.services.regimentDetail.RegimentDetailService;
 
@@ -28,11 +29,14 @@ public class RegimentServiceImpl implements RegimentService {
     private RegimentMapper regimentMapper;
     @Autowired
     private RegimentDetailService regimentDetailService;
+    @Autowired
+    private PaymentPlansService paymentPlansService;
 
     @Transactional
     @Override
     public void createRegiment(RegimentRequest regimentRequest) {
         User user = securityContextService.getCurrentUser();
+        paymentPlansService.checkUserPlan(user);
         Regiment regiment = regimentMapper.mapDtoToEntity(regimentRequest);
         regiment.setUser(user);
         regiment.setCreatedDate(LocalDate.now());
