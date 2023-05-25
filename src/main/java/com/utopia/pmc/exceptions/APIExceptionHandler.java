@@ -55,6 +55,11 @@ public class APIExceptionHandler {
         ExceptionResponse error = ExceptionResponse.builder().message(ex.getMessage()).build();
         return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
     }
+    @ExceptionHandler(EmptyException.class)
+    public ResponseEntity<ExceptionResponse> handleEmptyException(EmptyException ex) {
+        ExceptionResponse error = ExceptionResponse.builder().message(ex.getMessage()).build();
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
 
     @ExceptionHandler({
             HttpRequestMethodNotSupportedException.class,

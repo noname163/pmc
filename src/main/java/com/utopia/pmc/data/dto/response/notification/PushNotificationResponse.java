@@ -1,7 +1,8 @@
 package com.utopia.pmc.data.dto.response.notification;
 
-import com.google.auto.value.AutoValue.Builder;
 
+
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
