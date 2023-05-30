@@ -37,7 +37,7 @@ jobs:
       if: ${{ job.status == 'success' }}
       uses: actions/github-script@v4
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ secrets.AUTO_PULL }}
         script: |
           const pr = await github.pulls.create({
             owner: context.repo.owner,
