@@ -9,14 +9,15 @@ import org.springframework.stereotype.Component;
 
 import com.utopia.pmc.data.constants.others.Validation;
 import com.utopia.pmc.data.dto.request.regimendetail.RegimenDetailRequest;
-import com.utopia.pmc.data.entities.RegimentDetail;
+import com.utopia.pmc.data.entities.RegimenDetail;
 import com.utopia.pmc.utils.ConvertStringToLocalTime;
 
 @Component
 public class RegimenDetailMapper {
     @Autowired
     private ConvertStringToLocalTime convertStringToLocalTime;
-    public RegimentDetail mapDtoToEntity(RegimenDetailRequest regimentDetailRequest) {
+    
+    public RegimenDetail mapDtoToEntity(RegimenDetailRequest regimentDetailRequest) {
         LocalTime firstTime = convertStringToLocalTime.convertStringToLocalTime(Validation.TIME_FORMAT,
                 regimentDetailRequest.getFirstTime());
         LocalTime secondTime = convertStringToLocalTime.convertStringToLocalTime(Validation.TIME_FORMAT,
@@ -25,7 +26,7 @@ public class RegimenDetailMapper {
                 regimentDetailRequest.getThirdTime());
         LocalTime fourthTime = convertStringToLocalTime.convertStringToLocalTime(Validation.TIME_FORMAT,
                 regimentDetailRequest.getFourthTime());
-        return RegimentDetail
+        return RegimenDetail
                 .builder()
                 .takenQuantity(regimentDetailRequest.getTakenQuantity())
                 .firstTime(firstTime)
@@ -36,7 +37,7 @@ public class RegimenDetailMapper {
                 .build();
     }
 
-    public List<RegimentDetail> mapDtosToEntities(List<RegimenDetailRequest> regimentDetailRequests) {
+    public List<RegimenDetail> mapDtosToEntities(List<RegimenDetailRequest> regimentDetailRequests) {
         return regimentDetailRequests
                 .stream()
                 .map(this::mapDtoToEntity)

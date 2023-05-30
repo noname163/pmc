@@ -6,24 +6,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.utopia.pmc.data.entities.PaymentPlan;
-import com.utopia.pmc.data.entities.Regiment;
-import com.utopia.pmc.data.entities.RegimentDetail;
+import com.utopia.pmc.data.entities.Regimen;
+import com.utopia.pmc.data.entities.RegimenDetail;
 import com.utopia.pmc.data.entities.User;
-import com.utopia.pmc.data.repositories.RegimentDetailRepository;
-import com.utopia.pmc.data.repositories.RegimentRepository;
+import com.utopia.pmc.data.repositories.RegimenDetailRepository;
+import com.utopia.pmc.data.repositories.RegimenRepository;
 import com.utopia.pmc.exceptions.BadRequestException;
 import com.utopia.pmc.services.payment.PaymentPlansService;
 
 @Service
 public class PaymentPlansServiceImpl implements PaymentPlansService {
     @Autowired
-    private RegimentRepository regimentRepository;
+    private RegimenRepository regimentRepository;
     @Autowired 
-    private RegimentDetailRepository regimentDetailRepository;
+    private RegimenDetailRepository regimentDetailRepository;
     @Override
     public void checkUserPlan(User user) {
-        List<Regiment> regiments = regimentRepository.findByUser(user);
-        List<RegimentDetail> regimentDetails = regimentDetailRepository.findByRegimentIn(regiments);
+        List<Regimen> regiments = regimentRepository.findByUser(user);
+        List<RegimenDetail> regimentDetails = regimentDetailRepository.findByRegimentIn(regiments);
         Integer totalOfRegiment = regiments.size();
         Integer totalMedicine = regimentDetails.size();
 

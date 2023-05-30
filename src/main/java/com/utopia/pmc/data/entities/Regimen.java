@@ -32,7 +32,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Regiment {
+public class Regimen {
     @Id
     @SequenceGenerator(name = "regiment_sequence", sequenceName = "regiment_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "regiment_sequence")
@@ -62,7 +62,7 @@ public class Regiment {
     @JoinColumn(name = "user_id")
     private User user;
     @OneToMany(mappedBy = "regiment")
-    private List<RegimentDetail> regimentDetails;
+    private List<RegimenDetail> regimentDetails;
     @OneToMany(mappedBy = "regiment")
     private List<History> histories;
 }
