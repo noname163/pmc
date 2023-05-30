@@ -1,4 +1,4 @@
-package com.utopia.pmc.data.dto.response.regiment;
+package com.utopia.pmc.data.dto.response.regimen;
 
 
 import lombok.Builder;
@@ -8,7 +8,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class RegimentResponse {
+public class RegimenResponse {
     private String dose;
     private String takenTime;
     private Long regimentName;

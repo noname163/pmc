@@ -5,12 +5,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import com.utopia.pmc.data.dto.request.regiment.RegimentRequest;
+import com.utopia.pmc.data.dto.request.regimen.RegimenRequest;
 import com.utopia.pmc.data.entities.Regiment;
 
 @Component
-public class RegimentMapper {
-    public Regiment mapDtoToEntity(RegimentRequest regimentRequest) {
+public class RegimenMapper {
+    public Regiment mapDtoToEntity(RegimenRequest regimentRequest) {
         return Regiment
                 .builder()
                 .name(regimentRequest.getName())
@@ -21,7 +21,7 @@ public class RegimentMapper {
                 .build();
     }
 
-    public List<Regiment> mapDtosToEntities(List<RegimentRequest> regimentRequests) {
+    public List<Regiment> mapDtosToEntities(List<RegimenRequest> regimentRequests) {
         return regimentRequests
                 .stream()
                 .map(this::mapDtoToEntity)

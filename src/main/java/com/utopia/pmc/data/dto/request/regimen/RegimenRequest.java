@@ -1,9 +1,9 @@
-package com.utopia.pmc.data.dto.request.regiment;
+package com.utopia.pmc.data.dto.request.regimen;
 
 import java.util.List;
 
 import com.utopia.pmc.data.constants.others.Period;
-import com.utopia.pmc.data.dto.request.regimentdetail.RegimentDetailRequest;
+import com.utopia.pmc.data.dto.request.regimendetail.RegimenDetailRequest;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class RegimentRequest {
+public class RegimenRequest {
     private Long id;
     private String name;
     private String image;
@@ -20,5 +20,5 @@ public class RegimentRequest {
     private Integer doseRegiment;
     private Boolean startNow;
     private String deviceToken;
-    private List<RegimentDetailRequest> regimentDetailRequests;
+    private List<RegimenDetailRequest> regimentDetailRequests;
 }

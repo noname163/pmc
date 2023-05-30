@@ -8,19 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.utopia.pmc.data.constants.others.Validation;
-import com.utopia.pmc.data.dto.request.regimentdetail.RegimentDetailRequest;
-import com.utopia.pmc.data.entities.Medicine;
+import com.utopia.pmc.data.dto.request.regimendetail.RegimenDetailRequest;
 import com.utopia.pmc.data.entities.RegimentDetail;
 import com.utopia.pmc.utils.ConvertStringToLocalTime;
-import com.utopia.pmc.utils.DetermineTakenTime;
 
 @Component
-public class RegimentDetailMapper {
+public class RegimenDetailMapper {
     @Autowired
     private ConvertStringToLocalTime convertStringToLocalTime;
-    @Autowired
-    private DetermineTakenTime determineTakenTime;
-    public RegimentDetail mapDtoToEntity(RegimentDetailRequest regimentDetailRequest) {
+    public RegimentDetail mapDtoToEntity(RegimenDetailRequest regimentDetailRequest) {
         LocalTime firstTime = convertStringToLocalTime.convertStringToLocalTime(Validation.TIME_FORMAT,
                 regimentDetailRequest.getFirstTime());
         LocalTime secondTime = convertStringToLocalTime.convertStringToLocalTime(Validation.TIME_FORMAT,
@@ -31,7 +27,7 @@ public class RegimentDetailMapper {
                 regimentDetailRequest.getFourthTime());
         return RegimentDetail
                 .builder()
-                .quantity(regimentDetailRequest.getQuantity())
+                .takenQuantity(regimentDetailRequest.getTakenQuantity())
                 .firstTime(firstTime)
                 .secondTime(secondTime)
                 .thirdTime(thirdTime)
@@ -40,7 +36,7 @@ public class RegimentDetailMapper {
                 .build();
     }
 
-    public List<RegimentDetail> mapDtosToEntities(List<RegimentDetailRequest> regimentDetailRequests) {
+    public List<RegimentDetail> mapDtosToEntities(List<RegimenDetailRequest> regimentDetailRequests) {
         return regimentDetailRequests
                 .stream()
                 .map(this::mapDtoToEntity)
