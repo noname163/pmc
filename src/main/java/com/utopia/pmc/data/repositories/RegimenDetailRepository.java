@@ -17,7 +17,7 @@ public interface RegimenDetailRepository extends JpaRepository<RegimenDetail, Lo
 
         public List<RegimenDetail> findByRegimentIn(List<Regimen> regiments);
 
-        @Query("SELECT rd FROM RegimentDetail rd" +
+        @Query("SELECT rd FROM RegimenDetail rd" +
                         " JOIN FETCH rd.regiment r" +
                         " WHERE r.status = :regimentStatus" +
                         " AND (" +
