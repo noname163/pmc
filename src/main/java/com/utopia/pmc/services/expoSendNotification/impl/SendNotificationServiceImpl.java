@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.utopia.pmc.data.dto.response.notification.NotificationResponse;
-import com.utopia.pmc.data.dto.response.regiment.RegimentNotifiactionResponse;
+import com.utopia.pmc.data.dto.response.regimen.RegimenNotifiactionResponse;
 import com.utopia.pmc.services.expoSendNotification.LogNotificationStatus;
 import com.utopia.pmc.services.expoSendNotification.SendNotificationService;
 

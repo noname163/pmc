@@ -29,7 +29,7 @@ public class PaymentPlansServiceImpl implements PaymentPlansService {
 
         PaymentPlan userPaymentPlan = user.getPaymentPlan();
         String message = "You have used up all the resources allocated by the plan";
-        if(userPaymentPlan==null && totalOfRegiment >= 1){
+        if(userPaymentPlan==null && totalOfRegiment > 1){
             throw new BadRequestException(message);
         }
         if(userPaymentPlan==null && totalMedicine >= 10){

@@ -1,5 +1,6 @@
 package com.utopia.pmc.data.dto.request.regimen;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.utopia.pmc.data.constants.others.Period;
@@ -19,6 +20,7 @@ public class RegimenRequest {
     private Period period;
     private Integer doseRegiment;
     private Boolean startNow;
+    private LocalDate startDate;
     private String deviceToken;
     private List<RegimenDetailRequest> regimentDetailRequests;
 }

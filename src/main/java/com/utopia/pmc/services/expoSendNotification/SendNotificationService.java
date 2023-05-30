@@ -3,7 +3,7 @@ package com.utopia.pmc.services.expoSendNotification;
 import java.util.Map;
 
 import com.utopia.pmc.data.dto.response.notification.NotificationResponse;
-import com.utopia.pmc.data.dto.response.regiment.RegimentNotifiactionResponse;
+import com.utopia.pmc.data.dto.response.regimen.RegimenNotifiactionResponse;
 
 import io.github.jav.exposerversdk.PushClientException;
 

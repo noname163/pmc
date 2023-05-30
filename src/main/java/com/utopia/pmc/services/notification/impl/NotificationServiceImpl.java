@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
 import com.utopia.pmc.data.dto.response.notification.NotificationResponse;
-import com.utopia.pmc.data.dto.response.regiment.RegimentNotifiactionResponse;
+import com.utopia.pmc.data.dto.response.regimen.RegimenNotifiactionResponse;
 import com.utopia.pmc.services.expoSendNotification.SendNotificationService;
 import com.utopia.pmc.services.notification.NotificationService;
-import com.utopia.pmc.services.regimentDetail.RegimentDetailService;
+import com.utopia.pmc.services.regimenDetail.RegimenDetailService;
 
 import io.github.jav.exposerversdk.PushClientException;
 
@@ -23,7 +23,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Autowired
     private SendNotificationService sendNotificationService;
     @Autowired
-    private RegimentDetailService regimentDetailService;
+    private RegimenDetailService regimentDetailService;
 
     @Override
     @Scheduled(fixedDelay = 1000)
@@ -33,13 +33,13 @@ public class NotificationServiceImpl implements NotificationService {
         LocalTime starTime = LocalTime.now();
         LocalTime endTime = starTime.plusSeconds(1);
 
-        Map<Long, RegimentNotifiactionResponse> regimentResponse = regimentDetailService
+        Map<Long, RegimenNotifiactionResponse> regimentResponse = regimentDetailService
                 .getRegimentDetailResponsesByStatusAndTime(regimentStatus,
                         starTime, endTime);
 
         Map<String, NotificationResponse> notificationResponses = new HashMap<>();
 
-        for (RegimentNotifiactionResponse regimentDetailResponse : regimentResponse.values()) {
+        for (RegimenNotifiactionResponse regimentDetailResponse : regimentResponse.values()) {
             NotificationResponse notificationResponse = NotificationResponse
                     .builder()
                     .data(regimentDetailResponse)

@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.utopia.pmc.data.dto.request.regiment.RegimentRequest;
+import com.utopia.pmc.data.dto.request.regimen.RegimenRequest;
+import com.utopia.pmc.data.dto.response.regimen.RegimenResponse;
 import com.utopia.pmc.exceptions.BadRequestException;
-import com.utopia.pmc.services.regiment.RegimentService;
+import com.utopia.pmc.services.regimen.RegimenService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,17 +25,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @RequestMapping("/api/regiments")
 public class RegimentController {
     @Autowired
-    private RegimentService regimentService;
+    private RegimenService regimentService;
 
     @Operation(summary = "Create new regiment")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Created successfull."),
+            @ApiResponse(responseCode = "201", description = "Created successfull.", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = RegimenResponse.class)) }),
             @ApiResponse(responseCode = "400", description = "Regiment information not valid.", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = BadRequestException.class))})
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = BadRequestException.class)) })
     })
     @PostMapping()
-    public ResponseEntity<Void> createRegiment(@Valid @RequestBody RegimentRequest regimentRequest){
-        regimentService.createRegiment(regimentRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<RegimenResponse> createRegiment(@Valid @RequestBody RegimenRequest regimentRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                regimentService.createRegiment(regimentRequest));
     }
 }
