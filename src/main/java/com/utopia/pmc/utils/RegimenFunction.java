@@ -6,23 +6,24 @@ import java.time.LocalTime;
 import org.springframework.stereotype.Component;
 
 import com.utopia.pmc.data.constants.others.Period;
-import com.utopia.pmc.data.entities.RegimentDetail;
+import com.utopia.pmc.data.entities.RegimenDetail;
 
 @Component
 public class RegimenFunction {
 
-    public LocalTime determineTakenTime(RegimentDetail regimentDetail) {
-        if (regimentDetail.getFirstTime() != null) {
-            return regimentDetail.getFirstTime();
+    public LocalTime determineTakenTime(RegimenDetail regimenDetail) {
+        LocalTime currentTime = LocalTime.now();
+        if (regimenDetail.getFirstTime() != null && currentTime.compareTo(regimenDetail.getFirstTime()) <= 0) {
+            return regimenDetail.getFirstTime();
         }
-        if (regimentDetail.getSecondTime() != null) {
-            return regimentDetail.getSecondTime();
+        if (regimenDetail.getSecondTime() != null && currentTime.compareTo(regimenDetail.getSecondTime()) <= 0) {
+            return regimenDetail.getSecondTime();
         }
-        if (regimentDetail.getThirdTime() != null) {
-            return regimentDetail.getThirdTime();
+        if (regimenDetail.getThirdTime() != null && currentTime.compareTo(regimenDetail.getThirdTime()) <= 0) {
+            return regimenDetail.getThirdTime();
         }
-        if (regimentDetail.getFourthTime() != null) {
-            return regimentDetail.getFourthTime();
+        if (regimenDetail.getFourthTime() != null && currentTime.compareTo(regimenDetail.getFourthTime()) <= 0) {
+            return regimenDetail.getFourthTime();
         }
         return null;
     }

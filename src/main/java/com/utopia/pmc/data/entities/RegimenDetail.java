@@ -27,7 +27,7 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegimentDetail {
+public class RegimenDetail {
     @Id
     @SequenceGenerator(name = "regiment_detail_sequence", sequenceName = "regiment_detail_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "regiment_detail_sequence")
@@ -48,7 +48,7 @@ public class RegimentDetail {
     private LocalTime fourthTime;
     @ManyToOne
     @JoinColumn(name = "regiment_id")
-    private Regiment regiment;
+    private Regimen regiment;
     @ManyToOne
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;

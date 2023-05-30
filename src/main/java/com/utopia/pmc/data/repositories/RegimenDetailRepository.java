@@ -9,15 +9,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
-import com.utopia.pmc.data.entities.Regiment;
-import com.utopia.pmc.data.entities.RegimentDetail;
+import com.utopia.pmc.data.entities.Regimen;
+import com.utopia.pmc.data.entities.RegimenDetail;
 
 @Repository
-public interface RegimentDetailRepository extends JpaRepository<RegimentDetail, Long> {
+public interface RegimenDetailRepository extends JpaRepository<RegimenDetail, Long> {
 
-        public List<RegimentDetail> findByRegimentIn(List<Regiment> regiments);
+        public List<RegimenDetail> findByRegimentIn(List<Regimen> regiments);
 
-        @Query("SELECT rd FROM RegimentDetail rd" +
+        @Query("SELECT rd FROM RegimenDetail rd" +
                         " JOIN FETCH rd.regiment r" +
                         " WHERE r.status = :regimentStatus" +
                         " AND (" +
@@ -26,7 +26,7 @@ public interface RegimentDetailRepository extends JpaRepository<RegimentDetail, 
                         "    OR rd.thirdTime BETWEEN :startTime AND :endTime" +
                         "    OR rd.fourthTime BETWEEN :startTime AND :endTime" +
                         " )")
-        List<RegimentDetail> findByStatusAndTime(
+        List<RegimenDetail> findByStatusAndTime(
                         @Param("regimentStatus") RegimentStatus regimentStatus,
                         @Param("startTime") LocalTime startTime,
                         @Param("endTime") LocalTime endTime);

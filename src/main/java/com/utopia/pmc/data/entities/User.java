@@ -49,7 +49,7 @@ public class User {
     @Column(name ="role")
     private Role role;
     @OneToMany(mappedBy = "user")
-    private List<Regiment> regiments;
+    private List<Regimen> regiments;
     @OneToMany(mappedBy = "user")
     private List<History> histories;
     @ManyToOne
