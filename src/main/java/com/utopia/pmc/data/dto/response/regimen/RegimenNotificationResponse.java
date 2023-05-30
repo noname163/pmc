@@ -10,7 +10,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class RegimenNotifiactionResponse {
+public class RegimenNotificationResponse {
     private Integer doseRegiment;
     private String takenTime;
     private String regimentName;

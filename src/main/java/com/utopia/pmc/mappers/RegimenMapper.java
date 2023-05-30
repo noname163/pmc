@@ -6,13 +6,14 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import com.utopia.pmc.data.dto.request.regimen.RegimenRequest;
+import com.utopia.pmc.data.dto.response.regimen.RegimenNotificationResponse;
 import com.utopia.pmc.data.dto.response.regimen.RegimenResponse;
-import com.utopia.pmc.data.entities.Regiment;
+import com.utopia.pmc.data.entities.Regimen;
 
 @Component
 public class RegimenMapper {
-    public Regiment mapDtoToEntity(RegimenRequest regimentRequest) {
-        return Regiment
+    public Regimen mapDtoToEntity(RegimenRequest regimentRequest) {
+        return Regimen
                 .builder()
                 .name(regimentRequest.getName())
                 .image(regimentRequest.getImage())
@@ -22,8 +23,18 @@ public class RegimenMapper {
                 .period(regimentRequest.getPeriod())
                 .build();
     }
+    public RegimenNotificationResponse mapEntityToNotificationResponse(Regimen regimen){
+        return RegimenNotificationResponse.builder()
+        .doseRegiment(regimen.getDoseRegiment())
+        .period(regimen.getPeriod().toString())
+        .regimentId(regimen.getId())
+        .regimentImage(regimen.getImage())
+        .regimentName(regimen.getName())
+        .userDeviceToken(regimen.getDeviceToken())
+        .build();
+    }
 
-    public RegimenResponse mapEntityToDtoRegimenResponse(Regiment regiment){
+    public RegimenResponse mapEntityToDtoRegimenResponse(Regimen regiment){
         return RegimenResponse
         .builder()
         .regimenName(regiment.getName())
@@ -37,7 +48,7 @@ public class RegimenMapper {
         .build();
     }
 
-    public List<Regiment> mapDtosToEntities(List<RegimenRequest> regimentRequests) {
+    public List<Regimen> mapDtosToEntities(List<RegimenRequest> regimentRequests) {
         return regimentRequests
                 .stream()
                 .map(this::mapDtoToEntity)

@@ -39,7 +39,7 @@ public class History {
     private TakenStatus takenStatus;
     @ManyToOne
     @JoinColumn(name = "regiment_id")
-    private Regiment regiment;
+    private Regimen regiment;
     @ManyToOne
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;

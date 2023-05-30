@@ -9,11 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
+import com.utopia.pmc.data.database.DailyData;
 import com.utopia.pmc.data.dto.request.regimen.RegimenRequest;
 import com.utopia.pmc.data.dto.response.regimen.RegimenResponse;
-import com.utopia.pmc.data.entities.Regiment;
+import com.utopia.pmc.data.entities.Regimen;
 import com.utopia.pmc.data.entities.User;
-import com.utopia.pmc.data.repositories.RegimentRepository;
+import com.utopia.pmc.data.repositories.RegimenRepository;
 import com.utopia.pmc.exceptions.BadRequestException;
 import com.utopia.pmc.mappers.RegimenMapper;
 import com.utopia.pmc.services.authenticate.SecurityContextService;
@@ -25,7 +26,7 @@ import com.utopia.pmc.services.regimenDetail.RegimenDetailService;
 public class RegimenServiceImpl implements RegimenService {
 
     @Autowired
-    private RegimentRepository regimentRepository;
+    private RegimenRepository regimentRepository;
     @Autowired
     private SecurityContextService securityContextService;
     @Autowired
@@ -41,7 +42,7 @@ public class RegimenServiceImpl implements RegimenService {
         User user = securityContextService.getCurrentUser();
         paymentPlansService.checkUserPlan(user);
 
-        Regiment regiment = regimentMapper.mapDtoToEntity(regimentRequest);
+        Regimen regiment = regimentMapper.mapDtoToEntity(regimentRequest);
 
         regiment.setUser(user);
         regiment.setCreatedDate(LocalDate.now());
@@ -52,8 +53,10 @@ public class RegimenServiceImpl implements RegimenService {
         regimentRequest.setId(regiment.getId());
         regimentDetailService.createRegimentDetails(regimentRequest);
 
-        Regiment result = regimentRepository.findById(regiment.getId())
+        Regimen result = regimentRepository.findById(regiment.getId())
                 .orElseThrow(() -> new BadRequestException("Errors as create new regiment"));
+
+        DailyData.addRegimen(result);
         return regimentMapper.mapEntityToDtoRegimenResponse(result);
     }
 

@@ -44,7 +44,7 @@ public class Medicine {
     // @Lob
     private String describe;
     @OneToMany(mappedBy = "medicine")
-    private List<RegimentDetail> regimentDetails;
+    private List<RegimenDetail> regimenDetails;
     @OneToMany(mappedBy = "medicine")
     private List<History> histories;
 }

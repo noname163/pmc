@@ -15,17 +15,17 @@ import org.springframework.stereotype.Service;
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
 import com.utopia.pmc.data.dto.request.regimen.RegimenRequest;
 import com.utopia.pmc.data.dto.request.regimendetail.RegimenDetailRequest;
-import com.utopia.pmc.data.dto.response.regimen.RegimenNotifiactionResponse;
+import com.utopia.pmc.data.dto.response.regimen.RegimenNotificationResponse;
 import com.utopia.pmc.data.entities.Medicine;
-import com.utopia.pmc.data.entities.Regiment;
-import com.utopia.pmc.data.entities.RegimentDetail;
+import com.utopia.pmc.data.entities.Regimen;
+import com.utopia.pmc.data.entities.RegimenDetail;
 import com.utopia.pmc.data.repositories.MedicineRepository;
-import com.utopia.pmc.data.repositories.RegimentDetailRepository;
-import com.utopia.pmc.data.repositories.RegimentRepository;
+import com.utopia.pmc.data.repositories.RegimenDetailRepository;
+import com.utopia.pmc.data.repositories.RegimenRepository;
 import com.utopia.pmc.exceptions.BadRequestException;
-import com.utopia.pmc.exceptions.EmptyException;
 import com.utopia.pmc.exceptions.message.Message;
 import com.utopia.pmc.mappers.RegimenDetailMapper;
+import com.utopia.pmc.mappers.RegimenMapper;
 import com.utopia.pmc.services.payment.PaymentPlansService;
 import com.utopia.pmc.services.regimenDetail.RegimenDetailService;
 import com.utopia.pmc.utils.RegimenFunction;
@@ -33,15 +33,17 @@ import com.utopia.pmc.utils.RegimenFunction;
 @Service
 public class RegimenDetailServiceImpl implements RegimenDetailService {
     @Autowired
-    private RegimentDetailRepository regimentDetailRepository;
+    private RegimenDetailRepository regimentDetailRepository;
     @Autowired
-    private RegimentRepository regimentRepository;
+    private RegimenRepository regimentRepository;
     @Autowired
     private MedicineRepository medicineRepository;
     @Autowired
     private PaymentPlansService paymentPlansService;
     @Autowired
     private RegimenDetailMapper regimentDetailMapper;
+    @Autowired
+    private RegimenMapper regimenMapper;
     @Autowired
     private Message message;
     @Autowired
@@ -54,13 +56,13 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
         Map<Long, Integer> medicineRequests = new HashMap<>();
         Map<Long, RegimenDetailRequest> regimentDetailRequetsMap = new HashMap<>();
         Long regimentId = regimentRequest.getId();
-        Optional<Regiment> regimentOtp = regimentRepository.findById(regimentId);
+        Optional<Regimen> regimentOtp = regimentRepository.findById(regimentId);
 
         if (regimentOtp.isEmpty()) {
             throw new BadRequestException(message.objectNotFoundByIdMessage("Regiment", regimentId));
         }
 
-        Regiment regiment = regimentOtp.get();
+        Regimen regiment = regimentOtp.get();
         paymentPlansService.checkUserPlan(regimentOtp.get().getUser());
 
         for (RegimenDetailRequest regimentDetailRequest : regimentRequest.getRegimentDetailRequests()) {
@@ -76,12 +78,12 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
             throw new BadRequestException("Some demicine not exist.");
         }
 
-        List<RegimentDetail> regimentDetails = new ArrayList<>();
+        List<RegimenDetail> regimentDetails = new ArrayList<>();
         for (Medicine medicine : medicines) {
             Long medicineId = medicine.getId();
             int takenQuantity = medicineRequests.get(medicineId);
             RegimenDetailRequest regimentDetailRequest = regimentDetailRequetsMap.get(medicineId);
-            RegimentDetail regimentDetail = regimentDetailMapper.mapDtoToEntity(regimentDetailRequest);
+            RegimenDetail regimentDetail = regimentDetailMapper.mapDtoToEntity(regimentDetailRequest);
             Integer totalMedicine = regimenFunction.calculateMedicineQuantity(takenQuantity, regiment.getDoseRegiment(), regiment.getPeriod());
             
             regimentDetail.setNumberOfMedicine(totalMedicine);
@@ -98,24 +100,24 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
     }
 
     @Override
-    public Map<Long, RegimenNotifiactionResponse> getRegimentDetailResponsesByStatusAndTime(
+    public Map<Long, RegimenNotificationResponse> getRegimentDetailResponsesByStatusAndTime(
             RegimentStatus regimentStatus,
             LocalTime startTime, LocalTime endTime) {
 
-        List<RegimentDetail> regimentDetails = regimentDetailRepository.findByStatusAndTime(
+        List<RegimenDetail> regimentDetails = regimentDetailRepository.findByStatusAndTime(
                 regimentStatus,
                 startTime, endTime);
 
         if (regimentDetails.isEmpty()) {
             throw new BadRequestException(message.emptyList("Regiment"));
         }
-        Map<Long, RegimenNotifiactionResponse> result = new HashMap<>();
-        for (RegimentDetail regimentDetail : regimentDetails) {
-            Regiment regiment = regimentDetail.getRegiment();
+        Map<Long, RegimenNotificationResponse> result = new HashMap<>();
+        for (RegimenDetail regimentDetail : regimentDetails) {
+            Regimen regiment = regimentDetail.getRegiment();
 
-            RegimenNotifiactionResponse notificationResponse = result.get(regiment.getId());
+            RegimenNotificationResponse notificationResponse = result.get(regiment.getId());
             if (notificationResponse == null) {
-                notificationResponse = RegimenNotifiactionResponse.builder()
+                notificationResponse = RegimenNotificationResponse.builder()
                         .regimentName(regiment.getName())
                         .regimentImage(regiment.getImage())
                         .doseRegiment(regiment.getDoseRegiment())
