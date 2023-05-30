@@ -1,4 +1,4 @@
-package com.utopia.pmc.data.dto.response.regiment;
+package com.utopia.pmc.data.dto.response.regimen;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class RegimentNotifiactionResponse {
+public class RegimenNotifiactionResponse {
     private Integer doseRegiment;
     private String takenTime;
     private String regimentName;

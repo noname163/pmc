@@ -29,7 +29,7 @@ public class fakedata {
                         .age(18)
                         .email("admin@gmail.com")
                         .phone("012345678")
-                        .password("admin12345")
+                        .password("$2a$12$XYAxwzQHfQ9GiSO1vTjUSOyDIfNv48y5SQ3fwnvGvFibieIDWpjs6")
                         .gender(Gender.MALE)
                         .role(Role.ADMIN)
                         .build();
@@ -38,7 +38,7 @@ public class fakedata {
                         .age(18)
                         .email("baseuser@gmail.com")
                         .phone("012345679")
-                        .password("baseuser12345")
+                        .password("$2a$12$W.fEkdf/XwmU/ew78FR.deNoPi3g7tObftA3i3/pAIM./uGNyPwJa")
                         .gender(Gender.MALE)
                         .role(Role.USER)
                         .build();

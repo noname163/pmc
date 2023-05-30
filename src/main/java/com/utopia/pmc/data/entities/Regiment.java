@@ -43,6 +43,10 @@ public class Regiment {
     private String image;
     @Column(name = "dose_regiment")
     private Integer doseRegiment;
+    @Column(name = "taken_time")
+    private Integer takenTime;
+    @Column(name = "missed_time")
+    private Integer missedTime;
     @Column(name = "peroid")
     private Period period; 
     @Enumerated(EnumType.STRING)
