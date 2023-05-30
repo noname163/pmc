@@ -1,29 +1,26 @@
 package com.utopia.pmc.filters;
 
-import java.io.IOException;
-import java.util.Optional;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
-import org.springframework.web.filter.OncePerRequestFilter;
+import java.io.IOException;
+import java.util.Optional;
 
 import com.utopia.pmc.exceptions.BadRequestException;
 import com.utopia.pmc.exceptions.ForbiddenException;
 import com.utopia.pmc.services.authenticate.SecurityContextService;
 import com.utopia.pmc.utils.JwtTokenUtil;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 
-
+@Component
 public class AuthenticationFilter extends OncePerRequestFilter{
     public static final String AUTHORIZATION = "Authorization";
     public static final String BEARER = "Bearer ";

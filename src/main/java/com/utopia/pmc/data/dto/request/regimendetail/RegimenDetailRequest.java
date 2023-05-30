@@ -1,4 +1,4 @@
-package com.utopia.pmc.data.dto.request;
+package com.utopia.pmc.data.dto.request.regimendetail;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.utopia.pmc.data.constants.others.Dose;
@@ -11,8 +11,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class RegimentDetailRequest {
-    private Integer quantity;
+public class RegimenDetailRequest {
+    private Integer takenQuantity;
     private Dose dose;
 
     @JsonFormat(pattern = Validation.TIME_FORMAT) 

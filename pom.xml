@@ -103,13 +103,6 @@
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/com.google.firebase/firebase-admin -->
-		<dependency>
-			<groupId>com.google.firebase</groupId>
-			<artifactId>firebase-admin</artifactId>
-			<version>8.1.0</version>
-		</dependency>
 		<dependency>
 			<groupId>io.github.jav</groupId>
 			<artifactId>expo-server-sdk</artifactId>

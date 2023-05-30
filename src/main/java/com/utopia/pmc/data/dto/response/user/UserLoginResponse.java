@@ -1,4 +1,4 @@
-package com.utopia.pmc.data.dto.response;
+package com.utopia.pmc.data.dto.response.user;
 
 import lombok.Builder;
 import lombok.Getter;

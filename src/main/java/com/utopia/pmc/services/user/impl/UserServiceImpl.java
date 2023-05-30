@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.utopia.pmc.data.constants.others.Role;
-import com.utopia.pmc.data.dto.request.NewUserRequest;
+import com.utopia.pmc.data.dto.request.user.NewUserRequest;
 import com.utopia.pmc.data.entities.User;
 import com.utopia.pmc.data.repositories.UserRepository;
 import com.utopia.pmc.exceptions.BadRequestException;
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException(message.objectExistMessage("Phonenumber", newUserRequest.getPhone()));
         }
         User user = userMapper.mapDtoToEntity(newUserRequest);
-        user.setRole(Role.USER_LEVEL_1);
+        user.setRole(Role.USER);
         user.setPassword(passwordEncoder.encode(newUserRequest.getPassword()));
         userRepository.save(user);
     }

@@ -1,4 +1,4 @@
-package com.utopia.pmc.services.regimentDetail.impl;
+package com.utopia.pmc.services.regimenDetail.impl;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
-import com.utopia.pmc.data.dto.request.RegimentDetailRequest;
-import com.utopia.pmc.data.dto.request.RegimentRequest;
-import com.utopia.pmc.data.dto.response.regimentDetail.NotificationRegimentDetailResponse;
+import com.utopia.pmc.data.dto.request.regimen.RegimenRequest;
+import com.utopia.pmc.data.dto.request.regimendetail.RegimenDetailRequest;
+import com.utopia.pmc.data.dto.response.regimen.RegimenNotifiactionResponse;
 import com.utopia.pmc.data.entities.Medicine;
 import com.utopia.pmc.data.entities.Regiment;
 import com.utopia.pmc.data.entities.RegimentDetail;
@@ -25,12 +25,13 @@ import com.utopia.pmc.data.repositories.RegimentRepository;
 import com.utopia.pmc.exceptions.BadRequestException;
 import com.utopia.pmc.exceptions.EmptyException;
 import com.utopia.pmc.exceptions.message.Message;
-import com.utopia.pmc.mappers.RegimentDetailMapper;
-import com.utopia.pmc.services.regimentDetail.RegimentDetailService;
-import com.utopia.pmc.utils.DetermineTakenTime;
+import com.utopia.pmc.mappers.RegimenDetailMapper;
+import com.utopia.pmc.services.payment.PaymentPlansService;
+import com.utopia.pmc.services.regimenDetail.RegimenDetailService;
+import com.utopia.pmc.utils.RegimenFunction;
 
 @Service
-public class RegimentDetailServiceImpl implements RegimentDetailService {
+public class RegimenDetailServiceImpl implements RegimenDetailService {
     @Autowired
     private RegimentDetailRepository regimentDetailRepository;
     @Autowired
@@ -38,49 +39,66 @@ public class RegimentDetailServiceImpl implements RegimentDetailService {
     @Autowired
     private MedicineRepository medicineRepository;
     @Autowired
-    private RegimentDetailMapper regimentDetailMapper;
+    private PaymentPlansService paymentPlansService;
+    @Autowired
+    private RegimenDetailMapper regimentDetailMapper;
     @Autowired
     private Message message;
     @Autowired
-    private DetermineTakenTime determineTakenTime;
+    private RegimenFunction regimenFunction;
+
 
     @Override
     @Transactional
-    public void createRegimentDetails(RegimentRequest regimentRequest) {
+    public void createRegimentDetails(RegimenRequest regimentRequest) {
         Map<Long, Integer> medicineRequests = new HashMap<>();
-        Map<Long, RegimentDetailRequest> regimentDetailRequetsMap = new HashMap<>();
+        Map<Long, RegimenDetailRequest> regimentDetailRequetsMap = new HashMap<>();
         Long regimentId = regimentRequest.getId();
         Optional<Regiment> regimentOtp = regimentRepository.findById(regimentId);
+
         if (regimentOtp.isEmpty()) {
             throw new BadRequestException(message.objectNotFoundByIdMessage("Regiment", regimentId));
         }
-        for (RegimentDetailRequest regimentDetailRequest : regimentRequest.getRegimentDetailRequests()) {
+
+        Regiment regiment = regimentOtp.get();
+        paymentPlansService.checkUserPlan(regimentOtp.get().getUser());
+
+        for (RegimenDetailRequest regimentDetailRequest : regimentRequest.getRegimentDetailRequests()) {
             if (medicineRequests.containsKey(regimentDetailRequest.getMedicineId())) {
                 throw new BadRequestException("Duplicate medicine " + regimentDetailRequest.getMedicineId());
             }
             regimentDetailRequetsMap.put(regimentDetailRequest.getMedicineId(), regimentDetailRequest);
-            medicineRequests.put(regimentDetailRequest.getMedicineId(), regimentDetailRequest.getQuantity());
+            medicineRequests.put(regimentDetailRequest.getMedicineId(), regimentDetailRequest.getTakenQuantity());
         }
+
         List<Medicine> medicines = medicineRepository.findByIdIn(medicineRequests.keySet());
         if (medicines.size() < medicineRequests.size()) {
             throw new BadRequestException("Some demicine not exist.");
         }
+
         List<RegimentDetail> regimentDetails = new ArrayList<>();
         for (Medicine medicine : medicines) {
             Long medicineId = medicine.getId();
-            int medicineQuantity = medicineRequests.get(medicineId);
-            RegimentDetailRequest regimentDetailRequest = regimentDetailRequetsMap.get(medicineId);
+            int takenQuantity = medicineRequests.get(medicineId);
+            RegimenDetailRequest regimentDetailRequest = regimentDetailRequetsMap.get(medicineId);
             RegimentDetail regimentDetail = regimentDetailMapper.mapDtoToEntity(regimentDetailRequest);
-            regimentDetail.setQuantity(medicineQuantity);
+            Integer totalMedicine = regimenFunction.calculateMedicineQuantity(takenQuantity, regiment.getDoseRegiment(), regiment.getPeriod());
+            
+            regimentDetail.setNumberOfMedicine(totalMedicine);
+            regimentDetail.setTakenQuantity(takenQuantity);
             regimentDetail.setMedicine(medicine);
             regimentDetail.setRegiment(regimentOtp.get());
+
             regimentDetails.add(regimentDetail);
         }
         regimentDetailRepository.saveAll(regimentDetails);
+        
+        regiment.setRegimentDetails(regimentDetails);
+        regimentRepository.save(regiment);
     }
 
     @Override
-    public Map<Long, NotificationRegimentDetailResponse> getRegimentDetailResponsesByStatusAndTime(
+    public Map<Long, RegimenNotifiactionResponse> getRegimentDetailResponsesByStatusAndTime(
             RegimentStatus regimentStatus,
             LocalTime startTime, LocalTime endTime) {
 
@@ -91,20 +109,19 @@ public class RegimentDetailServiceImpl implements RegimentDetailService {
         if (regimentDetails.isEmpty()) {
             throw new BadRequestException(message.emptyList("Regiment"));
         }
-        System.out.println("Get data success");
-        Map<Long, NotificationRegimentDetailResponse> result = new HashMap<>();
+        Map<Long, RegimenNotifiactionResponse> result = new HashMap<>();
         for (RegimentDetail regimentDetail : regimentDetails) {
             Regiment regiment = regimentDetail.getRegiment();
 
-            NotificationRegimentDetailResponse notificationResponse = result.get(regiment.getId());
+            RegimenNotifiactionResponse notificationResponse = result.get(regiment.getId());
             if (notificationResponse == null) {
-                notificationResponse = NotificationRegimentDetailResponse.builder()
+                notificationResponse = RegimenNotifiactionResponse.builder()
                         .regimentName(regiment.getName())
                         .regimentImage(regiment.getImage())
                         .doseRegiment(regiment.getDoseRegiment())
                         .userDeviceToken(regiment.getDeviceToken())
                         .regimentId(regiment.getId())
-                        .takenTime(determineTakenTime.determineTakenTime(regimentDetail).toString())
+                        .takenTime(regimenFunction.determineTakenTime(regimentDetail).toString())
                         .build();
                 result.put(regiment.getId(), notificationResponse);
             }

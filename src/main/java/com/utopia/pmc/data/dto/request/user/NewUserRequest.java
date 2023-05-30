@@ -1,4 +1,4 @@
-package com.utopia.pmc.data.dto.request;
+package com.utopia.pmc.data.dto.request.user;
 
 
 import javax.validation.constraints.Min;
