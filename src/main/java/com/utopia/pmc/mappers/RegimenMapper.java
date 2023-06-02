@@ -23,29 +23,28 @@ public class RegimenMapper {
                 .period(regimentRequest.getPeriod())
                 .build();
     }
-    public RegimenNotificationResponse mapEntityToNotificationResponse(Regimen regimen){
+
+    public RegimenNotificationResponse mapEntityToNotificationResponse(Regimen regimen) {
         return RegimenNotificationResponse.builder()
-        .doseRegiment(regimen.getDoseRegiment())
-        .period(regimen.getPeriod().toString())
-        .regimentId(regimen.getId())
-        .regimentImage(regimen.getImage())
-        .regimentName(regimen.getName())
-        .userDeviceToken(regimen.getDeviceToken())
-        .build();
+                .regimentId(regimen.getId())
+                .regimentImage(regimen.getImage())
+                .regimentName(regimen.getName())
+                .userDeviceToken(regimen.getDeviceToken())
+                .build();
     }
 
-    public RegimenResponse mapEntityToDtoRegimenResponse(Regimen regiment){
+    public RegimenResponse mapEntityToDtoRegimenResponse(Regimen regiment) {
         return RegimenResponse
-        .builder()
-        .regimenName(regiment.getName())
-        .dosageRegimen(regiment.getDoseRegiment())
-        .period(regiment.getPeriod())
-        .image(regiment.getImage())
-        .startDate(regiment.getStartDate() == null ? null : regiment.getStartDate())
-        .takenTime(regiment.getTakenTime())
-        .missedTime(regiment.getMissedTime())
-        .totalTypeMedicine(regiment.getRegimentDetails().size())
-        .build();
+                .builder()
+                .regimenName(regiment.getName())
+                .dosageRegimen(regiment.getDoseRegiment())
+                .period(regiment.getPeriod())
+                .image(regiment.getImage())
+                .startDate(regiment.getStartDate() == null ? null : regiment.getStartDate())
+                .takenTime(regiment.getTakenTime())
+                .missedTime(regiment.getMissedTime())
+                .totalTypeMedicine(regiment.getRegimentDetails().size())
+                .build();
     }
 
     public List<Regimen> mapDtosToEntities(List<RegimenRequest> regimentRequests) {
