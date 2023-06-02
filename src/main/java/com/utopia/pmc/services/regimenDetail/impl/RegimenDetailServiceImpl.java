@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.utopia.pmc.data.constants.statuses.NotificationStatus;
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
+import com.utopia.pmc.data.database.DailyData;
 import com.utopia.pmc.data.dto.request.regimen.RegimenRequest;
 import com.utopia.pmc.data.dto.request.regimendetail.RegimenDetailRequest;
 import com.utopia.pmc.data.dto.response.regimen.RegimenNotificationResponse;
@@ -26,6 +27,7 @@ import com.utopia.pmc.data.repositories.MedicineRepository;
 import com.utopia.pmc.data.repositories.RegimenDetailRepository;
 import com.utopia.pmc.data.repositories.RegimenRepository;
 import com.utopia.pmc.exceptions.BadRequestException;
+import com.utopia.pmc.exceptions.NotFoundException;
 import com.utopia.pmc.exceptions.message.Message;
 import com.utopia.pmc.mappers.RegimenDetailMapper;
 import com.utopia.pmc.mappers.RegimenMapper;
@@ -93,7 +95,7 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
             regimentDetail.setNumberOfMedicine(totalMedicine);
             regimentDetail.setTakenQuantity(takenQuantity);
             regimentDetail.setMedicine(medicine);
-            regimentDetail.setRegiment(regimentOtp.get());
+            regimentDetail.setRegimen(regimentOtp.get());
 
             regimentDetails.add(regimentDetail);
         }
@@ -118,7 +120,7 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
         Map<String, List<RegimenDetailResponse>> result = new HashMap<>();
 
         for (RegimenDetail regimentDetail : regimentDetails) {
-            Regimen regiment = regimentDetail.getRegiment();
+            Regimen regiment = regimentDetail.getRegimen();
             String deviceToken = regiment.getDeviceToken();
 
             List<RegimenDetailResponse> regimenDetailResponses = result.getOrDefault(deviceToken, new ArrayList<>());
@@ -129,6 +131,15 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
         }
 
         return result;
+    }
+
+    @Override
+    public List<RegimenDetailResponse> getRegimenDetailResponse(Long regimenId) {
+        List<RegimenDetail> regimenDetailResponses = regimentDetailRepository.findByRegimenId(regimenId);
+        if (regimenDetailResponses.isEmpty()) {
+            throw new NotFoundException(message.emptyList("Regimen details"));
+        }
+        return regimentDetailMapper.mapEntityToDtos(regimenDetailResponses);
     }
 
 }

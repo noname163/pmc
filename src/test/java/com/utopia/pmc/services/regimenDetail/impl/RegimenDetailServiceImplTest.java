@@ -73,7 +73,7 @@ public class RegimenDetailServiceImplTest {
 
         when(regimenDetailRepository.findByStatusAndTime(regimentStatus, startTime, endTime))
                 .thenReturn(regimentDetails);
-        when(regimenDetailMock.getRegiment()).thenReturn(regimen);
+        when(regimenDetailMock.getRegimen()).thenReturn(regimen);
         when(result.get(regimen.getDeviceToken())).thenReturn(regimenDetailResponses);
         when(regimenDetailMapper.mapEntityToDto(regimenDetail)).thenReturn(regimenDetailResponse);
         when(result.put(regimen.getDeviceToken(), regimenDetailResponses)).thenReturn(regimenDetailResponses);

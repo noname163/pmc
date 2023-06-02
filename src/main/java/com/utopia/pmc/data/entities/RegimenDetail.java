@@ -47,8 +47,8 @@ public class RegimenDetail {
     @Column(name = "fourth_time")
     private LocalTime fourthTime;
     @ManyToOne
-    @JoinColumn(name = "regiment_id")
-    private Regimen regiment;
+    @JoinColumn(name = "regimen_id")
+    private Regimen regimen;
     @ManyToOne
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;
