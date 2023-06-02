@@ -12,16 +12,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.utopia.pmc.data.constants.statuses.NotificationStatus;
 import com.utopia.pmc.data.database.DailyData;
 import com.utopia.pmc.data.dto.response.notification.NotificationResponse;
 import com.utopia.pmc.data.dto.response.regimen.RegimenNotificationResponse;
+import com.utopia.pmc.data.dto.response.regimendetail.RegimenDetailResponse;
 import com.utopia.pmc.exceptions.BadRequestException;
 import com.utopia.pmc.mappers.NotificationMapper;
+import com.utopia.pmc.mappers.RegimenDetailMapper;
 import com.utopia.pmc.services.expoSendNotification.LogNotificationStatus;
 import com.utopia.pmc.services.expoSendNotification.SendNotificationService;
+import com.utopia.pmc.utils.RegimenFunction;
 
 import io.github.jav.exposerversdk.ExpoPushMessage;
-import io.github.jav.exposerversdk.ExpoPushMessageTicketPair;
 import io.github.jav.exposerversdk.ExpoPushTicket;
 import io.github.jav.exposerversdk.PushClient;
 import io.github.jav.exposerversdk.PushClientException;
@@ -35,6 +38,8 @@ public class SendNotificationServiceImpl implements SendNotificationService {
     private LogNotificationStatus logForSendNotification;
     @Autowired
     private NotificationMapper notificationMapper;
+    @Autowired
+    private RegimenFunction regimentFunction;
 
     @Override
     public void sendNotification(String recipient, String title, String message, String data) {
@@ -43,26 +48,23 @@ public class SendNotificationServiceImpl implements SendNotificationService {
     }
 
     @Override
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedRate = 1000)
     public void sendRegimenNotifications() throws PushClientException {
-        Map<String, List<Object>> data = DailyData.getData();
+        Map<String, List<RegimenDetailResponse>> data = DailyData.getData();
         LocalTime currentTime = LocalTime.now();
-        
+
         if (data == null || data.isEmpty()) {
             log.info("Notthing to send at " + currentTime);
             throw new BadRequestException("Notthing to send");
         }
-        
+
         List<ExpoPushMessage> expoPushMessages = new ArrayList<>();
-        List<Object> dataset = data.get(currentTime.toString());
+        Map<String, NotificationResponse> notificationData = handlerData(data);
 
-        for (Object object : dataset) {
+        for (String key : notificationData.keySet()) {
             Map<String, Object> dataSend = new HashMap<>();
-
-            RegimenNotificationResponse notificationRegimentResponse = (RegimenNotificationResponse) object;
-            String deviceToken = notificationRegimentResponse.getUserDeviceToken();
-            NotificationResponse notificationResponse = notificationMapper
-                    .mapRegimentDetailToNotification(notificationRegimentResponse);
+            String deviceToken = key;
+            NotificationResponse notificationResponse = notificationData.get(key);
 
             dataSend.put("data", notificationResponse.getData());
 
@@ -84,21 +86,12 @@ public class SendNotificationServiceImpl implements SendNotificationService {
             messageRepliesFutures.add(client.sendPushNotificationsAsync(chunk));
         }
 
-        List<ExpoPushTicket> allTickets = new ArrayList<>();
-
-        for (CompletableFuture<List<ExpoPushTicket>> messageReplyFuture : messageRepliesFutures) {
-            try {
-                for (ExpoPushTicket ticket : messageReplyFuture.get()) {
-                    allTickets.add(ticket);
-                }
-                List<ExpoPushMessageTicketPair<ExpoPushMessage>> zippedMessagesTickets = client
-                        .zipMessagesTickets(expoPushMessages, allTickets);
-                logForSendNotification.logForSendNotification(client, zippedMessagesTickets);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
+        try {
+            logForSendNotification.logForSendNotification(client, expoPushMessages, messageRepliesFutures);
+        } catch (InterruptedException e) {
+            System.out.println("Errors " + e.getMessage());
+        } catch (ExecutionException e) {
+            System.out.println("Errors " + e.getMessage());
         }
     }
 
@@ -110,5 +103,41 @@ public class SendNotificationServiceImpl implements SendNotificationService {
         expoPushMessage.setBody(message);
         expoPushMessage.setData(data);
         return expoPushMessage;
+    }
+
+    private Map<String, NotificationResponse> handlerData(Map<String, List<RegimenDetailResponse>> dataset) {
+        LocalTime currentTime = LocalTime.now();
+        Map<String, NotificationResponse> result = new HashMap<>();
+        String deviceToken = "";
+        for (List<RegimenDetailResponse> objetcts : dataset.values()) {
+            List<RegimenDetailResponse> regimenDetailResponses = new ArrayList<>();
+            for (RegimenDetailResponse object : objetcts) {
+                RegimenDetailResponse regimenDetailResponse = object;
+                LocalTime takenTime = regimentFunction.determineTakenTime(regimenDetailResponse.getFirstTime(),
+                        regimenDetailResponse.getSecondTime(), regimenDetailResponse.getThirdTime(),
+                        regimenDetailResponse.getFourthTime());
+                deviceToken = object.getDeviceToken();
+                if (takenTime != null
+                        && regimenDetailResponse.getNotificationStatus() != NotificationStatus.SENDED
+                        && currentTime.getHour() == takenTime.getHour()
+                        && currentTime.getMinute() == takenTime.getMinute()
+                        && result.get(deviceToken) == null) {
+                    RegimenNotificationResponse regimenNotificationResponse = RegimenNotificationResponse
+                            .builder()
+                            .regimentId(regimenDetailResponse.getRegimenId())
+                            .regimentName(regimenDetailResponse.getRegimenName())
+                            .takenTime(takenTime.toString())
+                            .userDeviceToken(deviceToken)
+                            .build();
+                    object.setNotificationStatus(NotificationStatus.SENDED);
+                    regimenDetailResponses.add(object);
+                    DailyData.updateData(deviceToken, regimenDetailResponses);
+                    NotificationResponse notificationResponse = notificationMapper
+                            .mapRegimentDetailToNotification(regimenNotificationResponse);
+                    result.put(regimenDetailResponse.getDeviceToken(), notificationResponse);
+                }
+            }
+        }
+        return result;
     }
 }

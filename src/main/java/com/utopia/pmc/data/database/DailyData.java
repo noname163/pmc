@@ -1,49 +1,41 @@
 package com.utopia.pmc.data.database;
 
-import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.utopia.pmc.data.constants.statuses.RegimentStatus;
-import com.utopia.pmc.data.dto.response.regimen.RegimenNotificationResponse;
+import com.utopia.pmc.data.dto.response.regimendetail.RegimenDetailResponse;
 import com.utopia.pmc.data.entities.Regimen;
 import com.utopia.pmc.data.entities.RegimenDetail;
-import com.utopia.pmc.mappers.RegimenMapper;
-import com.utopia.pmc.utils.RegimenFunction;
+import com.utopia.pmc.mappers.RegimenDetailMapper;
 
 public class DailyData {
 
-    private static Map<String, List<Object>> data;
+    private static Map<String, List<RegimenDetailResponse>> data = new HashMap<>();
 
-    public static Map<String, List<Object>> getData(){
+    public static Map<String, List<RegimenDetailResponse>> getData() {
         return data;
     }
 
-    public static void addDataset(String key, List<Object> values){
-        data.put(key, values);
+    public static void addDataset(String key, List<RegimenDetailResponse> list) {
+        data.put(key, list);
     }
 
-    public static void addData(String key, Object value){
+    public static void addData(String key, RegimenDetailResponse value) {
         data.get(key).add(value);
     }
 
-    public static void removeData(String key){
+    public static void updateData(String key, List<RegimenDetailResponse> values) {
+        data.replace(key, values);
+    }
+
+    public static void removeData(String key) {
         data.remove(key);
     }
 
-    public static void addRegimen(Regimen regimen){
-        RegimenFunction regimenFunction = new RegimenFunction();
-        RegimenMapper regimenMapper = new RegimenMapper();
+    public static void addRegimen(Regimen regimen) {
         List<RegimenDetail> regimentDetails = regimen.getRegimentDetails();
-        for (RegimenDetail regimentDetail : regimentDetails) {
-            LocalTime takenTime = regimenFunction.determineTakenTime(regimentDetail);
-            if(takenTime!=null && RegimentStatus.INPROCESS.equals(regimen.getStatus())){
-                RegimenNotificationResponse regimenNotificationResponse = regimenMapper.mapEntityToNotificationResponse(regimen);
-                regimenNotificationResponse.setTakenTime(takenTime.toString());
-                addData(takenTime.toString(), regimenNotificationResponse);
-            }
-        }
+        RegimenDetailMapper regimenDetailMapper = new RegimenDetailMapper();
+        addDataset(regimen.getDeviceToken(), regimenDetailMapper.mapEntityToDtos(regimentDetails));
     }
 }

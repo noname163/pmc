@@ -45,6 +45,4 @@ public class Medicine {
     private String describe;
     @OneToMany(mappedBy = "medicine")
     private List<RegimenDetail> regimenDetails;
-    @OneToMany(mappedBy = "medicine")
-    private List<History> histories;
 }
