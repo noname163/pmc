@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import com.utopia.pmc.data.constants.statuses.TakenStatus;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +25,7 @@ import lombok.Setter;
 @Table(name = "History")
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class History {
@@ -37,12 +39,13 @@ public class History {
     private LocalTime timeTaken;
     @Column
     private TakenStatus takenStatus;
+    @Column
+    private Integer totalMedicine;
+    @Column
+    private Integer numberOfTaken;
     @ManyToOne
     @JoinColumn(name = "regiment_id")
     private Regimen regiment;
-    @ManyToOne
-    @JoinColumn(name = "medicine_id")
-    private Medicine medicine;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user; 

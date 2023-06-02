@@ -27,6 +27,22 @@ public class RegimenFunction {
         }
         return null;
     }
+    public LocalTime determineTakenTime(LocalTime firstTime, LocalTime secondTime, LocalTime thirdTime, LocalTime fourthTime) {
+        LocalTime currentTime = LocalTime.now();
+        if (firstTime != null && currentTime.compareTo(firstTime) <= 0) {
+            return firstTime;
+        }
+        if (secondTime != null && currentTime.compareTo(secondTime) <= 0) {
+            return secondTime;
+        }
+        if (thirdTime != null && currentTime.compareTo(thirdTime) <= 0) {
+            return thirdTime;
+        }
+        if (fourthTime != null && currentTime.compareTo(fourthTime) <= 0) {
+            return fourthTime;
+        }
+        return null;
+    }
 
     public Integer calculateMedicineQuantity(Integer takenQuantity, Integer doseRegimen, Period period) {
         switch (period) {

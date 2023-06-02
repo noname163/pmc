@@ -12,10 +12,13 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.utopia.pmc.data.constants.statuses.NotificationStatus;
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
 import com.utopia.pmc.data.dto.request.regimen.RegimenRequest;
 import com.utopia.pmc.data.dto.request.regimendetail.RegimenDetailRequest;
 import com.utopia.pmc.data.dto.response.regimen.RegimenNotificationResponse;
+import com.utopia.pmc.data.dto.response.regimen.RegimenResponse;
+import com.utopia.pmc.data.dto.response.regimendetail.RegimenDetailResponse;
 import com.utopia.pmc.data.entities.Medicine;
 import com.utopia.pmc.data.entities.Regimen;
 import com.utopia.pmc.data.entities.RegimenDetail;
@@ -30,7 +33,10 @@ import com.utopia.pmc.services.payment.PaymentPlansService;
 import com.utopia.pmc.services.regimenDetail.RegimenDetailService;
 import com.utopia.pmc.utils.RegimenFunction;
 
+import lombok.Builder;
+
 @Service
+@Builder
 public class RegimenDetailServiceImpl implements RegimenDetailService {
     @Autowired
     private RegimenDetailRepository regimentDetailRepository;
@@ -43,12 +49,9 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
     @Autowired
     private RegimenDetailMapper regimentDetailMapper;
     @Autowired
-    private RegimenMapper regimenMapper;
-    @Autowired
     private Message message;
     @Autowired
     private RegimenFunction regimenFunction;
-
 
     @Override
     @Transactional
@@ -84,8 +87,9 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
             int takenQuantity = medicineRequests.get(medicineId);
             RegimenDetailRequest regimentDetailRequest = regimentDetailRequetsMap.get(medicineId);
             RegimenDetail regimentDetail = regimentDetailMapper.mapDtoToEntity(regimentDetailRequest);
-            Integer totalMedicine = regimenFunction.calculateMedicineQuantity(takenQuantity, regiment.getDoseRegiment(), regiment.getPeriod());
-            
+            Integer totalMedicine = regimenFunction.calculateMedicineQuantity(takenQuantity, regiment.getDoseRegiment(),
+                    regiment.getPeriod());
+
             regimentDetail.setNumberOfMedicine(totalMedicine);
             regimentDetail.setTakenQuantity(takenQuantity);
             regimentDetail.setMedicine(medicine);
@@ -94,16 +98,15 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
             regimentDetails.add(regimentDetail);
         }
         regimentDetailRepository.saveAll(regimentDetails);
-        
+
         regiment.setRegimentDetails(regimentDetails);
         regimentRepository.save(regiment);
     }
 
     @Override
-    public Map<Long, RegimenNotificationResponse> getRegimentDetailResponsesByStatusAndTime(
+    public Map<String, List<RegimenDetailResponse>> getRegimentDetailResponsesByStatusAndTime(
             RegimentStatus regimentStatus,
             LocalTime startTime, LocalTime endTime) {
-
         List<RegimenDetail> regimentDetails = regimentDetailRepository.findByStatusAndTime(
                 regimentStatus,
                 startTime, endTime);
@@ -111,23 +114,18 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
         if (regimentDetails.isEmpty()) {
             throw new BadRequestException(message.emptyList("Regiment"));
         }
-        Map<Long, RegimenNotificationResponse> result = new HashMap<>();
+
+        Map<String, List<RegimenDetailResponse>> result = new HashMap<>();
+
         for (RegimenDetail regimentDetail : regimentDetails) {
             Regimen regiment = regimentDetail.getRegiment();
+            String deviceToken = regiment.getDeviceToken();
 
-            RegimenNotificationResponse notificationResponse = result.get(regiment.getId());
-            if (notificationResponse == null) {
-                notificationResponse = RegimenNotificationResponse.builder()
-                        .regimentName(regiment.getName())
-                        .regimentImage(regiment.getImage())
-                        .doseRegiment(regiment.getDoseRegiment())
-                        .userDeviceToken(regiment.getDeviceToken())
-                        .regimentId(regiment.getId())
-                        .takenTime(regimenFunction.determineTakenTime(regimentDetail).toString())
-                        .build();
-                result.put(regiment.getId(), notificationResponse);
-            }
-            result.put(regiment.getId(), notificationResponse);
+            List<RegimenDetailResponse> regimenDetailResponses = result.getOrDefault(deviceToken, new ArrayList<>());
+            RegimenDetailResponse regimenDetailResponse = regimentDetailMapper.mapEntityToDto(regimentDetail);
+            regimenDetailResponses.add(regimenDetailResponse);
+
+            result.put(deviceToken, regimenDetailResponses);
         }
 
         return result;
