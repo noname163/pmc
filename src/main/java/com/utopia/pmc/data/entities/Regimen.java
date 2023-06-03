@@ -61,7 +61,7 @@ public class Regimen {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @OneToMany(mappedBy = "regiment")
+    @OneToMany(mappedBy = "regimen")
     private List<RegimenDetail> regimentDetails;
     @OneToMany(mappedBy = "regiment")
     private List<History> histories;

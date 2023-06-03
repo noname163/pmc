@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
-@RequestMapping("/api/regiments")
+@RequestMapping("/api/regimen")
 public class RegimentController {
     @Autowired
     private RegimenService regimentService;

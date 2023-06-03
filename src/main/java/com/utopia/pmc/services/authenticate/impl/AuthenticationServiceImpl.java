@@ -30,7 +30,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public UserLoginResponse login(UserLoginRequest userLoginRequest) {
         Optional<User> userOtp = userRepository.findByPhone(userLoginRequest.getPhonenumber());
         if (userOtp.isEmpty()) {
-            throw new BadRequestException(message.objectNotFoundByIdMessage("User", userLoginRequest.getPassword()));
+            throw new BadRequestException(message.objectNotFoundByIdMessage("User", userLoginRequest.getPhonenumber()));
         }
         User user = userOtp.get();
         if (!passwordEncoder.matches(userLoginRequest.getPassword(), user.getPassword())) {

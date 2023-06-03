@@ -15,10 +15,10 @@ import com.utopia.pmc.data.entities.RegimenDetail;
 @Repository
 public interface RegimenDetailRepository extends JpaRepository<RegimenDetail, Long> {
 
-        public List<RegimenDetail> findByRegimentIn(List<Regimen> regiments);
+        public List<RegimenDetail> findByRegimenIn(List<Regimen> regiments);
 
         @Query("SELECT rd FROM RegimenDetail rd" +
-                        " JOIN FETCH rd.regiment r" +
+                        " JOIN FETCH rd.regimen r" +
                         " WHERE r.status = :regimentStatus" +
                         " AND (" +
                         "    rd.firstTime BETWEEN :startTime AND :endTime" +
@@ -30,5 +30,5 @@ public interface RegimenDetailRepository extends JpaRepository<RegimenDetail, Lo
                         @Param("regimentStatus") RegimentStatus regimentStatus,
                         @Param("startTime") LocalTime startTime,
                         @Param("endTime") LocalTime endTime);
-
+        List<RegimenDetail> findByRegimenId(Long id);
 }

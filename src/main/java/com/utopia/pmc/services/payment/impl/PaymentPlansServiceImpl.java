@@ -23,7 +23,7 @@ public class PaymentPlansServiceImpl implements PaymentPlansService {
     @Override
     public void checkUserPlan(User user) {
         List<Regimen> regiments = regimentRepository.findByUser(user);
-        List<RegimenDetail> regimentDetails = regimentDetailRepository.findByRegimentIn(regiments);
+        List<RegimenDetail> regimentDetails = regimentDetailRepository.findByRegimenIn(regiments);
         Integer totalOfRegiment = regiments.size();
         Integer totalMedicine = regimentDetails.size();
 
