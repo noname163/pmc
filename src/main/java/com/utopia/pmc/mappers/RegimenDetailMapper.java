@@ -42,14 +42,14 @@ public class RegimenDetailMapper {
         public RegimenDetailResponse mapEntityToDto(RegimenDetail regimenDetail) {
                 return RegimenDetailResponse
                                 .builder()
-                                .regimenId(regimenDetail.getRegiment().getId())
-                                .regimenName(regimenDetail.getRegiment().getName())
+                                .regimenId(regimenDetail.getRegimen().getId())
+                                .regimenName(regimenDetail.getRegimen().getName())
                                 .medicineId(regimenDetail.getMedicine().getId())
                                 .numberOfMedicine(regimenDetail.getNumberOfMedicine())
                                 .notificationStatus(NotificationStatus.SENDING)
                                 .takenQuantity(regimenDetail.getTakenQuantity())
                                 .dose(regimenDetail.getDose())
-                                .deviceToken(regimenDetail.getRegiment().getDeviceToken())
+                                .deviceToken(regimenDetail.getRegimen().getDeviceToken())
                                 .firstTime(regimenDetail.getFirstTime() == null ? null : regimenDetail.getFirstTime())
                                 .secondTime(regimenDetail.getSecondTime() == null ? null
                                                 : regimenDetail.getSecondTime())

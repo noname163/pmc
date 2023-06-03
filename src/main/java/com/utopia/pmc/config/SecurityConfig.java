@@ -19,6 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.utopia.pmc.data.constants.others.Role;
 import com.utopia.pmc.filters.AuthenticationFilter;
 import com.utopia.pmc.filters.ExceptionHandlerFilter;
 
@@ -41,7 +42,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(
             HttpSecurity httpSecurity, AuthenticationFilter authenticationFilter,
             ExceptionHandlerFilter exceptionHandlerFilter) throws Exception {
-        httpSecurity.csrf(withDefaults()).cors(withDefaults());
+        httpSecurity.csrf().disable().cors();
         httpSecurity.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         httpSecurity.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
         httpSecurity.addFilterBefore(exceptionHandlerFilter, AuthenticationFilter.class);
@@ -51,6 +52,6 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().antMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api/authentication",
-                "/api/users", "/api/regiments");
+                "/api/user");
     }
 }

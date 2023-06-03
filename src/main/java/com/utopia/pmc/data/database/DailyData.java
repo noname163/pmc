@@ -1,8 +1,11 @@
 package com.utopia.pmc.data.database;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
 
 import com.utopia.pmc.data.dto.response.regimendetail.RegimenDetailResponse;
 import com.utopia.pmc.data.entities.Regimen;
@@ -38,4 +41,14 @@ public class DailyData {
         RegimenDetailMapper regimenDetailMapper = new RegimenDetailMapper();
         addDataset(regimen.getDeviceToken(), regimenDetailMapper.mapEntityToDtos(regimentDetails));
     }
+
+    public static void removeRegimenResponse(String key, Set<Long> medicineIds) {
+        if (!data.isEmpty()) {
+            List<RegimenDetailResponse> regimenDetailResponses = data.get(key);
+            regimenDetailResponses
+                    .removeIf(regimenDetailResponse -> medicineIds.contains(regimenDetailResponse.getMedicineId()));
+            updateData(key, regimenDetailResponses);
+        }
+    }
+
 }

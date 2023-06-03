@@ -85,7 +85,7 @@ public class fakedata {
                         .dose(Dose.PILL)
                         .firstTime(LocalTime.now().plusMinutes(1))
                         .medicine(medicine2)
-                        .regiment(regimen)
+                        .regimen(regimen)
                         .takenQuantity(2)
                         .build();
                 

@@ -15,4 +15,5 @@ public interface RegimenDetailService {
             RegimentStatus regimentStatus,
             LocalTime starTime,
             LocalTime endTime);
+    public List<RegimenDetailResponse> getRegimenDetailResponse(Long regimenId);
 }

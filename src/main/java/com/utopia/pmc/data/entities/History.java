@@ -2,6 +2,7 @@ package com.utopia.pmc.data.entities;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -49,4 +51,6 @@ public class History {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user; 
+    @OneToMany(mappedBy = "history")
+    private List<HistoryDetail> historyDetails;
 }
