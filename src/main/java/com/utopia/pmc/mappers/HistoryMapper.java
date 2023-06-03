@@ -10,9 +10,8 @@ public class HistoryMapper {
     public History mapDtoToEntity(HistoryRequest historyRequest) {
         return History
                 .builder()
-                .dateTaken(historyRequest.getTakenDate())
                 .takenStatus(historyRequest.getTakenStatus())
-                .timeTaken(historyRequest.getTakenTime())
+                .numberOfTaken(historyRequest.getMedicineIds().size())
                 .build();
     }
 }
