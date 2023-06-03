@@ -25,19 +25,19 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
-@RequestMapping("/api/regiment-details")
+@RequestMapping("/api/regimen-detail")
 public class RegimenDetailController {
     @Autowired
     private RegimenDetailService regimenDetailService;
 
-    @Operation(summary = "Create new regiment")
+    @Operation(summary = "Get regimen detail")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Get regimen detail successfull.", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = RegimenDetailRequest.class)) }),
             @ApiResponse(responseCode = "404", description = "Regiment information not valid.", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = NotFoundException.class)) })
     })
-    @GetMapping("/regimen-detial/{regimenId}")
+    @GetMapping("/{regimenId}")
     public ResponseEntity<List<RegimenDetailResponse>> getRegimentDetail(@PathVariable Long regimenId){
         return ResponseEntity.status(HttpStatus.OK).body(
             regimenDetailService.getRegimenDetailResponse(regimenId)

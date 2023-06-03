@@ -6,7 +6,6 @@ import java.util.Map;
 
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
 import com.utopia.pmc.data.dto.request.regimen.RegimenRequest;
-import com.utopia.pmc.data.dto.response.regimen.RegimenResponse;
 import com.utopia.pmc.data.dto.response.regimendetail.RegimenDetailResponse;
 
 public interface RegimenDetailService {
