@@ -13,12 +13,12 @@ import com.utopia.pmc.data.database.DailyData;
 import com.utopia.pmc.data.entities.History;
 import com.utopia.pmc.data.entities.HistoryDetail;
 import com.utopia.pmc.data.entities.Medicine;
-import com.utopia.pmc.data.entities.Regimen;
 import com.utopia.pmc.data.repositories.HistoryDetailRepository;
 import com.utopia.pmc.data.repositories.MedicineRepository;
 import com.utopia.pmc.exceptions.BadRequestException;
 import com.utopia.pmc.exceptions.message.Message;
 import com.utopia.pmc.services.historyDetail.HistoryDetailService;
+import com.utopia.pmc.services.regimenDetail.RegimenDetailService;
 
 @Service
 public class HistoryDetailServiceImpl implements HistoryDetailService {
@@ -26,6 +26,8 @@ public class HistoryDetailServiceImpl implements HistoryDetailService {
     private HistoryDetailRepository historyDetailRepository;
     @Autowired
     private MedicineRepository medicineRepository;
+    @Autowired
+    private RegimenDetailService regimenDetailService;
     @Autowired
     private Message message;
 
@@ -45,6 +47,7 @@ public class HistoryDetailServiceImpl implements HistoryDetailService {
                     .build());
         }
         historyDetailRepository.saveAll(historyDetails);
+        regimenDetailService.reduceMedicineQuantity(history.getRegiment().getId(), medicineIds);
         DailyData.removeRegimenResponse(history.getRegiment().getDeviceToken(), medicineIds);
     }
 

@@ -2,6 +2,7 @@ package com.utopia.pmc.data.repositories;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +18,8 @@ public interface RegimenDetailRepository extends JpaRepository<RegimenDetail, Lo
 
         public List<RegimenDetail> findByRegimenIn(List<Regimen> regiments);
 
+        public List<RegimenDetail> findByRegimenIdAndMedicineIdIn(Long regimenId, Set<Long> medicineId);
+
         @Query("SELECT rd FROM RegimenDetail rd" +
                         " JOIN FETCH rd.regimen r" +
                         " WHERE r.status = :regimentStatus" +
@@ -30,5 +33,6 @@ public interface RegimenDetailRepository extends JpaRepository<RegimenDetail, Lo
                         @Param("regimentStatus") RegimentStatus regimentStatus,
                         @Param("startTime") LocalTime startTime,
                         @Param("endTime") LocalTime endTime);
+
         List<RegimenDetail> findByRegimenId(Long id);
 }
