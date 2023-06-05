@@ -15,14 +15,14 @@ import com.utopia.pmc.data.constants.others.Gender;
 import com.utopia.pmc.data.constants.others.Period;
 import com.utopia.pmc.data.constants.others.Role;
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
-import com.utopia.pmc.data.entities.Medicine;
 import com.utopia.pmc.data.entities.Regimen;
 import com.utopia.pmc.data.entities.RegimenDetail;
 import com.utopia.pmc.data.entities.User;
-import com.utopia.pmc.data.repositories.MedicineRepository;
+import com.utopia.pmc.data.entities.medicine.Medicine;
 import com.utopia.pmc.data.repositories.RegimenDetailRepository;
 import com.utopia.pmc.data.repositories.RegimenRepository;
 import com.utopia.pmc.data.repositories.UserRepository;
+import com.utopia.pmc.data.repositories.medicine.MedicineRepository;
 
 @Configuration
 public class fakedata {
@@ -82,7 +82,6 @@ public class fakedata {
                         .build();
                 RegimenDetail regimenDetail = RegimenDetail
                         .builder()
-                        .dose(Dose.PILL)
                         .firstTime(LocalTime.now().plusMinutes(1))
                         .medicine(medicine2)
                         .regimen(regimen)

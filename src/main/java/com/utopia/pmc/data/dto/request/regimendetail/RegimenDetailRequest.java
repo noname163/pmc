@@ -16,8 +16,6 @@ public class RegimenDetailRequest {
 
     private Integer takenQuantity;
 
-    private Dose dose;
-
     @JsonFormat(pattern = Validation.TIME_FORMAT)
     private String firstTime;
 
