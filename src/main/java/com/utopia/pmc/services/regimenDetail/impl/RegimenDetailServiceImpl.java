@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -135,6 +136,20 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
             throw new NotFoundException(message.emptyList("Regimen details"));
         }
         return regimentDetailMapper.mapEntityToDtos(regimenDetailResponses);
+    }
+
+    @Override
+    public void reduceMedicineQuantity(Long regimenId, Set<Long> medicineIds) {
+        List<RegimenDetail> regimenDetails = regimentDetailRepository.findByRegimenIdAndMedicineIdIn(regimenId,
+                medicineIds);
+
+        for (RegimenDetail regimenDetail : regimenDetails) {
+            Integer medicineQuantity = regimenDetail.getNumberOfMedicine();
+            Integer newMedicineQuantity = medicineQuantity - regimenDetail.getTakenQuantity();
+            regimenDetail.setNumberOfMedicine(newMedicineQuantity);
+        }
+
+        regimentDetailRepository.saveAll(regimenDetails);
     }
 
 }
