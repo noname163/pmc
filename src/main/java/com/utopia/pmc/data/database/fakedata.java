@@ -86,6 +86,7 @@ public class fakedata {
                         .firstTime(LocalTime.now().plusMinutes(1))
                         .medicine(medicine2)
                         .regimen(regimen)
+                        .numberOfMedicine(10)
                         .takenQuantity(2)
                         .build();
                 

@@ -61,38 +61,42 @@ public class SendNotificationServiceImpl implements SendNotificationService {
         List<ExpoPushMessage> expoPushMessages = new ArrayList<>();
         Map<String, NotificationResponse> notificationData = handlerData(data);
 
-        for (String key : notificationData.keySet()) {
-            Map<String, Object> dataSend = new HashMap<>();
-            String deviceToken = key;
-            NotificationResponse notificationResponse = notificationData.get(key);
-
-            dataSend.put("data", notificationResponse.getData());
-
-            ExpoPushMessage expoPushMessage = setExpoPushMessage(
-                    deviceToken,
-                    notificationResponse.getTitle(),
-                    notificationResponse.getMessage(),
-                    dataSend);
-
-            expoPushMessages.add(expoPushMessage);
-
+        if(!notificationData.isEmpty()){
+            for (String key : notificationData.keySet()) {
+                Map<String, Object> dataSend = new HashMap<>();
+                String deviceToken = key;
+                NotificationResponse notificationResponse = notificationData.get(key);
+    
+                dataSend.put("data", notificationResponse.getData());
+    
+                ExpoPushMessage expoPushMessage = setExpoPushMessage(
+                        deviceToken,
+                        notificationResponse.getTitle(),
+                        notificationResponse.getMessage(),
+                        dataSend);
+    
+                expoPushMessages.add(expoPushMessage);
+    
+            }
+    
+            PushClient client = new PushClient();
+            List<List<ExpoPushMessage>> chunks = client.chunkPushNotifications(expoPushMessages);
+            List<CompletableFuture<List<ExpoPushTicket>>> messageRepliesFutures = new ArrayList<>();
+    
+            for (List<ExpoPushMessage> chunk : chunks) {
+                messageRepliesFutures.add(client.sendPushNotificationsAsync(chunk));
+            }
+            try {
+                logForSendNotification.logForSendNotification(client, expoPushMessages, messageRepliesFutures);
+            } catch (InterruptedException e) {
+                System.out.println("Errors " + e.getMessage());
+            } catch (ExecutionException e) {
+                System.out.println("Errors " + e.getMessage());
+            }
         }
+        log.info("Notthing to send at " + currentTime);
 
-        PushClient client = new PushClient();
-        List<List<ExpoPushMessage>> chunks = client.chunkPushNotifications(expoPushMessages);
-        List<CompletableFuture<List<ExpoPushTicket>>> messageRepliesFutures = new ArrayList<>();
-
-        for (List<ExpoPushMessage> chunk : chunks) {
-            messageRepliesFutures.add(client.sendPushNotificationsAsync(chunk));
-        }
-
-        try {
-            logForSendNotification.logForSendNotification(client, expoPushMessages, messageRepliesFutures);
-        } catch (InterruptedException e) {
-            System.out.println("Errors " + e.getMessage());
-        } catch (ExecutionException e) {
-            System.out.println("Errors " + e.getMessage());
-        }
+        
     }
 
     private ExpoPushMessage setExpoPushMessage(String recipient, String title, String message,
