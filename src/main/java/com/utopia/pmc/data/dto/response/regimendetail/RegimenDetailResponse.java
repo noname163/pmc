@@ -16,7 +16,6 @@ import lombok.Setter;
 public class RegimenDetailResponse {
     private Long regimenId;
     private Integer takenQuantity;
-    private Dose dose;
     private Integer numberOfMedicine;
     private LocalTime firstTime;
     private LocalTime secondTime;

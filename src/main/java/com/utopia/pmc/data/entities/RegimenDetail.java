@@ -13,6 +13,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.utopia.pmc.data.constants.others.Dose;
+import com.utopia.pmc.data.entities.medicine.Medicine;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,8 +35,6 @@ public class RegimenDetail {
     private long id;
     @Column(name = "taken_quantity")
     private Integer takenQuantity;
-    @Column(name = "dose")
-    private Dose dose;
     @Column(name =  "number_of_medicine")
     private Integer numberOfMedicine;
     @Column(name = "first_time")
