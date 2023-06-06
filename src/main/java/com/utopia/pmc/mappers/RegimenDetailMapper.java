@@ -35,7 +35,6 @@ public class RegimenDetailMapper {
                                 .secondTime(secondTime)
                                 .thirdTime(thirdTime)
                                 .fourthTime(fourthTime)
-                                .dose(regimentDetailRequest.getDose())
                                 .build();
         }
 
@@ -48,7 +47,6 @@ public class RegimenDetailMapper {
                                 .numberOfMedicine(regimenDetail.getNumberOfMedicine())
                                 .notificationStatus(NotificationStatus.SENDING)
                                 .takenQuantity(regimenDetail.getTakenQuantity())
-                                .dose(regimenDetail.getDose())
                                 .deviceToken(regimenDetail.getRegimen().getDeviceToken())
                                 .firstTime(regimenDetail.getFirstTime() == null ? null : regimenDetail.getFirstTime())
                                 .secondTime(regimenDetail.getSecondTime() == null ? null
