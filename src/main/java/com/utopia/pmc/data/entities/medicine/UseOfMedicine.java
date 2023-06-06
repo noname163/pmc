@@ -1,5 +1,6 @@
 package com.utopia.pmc.data.entities.medicine;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,17 +25,17 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UseOfMedicine {
-    @Id
-    @SequenceGenerator(name = "use_of_medicine_sequence", sequenceName = "use_of_medicine_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "use_of_medicine_sequence")
-    private long id;
+    @EmbeddedId
+    private UseOfMedicineKey id;
 
     @ManyToOne
-    @MapsId("medicine_id")
+    @MapsId("medicineId")
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;
+    
     @ManyToOne
-    @MapsId("medication_use")
+    @MapsId("medicationUseId")
     @JoinColumn(name = "medication_use_id")
     private MedicationUse medicationUse;
 }
+
