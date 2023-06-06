@@ -22,8 +22,10 @@ public class HistoryMapper {
     public HistoryResponse mapEntityToDto(History history) {
         return HistoryResponse
                 .builder()
+                .historyId(history.getId())
                 .regimenName(history.getRegiment().getName())
                 .takenDate(history.getDateTaken())
+                .timeTaken(history.getTimeTaken())
                 .takenStatus(history.getTakenStatus())
                 .totalMedicine(history.getTotalMedicine())
                 .numberOfTaken(history.getNumberOfTaken())

@@ -44,13 +44,14 @@ public class HistoryServiceImpl implements HistoryService {
     @Transient
     public void createHistory(@RequestBody HistoryRequest historyRequest) {
         User user = securityContextService.getCurrentUser();
-        if(user == null){
+        if (user == null) {
             throw new BadRequestException(message.invalidUser());
         }
         Regimen regimen = regimenRepository
                 .findById(historyRequest.getRegimentId())
                 .orElseThrow(() -> new BadRequestException(
                         message.objectNotFoundByIdMessage("Regimen", historyRequest.getRegimentId())));
+
         History history = historyMapper.mapDtoToEntity(historyRequest);
         history.setRegiment(regimen);
         history.setUser(user);
@@ -64,7 +65,7 @@ public class HistoryServiceImpl implements HistoryService {
     @Override
     public List<HistoryResponse> getHistoryByUser() {
         User user = securityContextService.getCurrentUser();
-        if(user == null){
+        if (user == null) {
             throw new BadRequestException(message.invalidUser());
         }
         List<History> histories = historyRepository.findByUserIdOrderByDateTakenDesc(user.getId());

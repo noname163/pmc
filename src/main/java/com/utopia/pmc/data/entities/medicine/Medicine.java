@@ -53,8 +53,6 @@ public class Medicine {
     private String note;
     @OneToMany(mappedBy = "medicine")
     private List<RegimenDetail> regimenDetails;
-    @OneToMany(mappedBy = "medicine")
-    private List<HistoryDetail> historyDetails;
     @OneToMany(mappedBy = "medicine", cascade = CascadeType.ALL)
     private List<UseOfMedicine> useOfMedicines;
     @ManyToOne
