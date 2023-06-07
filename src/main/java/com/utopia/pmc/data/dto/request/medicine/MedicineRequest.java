@@ -21,6 +21,6 @@ public class MedicineRequest {
     private String note;
     private ConsumerWay consumerWay;
     private List<Long> useOfMedicineIds;
-    private Long dosageFormId;
+    private String dosageForm;
     private Long classificationId;
 }
