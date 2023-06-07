@@ -18,5 +18,8 @@ public class Message {
     public String badValue(String objectName) {
         return "The " + objectName + " not valid";
     }
+    public String invalidUser(){
+        return "Login to perform this function";
+    }
 
 }

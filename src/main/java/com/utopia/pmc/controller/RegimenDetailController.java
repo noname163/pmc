@@ -7,14 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.utopia.pmc.data.dto.request.regimendetail.RegimenDetailRequest;
-import com.utopia.pmc.data.dto.response.regimen.RegimenResponse;
 import com.utopia.pmc.data.dto.response.regimendetail.RegimenDetailResponse;
-import com.utopia.pmc.exceptions.BadRequestException;
 import com.utopia.pmc.exceptions.NotFoundException;
 import com.utopia.pmc.services.regimenDetail.RegimenDetailService;
 

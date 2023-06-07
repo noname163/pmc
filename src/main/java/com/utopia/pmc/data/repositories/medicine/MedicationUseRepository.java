@@ -10,4 +10,5 @@ import com.utopia.pmc.data.entities.medicine.MedicationUse;
 @Repository
 public interface MedicationUseRepository extends JpaRepository<MedicationUse, Long> {
     public List<MedicationUse> findByIdIn(List<Long> id);
+    
 }
