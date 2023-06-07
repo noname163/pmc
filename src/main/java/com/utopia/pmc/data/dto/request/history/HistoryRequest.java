@@ -16,7 +16,6 @@ import lombok.Setter;
 @Setter
 public class HistoryRequest {
     private Long regimentId;
-    private Long userId;
     private TakenStatus takenStatus;
     private Set<Long> medicineIds;
 }

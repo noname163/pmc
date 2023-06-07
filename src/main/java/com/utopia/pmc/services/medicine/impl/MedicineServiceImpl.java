@@ -55,9 +55,9 @@ public class MedicineServiceImpl implements MedicineService {
         MedicineClassification medicineClassification = medicineClassificationRepository
                 .findById(medicineRequest.getClassificationId()).orElseThrow(() -> new BadRequestException(
                         message.objectNotFoundByIdMessage("Classification", medicineRequest.getClassificationId())));
-        DosageForm dosageForm = dosageFormRepository.findById(medicineRequest.getDosageFormId())
+        DosageForm dosageForm = dosageFormRepository.findByFormIgnoreCase(medicineRequest.getDosageForm())
                 .orElseThrow(() -> new BadRequestException(
-                        message.objectNotFoundByIdMessage("Dosage Form", medicineRequest.getDosageFormId())));
+                        message.objectNotFoundByIdMessage("Dosage Form", medicineRequest.getDosageForm())));
 
         medicine.setDosageForm(dosageForm);
         medicine.setClassification(medicineClassification);

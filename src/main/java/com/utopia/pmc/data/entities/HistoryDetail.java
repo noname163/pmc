@@ -1,5 +1,6 @@
 package com.utopia.pmc.data.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,8 +31,8 @@ public class HistoryDetail {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "history_detail_sequence")
     private long id;
     @ManyToOne
-    @JoinColumn(name = "medicine_id")
-    private Medicine medicine;
+    @JoinColumn(name = "regimen_detail_id")
+    private RegimenDetail regimenDetail;
     @ManyToOne
     @JoinColumn(name = "history_id")
     private History history;
