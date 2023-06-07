@@ -1,10 +1,13 @@
 package com.utopia.pmc.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +30,7 @@ public class RegimentController {
     @Autowired
     private RegimenService regimentService;
 
-    @Operation(summary = "Create new regiment")
+    @Operation(summary = "Create new regimen")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Created successfull.", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = RegimenResponse.class)) }),
@@ -38,5 +41,20 @@ public class RegimentController {
     public ResponseEntity<RegimenResponse> createRegiment(@Valid @RequestBody RegimenRequest regimentRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 regimentService.createRegiment(regimentRequest));
+    }
+
+    
+    @Operation(summary = "Get regimen of current user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Get successfull.", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = RegimenResponse.class)) }),
+            @ApiResponse(responseCode = "400", description = "User information not valid.", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = BadRequestException.class)) })
+    })
+    @GetMapping()
+    public ResponseEntity<List<RegimenResponse>> getRegimenOfCurrentUser(){
+        return ResponseEntity.status(HttpStatus.OK).body(
+                regimentService.getRegimenOfCurrentUser()
+        );
     }
 }
