@@ -47,6 +47,13 @@ public class RegimenMapper {
                 .build();
     }
 
+    public List<RegimenResponse> mapEntitiesToDtoRegimenResponse(List<Regimen> regimens) {
+        return regimens
+                .stream()
+                .map(this::mapEntityToDtoRegimenResponse)
+                .collect(Collectors.toList());
+    }
+
     public List<Regimen> mapDtosToEntities(List<RegimenRequest> regimentRequests) {
         return regimentRequests
                 .stream()
