@@ -1,6 +1,7 @@
 package com.utopia.pmc.services.regimen.impl;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -16,6 +17,7 @@ import com.utopia.pmc.data.entities.Regimen;
 import com.utopia.pmc.data.entities.User;
 import com.utopia.pmc.data.repositories.RegimenRepository;
 import com.utopia.pmc.exceptions.BadRequestException;
+import com.utopia.pmc.exceptions.message.Message;
 import com.utopia.pmc.mappers.RegimenMapper;
 import com.utopia.pmc.services.authenticate.SecurityContextService;
 import com.utopia.pmc.services.payment.PaymentPlansService;
@@ -35,6 +37,8 @@ public class RegimenServiceImpl implements RegimenService {
     private RegimenDetailService regimentDetailService;
     @Autowired
     private PaymentPlansService paymentPlansService;
+    @Autowired
+    private Message message;
 
     @Transactional
     @Override
@@ -64,6 +68,20 @@ public class RegimenServiceImpl implements RegimenService {
     public void updateRegiment(Long regimentId) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateRegiment'");
+    }
+
+    @Override
+    public List<RegimenResponse> getRegimenOfCurrentUser() {
+        User user = securityContextService.getCurrentUser();
+        if(user == null){
+            throw new BadRequestException(message.invalidUser());
+        }
+        List<Regimen> regimens = regimentRepository.findByUser(user);
+
+        if(regimens.isEmpty()){
+            throw new BadRequestException(message.emptyList("Regimen"));
+        }
+        return regimentMapper.mapEntitiesToDtoRegimenResponse(regimens);
     }
 
 }
