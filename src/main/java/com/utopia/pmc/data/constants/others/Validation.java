@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 public class Validation {
     public static final String DATE_FORMAT = "dd/MM/yyyy";
     public static final String TIME_FORMAT = "HH:mm";
+    public static final String TIME_FORMAT_WITH_SECOND = "HH:mm:ss";
     public static final String PHONE_REGEX = "^\\d{10}$";
     public static final String ONLY_ALPHABET_REGEX = "^.*[A-Za-z].*$";
     public static final String EMAIL_REGEX = "^[A-Za-z0-9._]+@gmail\\.[A-Za-z]{2,3}$";

@@ -19,5 +19,7 @@ public interface RegimenDetailService {
             LocalTime starTime,
             LocalTime endTime);
 
-    public List<RegimenDetailResponse> getRegimenDetailResponse(Long regimenId);
+    public List<RegimenDetailResponse> getRegimenDetailResponses(Long regimenId);
+
+    public RegimenDetailResponse getRegimenDetailResponse(Long regimenDetailId);
 }

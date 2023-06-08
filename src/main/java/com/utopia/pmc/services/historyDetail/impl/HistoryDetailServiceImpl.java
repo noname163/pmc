@@ -63,7 +63,6 @@ public class HistoryDetailServiceImpl implements HistoryDetailService {
 
         historyDetailRepository.saveAll(historyDetails);
         regimenDetailService.reduceMedicineQuantity(history.getRegiment().getId(), medicineIds);
-        DailyData.removeRegimenResponse(history.getRegiment().getDeviceToken(), medicineIds);
     }
 
     @Override

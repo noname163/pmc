@@ -27,6 +27,20 @@ public class RegimenDetailController {
     @Autowired
     private RegimenDetailService regimenDetailService;
 
+    @Operation(summary = "Get regimen details")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Get regimen details successfull.", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = RegimenDetailRequest.class)) }),
+            @ApiResponse(responseCode = "404", description = "Regiment information not valid.", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = NotFoundException.class)) })
+    })
+    @GetMapping("/{regimenId}")
+    public ResponseEntity<List<RegimenDetailResponse>> getRegimenDetails(@PathVariable Long regimenId){
+        return ResponseEntity.status(HttpStatus.OK).body(
+            regimenDetailService.getRegimenDetailResponses(regimenId)
+        );
+    }
+
     @Operation(summary = "Get regimen detail")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Get regimen detail successfull.", content = {
@@ -34,10 +48,10 @@ public class RegimenDetailController {
             @ApiResponse(responseCode = "404", description = "Regiment information not valid.", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = NotFoundException.class)) })
     })
-    @GetMapping("/{regimenId}")
-    public ResponseEntity<List<RegimenDetailResponse>> getRegimentDetail(@PathVariable Long regimenId){
+    @GetMapping("/view-detail/{regimenDetailId}")
+    public ResponseEntity<RegimenDetailResponse> getRegimenDetail(@PathVariable Long regimenDetailId){
         return ResponseEntity.status(HttpStatus.OK).body(
-            regimenDetailService.getRegimenDetailResponse(regimenId)
+            regimenDetailService.getRegimenDetailResponse(regimenDetailId)
         );
     }
 }

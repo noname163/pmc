@@ -11,6 +11,6 @@ import io.github.jav.exposerversdk.PushClient;
 
 public interface LogNotificationStatus {
     public void logForSendNotification(PushClient client, List<ExpoPushMessage> expoPushMessages,
-            List<CompletableFuture<List<ExpoPushTicket>>> messageRepliesFutures)
+            List<CompletableFuture<List<ExpoPushTicket>>> messageRepliesFutures, String takenTime)
             throws InterruptedException, ExecutionException;
 }
