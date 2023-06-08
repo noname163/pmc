@@ -12,5 +12,6 @@ import lombok.Setter;
 public class NotificationResponse {
     private String title;
     private String message;
+    private String sendingTime;
     private Object data;
 }

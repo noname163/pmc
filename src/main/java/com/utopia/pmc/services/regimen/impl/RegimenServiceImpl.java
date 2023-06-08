@@ -60,7 +60,6 @@ public class RegimenServiceImpl implements RegimenService {
         Regimen result = regimentRepository.findById(regiment.getId())
                 .orElseThrow(() -> new BadRequestException("Errors as create new regiment"));
 
-        DailyData.addRegimen(result);
         return regimentMapper.mapEntityToDtoRegimenResponse(result);
     }
 
