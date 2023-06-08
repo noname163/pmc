@@ -3,7 +3,6 @@ package com.utopia.pmc.data.dto.response.regimendetail;
 import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.utopia.pmc.data.constants.others.Dose;
 import com.utopia.pmc.data.constants.statuses.NotificationStatus;
 
 import lombok.Builder;

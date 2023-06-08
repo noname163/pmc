@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import javax.persistence.Transient;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import com.utopia.pmc.mappers.HistoryMapper;
 import com.utopia.pmc.services.authenticate.SecurityContextService;
 import com.utopia.pmc.services.history.HistoryService;
 import com.utopia.pmc.services.historyDetail.HistoryDetailService;
+import com.utopia.pmc.services.regimen.RegimenService;
 
 @Service
 public class HistoryServiceImpl implements HistoryService {
@@ -36,17 +38,21 @@ public class HistoryServiceImpl implements HistoryService {
     @Autowired
     private SecurityContextService securityContextService;
     @Autowired
+    private RegimenService regimenService;
+    @Autowired
     private HistoryMapper historyMapper;
     @Autowired
     private Message message;
 
     @Override
-    @Transient
+    @Transactional
     public void createHistory(@RequestBody HistoryRequest historyRequest) {
         User user = securityContextService.getCurrentUser();
+
         if (user == null) {
             throw new BadRequestException(message.invalidUser());
         }
+
         Regimen regimen = regimenRepository
                 .findById(historyRequest.getRegimentId())
                 .orElseThrow(() -> new BadRequestException(
@@ -58,8 +64,10 @@ public class HistoryServiceImpl implements HistoryService {
         history.setTotalMedicine(regimen.getRegimentDetails().size());
         history.setDateTaken(LocalDate.now());
         history.setTimeTaken(LocalTime.now());
+
         history = historyRepository.save(history);
         historyDetailService.createHistoryDetail(history, historyRequest.getMedicineIds());
+        regimenService.countTakenTimeOrMissedTime(regimen, historyRequest.getTakenStatus());
     }
 
     @Override
