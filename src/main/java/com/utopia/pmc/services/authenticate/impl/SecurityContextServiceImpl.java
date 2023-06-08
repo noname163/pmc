@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.utopia.pmc.config.CustomUserDetails;
 import com.utopia.pmc.data.entities.User;
 import com.utopia.pmc.data.repositories.UserRepository;
+import com.utopia.pmc.exceptions.BadRequestException;
 import com.utopia.pmc.exceptions.ForbiddenException;
 import com.utopia.pmc.services.authenticate.SecurityContextService;
 
@@ -39,5 +40,13 @@ public class SecurityContextServiceImpl implements SecurityContextService {
         Authentication authentication = securityContext.getAuthentication();
         Object principal = authentication.getPrincipal();
         return ((CustomUserDetails) principal).getUser();
+    }
+
+    @Override
+    public void validateCurrentUser(User user) {
+        User currentUser = getCurrentUser();
+        if(!currentUser.getPhone().equals(user.getPhone())){
+            throw new BadRequestException("Invalid User");
+        }
     }
 }

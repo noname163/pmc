@@ -9,16 +9,13 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.utopia.pmc.data.database.DailyData;
 import com.utopia.pmc.data.dto.response.history.HistoryDetailRespone;
 import com.utopia.pmc.data.entities.History;
 import com.utopia.pmc.data.entities.HistoryDetail;
 import com.utopia.pmc.data.entities.RegimenDetail;
 import com.utopia.pmc.data.entities.User;
-import com.utopia.pmc.data.entities.medicine.Medicine;
 import com.utopia.pmc.data.repositories.HistoryDetailRepository;
 import com.utopia.pmc.data.repositories.RegimenDetailRepository;
-import com.utopia.pmc.data.repositories.medicine.MedicineRepository;
 import com.utopia.pmc.exceptions.BadRequestException;
 import com.utopia.pmc.exceptions.message.Message;
 import com.utopia.pmc.mappers.HistoryDetailMapper;
