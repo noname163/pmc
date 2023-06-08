@@ -69,12 +69,6 @@ public class RegimenServiceImpl implements RegimenService {
     }
 
     @Override
-    public void updateRegiment(Long regimentId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateRegiment'");
-    }
-
-    @Override
     public List<RegimenResponse> getRegimenOfCurrentUser() {
         User user = securityContextService.getCurrentUser();
         securityContextService.validateCurrentUser(user);
@@ -90,9 +84,7 @@ public class RegimenServiceImpl implements RegimenService {
     @Override
     public void editRegimen(EditRegimenRequest editRegimenRequest) {
 
-        Regimen regimen = regimentRepository.findById(editRegimenRequest.getRegimenId())
-                .orElseThrow(() -> new BadRequestException(
-                        message.objectNotFoundByIdMessage("Regimen", editRegimenRequest.getRegimenId())));
+        Regimen regimen = getRegimenById(editRegimenRequest.getRegimenId());
         User userOfRegimen = regimen.getUser();
         securityContextService.validateCurrentUser(userOfRegimen);
 
@@ -125,5 +117,34 @@ public class RegimenServiceImpl implements RegimenService {
 
         regimentRepository.save(regimen);
     }
+
+    @Override
+    public void finishedRegimen(Long regimenId) {
+        Regimen regimen = getRegimenById(regimenId);
+        User currentUser = regimen.getUser();
+        securityContextService.validateCurrentUser(currentUser);
+
+        regimen.setStatus(RegimentStatus.FINISHED);
+        regimentRepository.save(regimen);
+    }
+
+    @Override
+    public void deleteRegimen(Long regimenId) {
+        Regimen regimen = getRegimenById(regimenId);
+        User currentUser = regimen.getUser();
+        securityContextService.validateCurrentUser(currentUser);
+
+        regimen.setStatus(RegimentStatus.DISABLE);
+        regimentRepository.save(regimen);
+    }
+
+    private Regimen getRegimenById(Long regimenId) {
+        return regimentRepository.findById(regimenId)
+                .orElseThrow(() -> new BadRequestException(
+                        message.objectNotFoundByIdMessage("Regimen", regimenId)));
+
+    }
+
+    
 
 }

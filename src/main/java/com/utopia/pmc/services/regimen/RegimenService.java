@@ -12,6 +12,7 @@ public interface RegimenService {
     public RegimenResponse createRegiment(RegimenRequest regimentRequest);
     public List<RegimenResponse> getRegimenOfCurrentUser();
     public void editRegimen(EditRegimenRequest editRegimenRequest);
-    public void updateRegiment(Long regimentId);
+    public void finishedRegimen(Long regimenId);
+    public void deleteRegimen(Long regimenId);
     public void countTakenTimeOrMissedTime(Regimen regimen, TakenStatus takenStatus);
 }

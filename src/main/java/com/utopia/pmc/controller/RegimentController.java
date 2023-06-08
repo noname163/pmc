@@ -7,7 +7,10 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,5 +71,29 @@ public class RegimentController {
         public ResponseEntity<List<RegimenResponse>> getRegimenOfCurrentUser() {
                 return ResponseEntity.status(HttpStatus.OK).body(
                                 regimentService.getRegimenOfCurrentUser());
+        }
+
+        @Operation(summary = "Finished regimen")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Finished successfull."),
+                        @ApiResponse(responseCode = "400", description = "User information not valid.", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(implementation = BadRequestException.class)) })
+        })
+        @PatchMapping("/{regimenId}")
+        public ResponseEntity<Void> finishedRegimen(@PathVariable Long regimenId) {
+                regimentService.finishedRegimen(regimenId);
+                return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        }
+
+        @Operation(summary = "Delete regimen")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Delete successfull."),
+                        @ApiResponse(responseCode = "400", description = "User information not valid.", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(implementation = BadRequestException.class)) })
+        })
+        @DeleteMapping("/{regimenId}")
+        public ResponseEntity<Void> deleteRegimen(@PathVariable Long regimenId) {
+                regimentService.deleteRegimen(regimenId);
+                return ResponseEntity.status(HttpStatus.ACCEPTED).build();
         }
 }
