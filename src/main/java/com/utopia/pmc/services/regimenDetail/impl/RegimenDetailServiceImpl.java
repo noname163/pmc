@@ -125,7 +125,7 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
         for (RegimenDetail regimentDetail : regimentDetails) {
             LocalTime takenTime = regimenFunction.determineTakenTime(regimentDetail);
 
-            List<RegimenDetailResponse> regimenDetailResponses = result.getOrDefault(takenTime.toString(),
+            List<RegimenDetailResponse> regimenDetailResponses = result.getOrDefault(takenTime.format(formatter),
                     new ArrayList<>());
             RegimenDetailResponse regimenDetailResponse = regimentDetailMapper.mapEntityToDto(regimentDetail);
             regimenDetailResponses.add(regimenDetailResponse);
