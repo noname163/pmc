@@ -1,6 +1,7 @@
 package com.utopia.pmc.services.regimenDetail.impl;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +14,9 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.utopia.pmc.data.constants.others.Validation;
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
+import com.utopia.pmc.data.database.DailyData;
 import com.utopia.pmc.data.dto.request.regimen.RegimenRequest;
 import com.utopia.pmc.data.dto.request.regimendetail.RegimenDetailRequest;
 import com.utopia.pmc.data.dto.response.regimendetail.RegimenDetailResponse;
@@ -58,7 +61,7 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
         Map<Long, RegimenDetailRequest> regimentDetailRequetsMap = new HashMap<>();
         Long regimentId = regimentRequest.getId();
         Optional<Regimen> regimentOtp = regimentRepository.findById(regimentId);
-
+        LocalTime takenTime = LocalTime.now();
         if (regimentOtp.isEmpty()) {
             throw new BadRequestException(message.objectNotFoundByIdMessage("Regiment", regimentId));
         }
@@ -85,6 +88,9 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
             int takenQuantity = medicineRequests.get(medicineId);
             RegimenDetailRequest regimentDetailRequest = regimentDetailRequetsMap.get(medicineId);
             RegimenDetail regimentDetail = regimentDetailMapper.mapDtoToEntity(regimentDetailRequest);
+            if (regimenFunction.determineTakenTime(regimentDetail) != null) {
+                takenTime = regimenFunction.determineTakenTime(regimentDetail);
+            }
             Integer totalMedicine = regimenFunction.calculateMedicineQuantity(takenQuantity, regiment.getDoseRegiment(),
                     regiment.getPeriod());
 
@@ -95,8 +101,9 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
 
             regimentDetails.add(regimentDetail);
         }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Validation.TIME_FORMAT_WITH_SECOND);
         regimentDetailRepository.saveAll(regimentDetails);
-
+        DailyData.addRegimenDetail(takenTime.format(formatter), regimentDetailMapper.mapEntityToDtos(regimentDetails));
         regiment.setRegimentDetails(regimentDetails);
         regimentRepository.save(regiment);
     }
@@ -114,27 +121,29 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
         }
 
         Map<String, List<RegimenDetailResponse>> result = new HashMap<>();
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Validation.TIME_FORMAT_WITH_SECOND);
         for (RegimenDetail regimentDetail : regimentDetails) {
-            Regimen regiment = regimentDetail.getRegimen();
-            String deviceToken = regiment.getDeviceToken();
+            LocalTime takenTime = regimenFunction.determineTakenTime(regimentDetail);
 
-            List<RegimenDetailResponse> regimenDetailResponses = result.getOrDefault(deviceToken, new ArrayList<>());
+            List<RegimenDetailResponse> regimenDetailResponses = result.getOrDefault(takenTime.toString(),
+                    new ArrayList<>());
             RegimenDetailResponse regimenDetailResponse = regimentDetailMapper.mapEntityToDto(regimentDetail);
             regimenDetailResponses.add(regimenDetailResponse);
 
-            result.put(deviceToken, regimenDetailResponses);
+            result.put(takenTime.format(formatter), regimenDetailResponses);
         }
 
         return result;
     }
 
     @Override
-    public List<RegimenDetailResponse> getRegimenDetailResponse(Long regimenId) {
+    public List<RegimenDetailResponse> getRegimenDetailResponses(Long regimenId) {
         List<RegimenDetail> regimenDetailResponses = regimentDetailRepository.findByRegimenId(regimenId);
+
         if (regimenDetailResponses.isEmpty()) {
             throw new NotFoundException(message.emptyList("Regimen details"));
         }
+
         return regimentDetailMapper.mapEntityToDtos(regimenDetailResponses);
     }
 
@@ -150,6 +159,16 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
         }
 
         regimentDetailRepository.saveAll(regimenDetails);
+    }
+
+    @Override
+    public RegimenDetailResponse getRegimenDetailResponse(Long regimenDetailId) {
+
+        RegimenDetail regimenDetail = regimentDetailRepository.findById(regimenDetailId)
+                .orElseThrow(() -> new BadRequestException(
+                        message.objectNotFoundByIdMessage("Regimen Detail", regimenDetailId)));
+
+        return regimentDetailMapper.mapEntityToDto(regimenDetail);
     }
 
 }

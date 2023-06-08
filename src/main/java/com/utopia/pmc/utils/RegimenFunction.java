@@ -29,16 +29,17 @@ public class RegimenFunction {
     }
     public LocalTime determineTakenTime(LocalTime firstTime, LocalTime secondTime, LocalTime thirdTime, LocalTime fourthTime) {
         LocalTime currentTime = LocalTime.now();
-        if (firstTime != null && currentTime.compareTo(firstTime) <= 0) {
+        
+        if (firstTime != null && currentTime.compareTo(firstTime.plusMinutes(5)) <= 0) {
             return firstTime;
         }
-        if (secondTime != null && currentTime.compareTo(secondTime) <= 0) {
+        if (secondTime != null && currentTime.compareTo(secondTime.plusMinutes(5)) <= 0) {
             return secondTime;
         }
-        if (thirdTime != null && currentTime.compareTo(thirdTime) <= 0) {
+        if (thirdTime != null && currentTime.compareTo(thirdTime.plusMinutes(5)) <= 0) {
             return thirdTime;
         }
-        if (fourthTime != null && currentTime.compareTo(fourthTime) <= 0) {
+        if (fourthTime != null && currentTime.compareTo(fourthTime.plusMinutes(5)) <= 0) {
             return fourthTime;
         }
         return null;

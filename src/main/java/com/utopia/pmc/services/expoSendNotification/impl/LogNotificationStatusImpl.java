@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.utopia.pmc.data.database.DailyData;
 import com.utopia.pmc.services.expoSendNotification.LogNotificationStatus;
 
 import io.github.jav.exposerversdk.ExpoPushMessage;
@@ -22,7 +23,7 @@ public class LogNotificationStatusImpl implements LogNotificationStatus {
 
         @Override
         public void logForSendNotification(PushClient client, List<ExpoPushMessage> expoPushMessages,
-                        List<CompletableFuture<List<ExpoPushTicket>>> messageRepliesFutures)
+                        List<CompletableFuture<List<ExpoPushTicket>>> messageRepliesFutures, String takenTime)
                         throws InterruptedException, ExecutionException {
 
                 List<ExpoPushTicket> allTickets = new ArrayList<>();
@@ -45,6 +46,9 @@ public class LogNotificationStatusImpl implements LogNotificationStatus {
                 log.info("Recieved OK ticket for " +
                                 okTicketMessages.size() +
                                 " messages: " + okTicketMessagesString);
+                if (!okTicketMessages.isEmpty()) {
+                        DailyData.removeData(takenTime);
+                }
 
                 List<ExpoPushMessageTicketPair<ExpoPushMessage>> errorTicketMessages = client
                                 .filterAllMessagesWithError(zippedMessagesTickets);
