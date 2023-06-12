@@ -14,6 +14,7 @@ import com.utopia.pmc.data.constants.others.Gender;
 import com.utopia.pmc.data.constants.others.Period;
 import com.utopia.pmc.data.constants.others.Role;
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
+import com.utopia.pmc.data.entities.PaymentPlan;
 import com.utopia.pmc.data.entities.Regimen;
 import com.utopia.pmc.data.entities.RegimenDetail;
 import com.utopia.pmc.data.entities.User;
@@ -21,6 +22,7 @@ import com.utopia.pmc.data.entities.medicine.DosageForm;
 import com.utopia.pmc.data.entities.medicine.MedicationUse;
 import com.utopia.pmc.data.entities.medicine.Medicine;
 import com.utopia.pmc.data.entities.medicine.MedicineClassification;
+import com.utopia.pmc.data.repositories.PaymentPlanRepository;
 import com.utopia.pmc.data.repositories.RegimenDetailRepository;
 import com.utopia.pmc.data.repositories.RegimenRepository;
 import com.utopia.pmc.data.repositories.UserRepository;
@@ -35,12 +37,17 @@ public class fakedata {
         CommandLineRunner initDatabase(UserRepository userRepository, RegimenRepository regimenRepository,
                         RegimenDetailRepository regimenDetailRepository, MedicineRepository medicineRepository,
                         DosageFormRepository dosageFormRepository, MedicationUseRepository medicationUseRepository,
-                        MedicineClassificationRepository medicineClassificationRepository) {
+                        MedicineClassificationRepository medicineClassificationRepository,
+                        PaymentPlanRepository paymentPlanRepository) {
                 return new CommandLineRunner() {
 
                         @Override
                         public void run(String... args) throws Exception {
                                 List<User> users = new ArrayList<>();
+                                PaymentPlan paymentPlan = PaymentPlan.builder().name("level1")
+                                                .expriredTime(5)
+                                                .numberOfMedicine(100)
+                                                .numberOfRegiment(100).build();
                                 User admin = User.builder()
                                                 .username("Admin")
                                                 .age(18)
@@ -48,12 +55,14 @@ public class fakedata {
                                                 .phone("012345678")
                                                 .password("$2a$12$XYAxwzQHfQ9GiSO1vTjUSOyDIfNv48y5SQ3fwnvGvFibieIDWpjs6")
                                                 .gender(Gender.MALE)
+                                                .paymentPlan(paymentPlan)
                                                 .role(Role.ADMIN)
                                                 .build();
                                 User baseUser = User.builder()
                                                 .username("baseuser")
                                                 .age(18)
                                                 .email("baseuser@gmail.com")
+                                                .paymentPlan(paymentPlan)
                                                 .phone("012345679")
                                                 .password("$2a$12$W.fEkdf/XwmU/ew78FR.deNoPi3g7tObftA3i3/pAIM./uGNyPwJa")
                                                 .gender(Gender.MALE)
@@ -110,6 +119,8 @@ public class fakedata {
                                                 .description("Can buy by anyone")
                                                 .build();
 
+                                System.out.println("Insert payment plan");
+                                paymentPlanRepository.save(paymentPlan);
                                 System.out.println("Insert users");
                                 userRepository.saveAll(users);
                                 System.out.println("Insert medicine");
