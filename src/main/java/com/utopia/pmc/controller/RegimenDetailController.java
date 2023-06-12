@@ -7,9 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.utopia.pmc.data.dto.request.regimendetail.EditRegimenDetailRequest;
 import com.utopia.pmc.data.dto.request.regimendetail.RegimenDetailRequest;
 import com.utopia.pmc.data.dto.response.regimendetail.RegimenDetailResponse;
 import com.utopia.pmc.exceptions.NotFoundException;
@@ -35,10 +37,9 @@ public class RegimenDetailController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = NotFoundException.class)) })
     })
     @GetMapping("/{regimenId}")
-    public ResponseEntity<List<RegimenDetailResponse>> getRegimenDetails(@PathVariable Long regimenId){
+    public ResponseEntity<List<RegimenDetailResponse>> getRegimenDetails(@PathVariable Long regimenId) {
         return ResponseEntity.status(HttpStatus.OK).body(
-            regimenDetailService.getRegimenDetailResponses(regimenId)
-        );
+                regimenDetailService.getRegimenDetailResponses(regimenId));
     }
 
     @Operation(summary = "Get regimen detail")
@@ -49,9 +50,20 @@ public class RegimenDetailController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = NotFoundException.class)) })
     })
     @GetMapping("/view-detail/{regimenDetailId}")
-    public ResponseEntity<RegimenDetailResponse> getRegimenDetail(@PathVariable Long regimenDetailId){
+    public ResponseEntity<RegimenDetailResponse> getRegimenDetail(@PathVariable Long regimenDetailId) {
         return ResponseEntity.status(HttpStatus.OK).body(
-            regimenDetailService.getRegimenDetailResponse(regimenDetailId)
-        );
+                regimenDetailService.getRegimenDetailResponse(regimenDetailId));
+    }
+
+    @Operation(summary = "Edit regimen detail")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Edit regimen detail successfull."),
+            @ApiResponse(responseCode = "404", description = "Regiment information not valid.", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = NotFoundException.class)) })
+    })
+    @PutMapping()
+    public ResponseEntity<Void> editRegimenDetail(EditRegimenDetailRequest editRegimenDetailRequest) {
+        regimenDetailService.editRegimenDetail(editRegimenDetailRequest);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

@@ -12,7 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.utopia.pmc.data.constants.others.Dose;
 import com.utopia.pmc.data.entities.medicine.Medicine;
 
 import lombok.AllArgsConstructor;
