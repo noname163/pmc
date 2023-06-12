@@ -12,10 +12,7 @@ import com.utopia.pmc.data.entities.User;
 public class UserMapper {
     public User mapDtoToEntity(NewUserRequest newUserRequest) {
         return User.builder()
-                .age(newUserRequest.getAge())
                 .email(newUserRequest.getEmail())
-                .gender(newUserRequest.getGender())
-                .username(newUserRequest.getUsername())
                 .password(newUserRequest.getPassword())
                 .phone(newUserRequest.getPhone())
                 .build();
