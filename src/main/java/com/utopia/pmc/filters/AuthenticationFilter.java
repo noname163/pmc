@@ -19,9 +19,8 @@ import com.utopia.pmc.exceptions.ForbiddenException;
 import com.utopia.pmc.services.authenticate.SecurityContextService;
 import com.utopia.pmc.utils.JwtTokenUtil;
 
-
 @Component
-public class AuthenticationFilter extends OncePerRequestFilter{
+public class AuthenticationFilter extends OncePerRequestFilter {
     public static final String AUTHORIZATION = "Authorization";
     public static final String BEARER = "Bearer ";
 
@@ -36,7 +35,9 @@ public class AuthenticationFilter extends OncePerRequestFilter{
         if (request.getRequestURI().startsWith("/swagger-ui")
                 || request.getRequestURI().startsWith("/v3/api-docs")
                 || request.getRequestURI().startsWith("/api/user")
-                || request.getRequestURI().startsWith("/api/authentication")) {
+                || request.getRequestURI().startsWith("/api/authentication")
+                || request.getMethod().equals("GET")
+                        && request.getRequestURI().startsWith("/api/medicine")) {
             filterChain.doFilter(request, response);
         } else {
             final Optional<String> requestTokenHeaderOpt = getJwtFromRequest(request);

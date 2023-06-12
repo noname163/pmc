@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.utopia.pmc.data.dto.request.medicine.MedicineRequest;
+import com.utopia.pmc.data.dto.response.medicine.SearchMedicineResponse;
 import com.utopia.pmc.data.entities.medicine.DosageForm;
 import com.utopia.pmc.data.entities.medicine.MedicationUse;
 import com.utopia.pmc.data.entities.medicine.Medicine;
@@ -65,6 +66,15 @@ public class MedicineServiceImpl implements MedicineService {
         medicine = medicineRepository.save(medicine);
 
         useOfMedicineService.createUseOfMedicine(medicine, medicationUses);
+    }
+
+    @Override
+    public List<SearchMedicineResponse> searchMedicineByName(String name) {
+
+        List<Medicine> medicines = medicineRepository.findByNameContainingIgnoreCase(name)
+                .orElseThrow(() -> new BadRequestException(message.emptyList("Medicines")));
+
+        return medicineMapper.mapEntitiesToDtos(medicines);
     }
 
 }
