@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 import com.utopia.pmc.data.constants.others.Validation;
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
 import com.utopia.pmc.data.database.DailyData;
+import com.utopia.pmc.data.dto.request.regimen.EditRegimenRequest;
 import com.utopia.pmc.data.dto.request.regimen.RegimenRequest;
+import com.utopia.pmc.data.dto.request.regimendetail.EditRegimenDetailRequest;
 import com.utopia.pmc.data.dto.request.regimendetail.RegimenDetailRequest;
 import com.utopia.pmc.data.dto.response.regimendetail.RegimenDetailResponse;
 import com.utopia.pmc.data.entities.Regimen;
@@ -169,6 +171,30 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
                         message.objectNotFoundByIdMessage("Regimen Detail", regimenDetailId)));
 
         return regimentDetailMapper.mapEntityToDto(regimenDetail);
+    }
+
+    @Override
+    public void editRegimenDetail(EditRegimenDetailRequest editRegimenRequest) {
+        RegimenDetail regimenDetail = regimentDetailRepository
+                .findById(editRegimenRequest.getRegimenDetailId())
+                .orElseThrow(() -> new BadRequestException(
+                        message.objectNotFoundByIdMessage(
+                                "Regimen detail",
+                                editRegimenRequest.getRegimenDetailId())));
+        if (!regimenDetail.getMedicine().getName().equals(editRegimenRequest.getMedicineName())) {
+            Medicine medicine = medicineRepository
+                    .findByName(editRegimenRequest.getMedicineName())
+                    .orElseThrow(() -> new BadRequestException(
+                            message.objectNotFoundByIdMessage("Medicine",
+                                    editRegimenRequest.getMedicineName())));
+            regimenDetail.setMedicine(medicine);
+        }
+        regimenDetail.setFirstTime(regimenFunction.convertStringToLocalTime(editRegimenRequest.getFirstTime()));
+        regimenDetail.setSecondTime(regimenFunction.convertStringToLocalTime(editRegimenRequest.getSecondTime()));
+        regimenDetail.setThirdTime(regimenFunction.convertStringToLocalTime(editRegimenRequest.getThirdTime()));
+        regimenDetail.setFourthTime(regimenFunction.convertStringToLocalTime(editRegimenRequest.getFourthTime()));
+
+        regimentDetailRepository.save(regimenDetail);
     }
 
 }

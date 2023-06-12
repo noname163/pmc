@@ -18,9 +18,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class NewUserRequest {
-    @NotBlank(message = "Username is require.")
-    @Size(min = Validation.MIN_LENGTH_PASSWORD, message = "Username must more than 6 digit")
-    private String username;
     @NotBlank(message = "Password is require.")
     @Size(min = Validation.MIN_LENGTH_PASSWORD, message = "Password must more than 6 digit")
     private String password;
@@ -30,9 +27,5 @@ public class NewUserRequest {
     @NotBlank(message = "Phone number is require")
     @Pattern(regexp = Validation.PHONE_REGEX, message = "Phone number must have 10 number")
     private String phone;
-    @NotNull(message = "Age is require")
-    @Min(value = Validation.MIN_AGE, message = "Age must be between 16 and 100")
-    private Integer age;
-    @NotNull(message = "Gender is require")
-    private Gender gender;
+    
 }

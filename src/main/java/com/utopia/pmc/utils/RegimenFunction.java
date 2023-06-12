@@ -3,13 +3,18 @@ package com.utopia.pmc.utils;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.utopia.pmc.data.constants.others.Period;
+import com.utopia.pmc.data.constants.others.Validation;
 import com.utopia.pmc.data.entities.RegimenDetail;
 
 @Component
 public class RegimenFunction {
+
+    @Autowired
+    private ConvertStringToLocalTime convertStringToLocalTime;
 
     public LocalTime determineTakenTime(RegimenDetail regimenDetail) {
         LocalTime currentTime = LocalTime.now();
@@ -59,4 +64,9 @@ public class RegimenFunction {
         }
 
     }
+
+    public LocalTime convertStringToLocalTime(String time){
+        return convertStringToLocalTime.convertStringToLocalTime(Validation.TIME_FORMAT, time);
+    }
+
 }
