@@ -10,5 +10,6 @@ import com.utopia.pmc.data.entities.medicine.Medicine;
 
 public interface MedicineRepository extends JpaRepository<Medicine, Long> {
     public List<Medicine> findByIdIn(Set<Long> id);
+    public Optional<List<Medicine>> findByNameContainingIgnoreCase(String name);
     public Optional<Medicine> findByName(String name);
 }
