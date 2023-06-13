@@ -9,6 +9,7 @@ import com.utopia.pmc.data.constants.statuses.RegimentStatus;
 import com.utopia.pmc.data.dto.request.regimen.EditRegimenRequest;
 import com.utopia.pmc.data.dto.request.regimen.RegimenRequest;
 import com.utopia.pmc.data.dto.request.regimendetail.EditRegimenDetailRequest;
+import com.utopia.pmc.data.dto.request.regimendetail.RegimenDetailNewMedicineRequest;
 import com.utopia.pmc.data.dto.response.regimendetail.RegimenDetailResponse;
 
 public interface RegimenDetailService {

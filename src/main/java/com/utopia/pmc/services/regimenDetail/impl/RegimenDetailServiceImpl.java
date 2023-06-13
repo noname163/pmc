@@ -20,6 +20,7 @@ import com.utopia.pmc.data.database.DailyData;
 import com.utopia.pmc.data.dto.request.regimen.EditRegimenRequest;
 import com.utopia.pmc.data.dto.request.regimen.RegimenRequest;
 import com.utopia.pmc.data.dto.request.regimendetail.EditRegimenDetailRequest;
+import com.utopia.pmc.data.dto.request.regimendetail.RegimenDetailNewMedicineRequest;
 import com.utopia.pmc.data.dto.request.regimendetail.RegimenDetailRequest;
 import com.utopia.pmc.data.dto.response.regimendetail.RegimenDetailResponse;
 import com.utopia.pmc.data.entities.Regimen;
@@ -196,5 +197,7 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
 
         regimentDetailRepository.save(regimenDetail);
     }
+
+    
 
 }
