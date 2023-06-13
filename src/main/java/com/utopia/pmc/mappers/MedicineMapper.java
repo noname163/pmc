@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import com.utopia.pmc.data.dto.request.medicine.MedicineRequest;
+import com.utopia.pmc.data.dto.request.medicine.UserMedicineRequest;
 import com.utopia.pmc.data.dto.response.medicine.SearchMedicineResponse;
 import com.utopia.pmc.data.entities.medicine.Medicine;
 
@@ -29,8 +30,17 @@ public class MedicineMapper {
                 .builder()
                 .id(medicine.getId())
                 .name(medicine.getName())
-                // .medicineForm(medicine.getDosageForm().getForm())
+                .medicineForm(medicine.getDosageForm().getForm())
                 .consumerWay(medicine.getConsumerWay().toString())
+                .build();
+    }
+
+    public Medicine mapDtoToEntity(UserMedicineRequest userMedicineRequest) {
+        return Medicine
+                .builder()
+                .name(userMedicineRequest.getName())
+                .image(userMedicineRequest.getImage())
+                .consumerWay(userMedicineRequest.getConsumerWay())
                 .build();
     }
 
