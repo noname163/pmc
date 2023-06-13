@@ -37,7 +37,7 @@ public class fakedata {
         CommandLineRunner initDatabase(UserRepository userRepository, RegimenRepository regimenRepository,
                         RegimenDetailRepository regimenDetailRepository, MedicineRepository medicineRepository,
                         DosageFormRepository dosageFormRepository, MedicationUseRepository medicationUseRepository,
-                        MedicineClassificationRepository medicineClassificationRepository,
+                        MedicineClassificationRepository medicineClassificationRepository, 
                         PaymentPlanRepository paymentPlanRepository) {
                 return new CommandLineRunner() {
 
@@ -70,10 +70,15 @@ public class fakedata {
                                                 .build();
                                 users.add(baseUser);
                                 users.add(admin);
+                                DosageForm dosageForm = DosageForm
+                                                .builder()
+                                                .form("PILL")
+                                                .build();
                                 List<Medicine> medicines = new ArrayList<>();
                                 Medicine medicine1 = Medicine
                                                 .builder()
                                                 .consumerWay(ConsumerWay.AFTERMEAL)
+                                                .dosageForm(dosageForm)
                                                 .describe("This medicine use for headache")
                                                 .expiredTime(2)
                                                 .name("paradon")
@@ -83,6 +88,7 @@ public class fakedata {
                                                 .consumerWay(ConsumerWay.BEFOREMEAL)
                                                 .describe("This medicine use for stomach-ache")
                                                 .expiredTime(2)
+                                                .dosageForm(dosageForm)
                                                 .name("puscopan")
                                                 .build();
                                 medicines.add(medicine2);
@@ -104,10 +110,6 @@ public class fakedata {
                                                 .numberOfMedicine(10)
                                                 .takenQuantity(2)
                                                 .build();
-                                DosageForm dosageForm = DosageForm
-                                                .builder()
-                                                .form("PILL")
-                                                .build();
                                 MedicationUse medicationUse = MedicationUse
                                                 .builder()
                                                 .use("Heart-Attack")
@@ -123,14 +125,14 @@ public class fakedata {
                                 paymentPlanRepository.save(paymentPlan);
                                 System.out.println("Insert users");
                                 userRepository.saveAll(users);
+                                System.out.println("Insert dosage form");
+                                dosageFormRepository.save(dosageForm);
                                 System.out.println("Insert medicine");
                                 medicineRepository.saveAll(medicines);
                                 System.out.println("Insert Regimen");
                                 regimenRepository.save(regimen);
                                 System.out.println("Insert regime detail");
                                 regimenDetailRepository.save(regimenDetail);
-                                System.out.println("Insert dosage form");
-                                dosageFormRepository.save(dosageForm);
                                 System.out.println("Insert medication use");
                                 medicationUseRepository.save(medicationUse);
                                 System.out.println("Insert medication classification");

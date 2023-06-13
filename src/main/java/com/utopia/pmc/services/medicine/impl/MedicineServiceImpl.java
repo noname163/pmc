@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.utopia.pmc.data.dto.request.medicine.MedicineRequest;
+import com.utopia.pmc.data.dto.request.medicine.UserMedicineRequest;
 import com.utopia.pmc.data.dto.response.medicine.SearchMedicineResponse;
 import com.utopia.pmc.data.entities.medicine.DosageForm;
 import com.utopia.pmc.data.entities.medicine.MedicationUse;
@@ -75,6 +76,25 @@ public class MedicineServiceImpl implements MedicineService {
                 .orElseThrow(() -> new BadRequestException(message.emptyList("Medicines")));
 
         return medicineMapper.mapEntitiesToDtos(medicines);
+    }
+
+    @Override
+    public Long userCreateNewMedicine(UserMedicineRequest userMedicineRequest) {
+        DosageForm dosageForm = dosageFormRepository
+                .findByFormIgnoreCase(userMedicineRequest.getMedicineForm())
+                .orElseThrow(() -> new BadRequestException(
+                        message.objectNotFoundByIdMessage(
+                                "Dosage form",
+                                userMedicineRequest.getMedicineForm())));
+
+        if (medicineRepository.findByName(userMedicineRequest.getName()).isPresent()) {
+            throw new BadRequestException(message.objectExistMessage("Medicine", userMedicineRequest.getName()));
+        }
+
+        Medicine medicine = medicineMapper.mapDtoToEntity(userMedicineRequest);
+        medicine.setDosageForm(dosageForm);
+        medicine = medicineRepository.save(medicine);
+        return medicine.getId();
     }
 
 }
