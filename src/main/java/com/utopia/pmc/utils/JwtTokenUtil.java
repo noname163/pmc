@@ -29,10 +29,10 @@ public class JwtTokenUtil {
 
     public String generateJwtToken(User user, Integer expiresTime) {
         Map<String, Object> claims = new Hashtable();
-        claims.put("username", user.getUsername());
+        claims.put("username", user.getEmail());
         claims.put("role", user.getRole());
         claims.put("phone", user.getPhone());
-        return doGenerateToken(claims, user.getUsername(), expiresTime);
+        return doGenerateToken(claims, user.getEmail(), expiresTime);
     }
 
     public Jws<Claims> getJwsClaims(String token) {

@@ -52,6 +52,8 @@ public class User {
     private List<Regimen> regiments;
     @OneToMany(mappedBy = "user")
     private List<History> histories;
+    @OneToMany(mappedBy = "user")
+    private List<Transaction> transactions;
     @ManyToOne
     @JoinColumn(name = "payment_plan_id")
     private PaymentPlan paymentPlan;

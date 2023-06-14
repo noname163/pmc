@@ -13,7 +13,6 @@ public class UserMapper {
     public User mapDtoToEntity(NewUserRequest newUserRequest) {
         return User.builder()
                 .email(newUserRequest.getEmail())
-                .password(newUserRequest.getPassword())
                 .phone(newUserRequest.getPhone())
                 .build();
     }
