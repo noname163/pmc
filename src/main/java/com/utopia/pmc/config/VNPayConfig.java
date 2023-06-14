@@ -17,12 +17,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
 public class VNPayConfig {
+
+    public static String vnp_Version = "2.1.0";
+    public static String vnp_Command = "pay";
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static String vnp_Returnurl = "http://localhost:8080/vnpay_jsp/vnpay_return.jsp";
-    public static String vnp_TmnCode = "";
-    public static String vnp_HashSecret = "";
+    public static String vnp_Returnurl = "http://localhost:8080/api/payment/transaction";
+    public static String vnp_TmnCode = "20A9KO2R";
+    public static String vnp_HashSecret = "GFCVJMZLTOIWCFSPHHLUHMYMGSMHLFII";
     public static String vnp_apiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
 
     public static String md5(String message) {
@@ -61,7 +63,7 @@ public class VNPayConfig {
         return digest;
     }
 
-    //Util for VNPAY
+    // Util for VNPAY
     public static String hashAllFields(Map fields) {
         List fieldNames = new ArrayList(fields.keySet());
         Collections.sort(fieldNames);
@@ -79,9 +81,9 @@ public class VNPayConfig {
                 sb.append("&");
             }
         }
-        return hmacSHA512(vnp_HashSecret,sb.toString());
+        return hmacSHA512(vnp_HashSecret, sb.toString());
     }
-    
+
     public static String hmacSHA512(final String key, final String data) {
         try {
 
