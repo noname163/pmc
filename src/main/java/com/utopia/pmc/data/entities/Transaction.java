@@ -1,5 +1,7 @@
 package com.utopia.pmc.data.entities;
 
+import java.time.LocalDate;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,10 +33,10 @@ public class Transaction {
     private long id;
 
     private String transactionId;
-    private String transactioncreatedDate;
-    private String transactionPaymentDate;
+    private LocalDate transactioncreatedDate;
+    private LocalDate transactionPaymentDate;
     private TransactionStatus transactionStatus;
-    private String expireDate;
+    private LocalDate expireDate;
     private Long amount;
     private String paymentPlan;
     private String bankCode;
