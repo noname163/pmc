@@ -75,4 +75,28 @@ public class HistoryDetailServiceImpl implements HistoryDetailService {
         return historyDetailMapper.mapEntityToDtos(historyDetails);
     }
 
+    @Transactional
+    @Override
+    public void createHistoryDetailByMedicineName(History history, Set<String> medicineName) {
+        List<RegimenDetail> regimenDetails = regimenDetailRepository
+                .findByRegimenIdAndMedicineNameIn(history.getRegiment().getId(), medicineName);
+
+        if (regimenDetails == null || regimenDetails.isEmpty()) {
+            throw new BadRequestException(message.emptyList("Medicine"));
+        }
+
+        List<HistoryDetail> historyDetails = new ArrayList<>();
+
+        for (RegimenDetail regimenDetail : regimenDetails) {
+            historyDetails.add(HistoryDetail
+                    .builder()
+                    .regimenDetail(regimenDetail)
+                    .history(history)
+                    .build());
+        }
+
+        historyDetailRepository.saveAll(historyDetails);
+        regimenDetailService.reduceMedicineQuantityByName(history.getRegiment().getId(), medicineName);
+    }
+
 }

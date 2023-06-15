@@ -20,6 +20,8 @@ public interface RegimenDetailRepository extends JpaRepository<RegimenDetail, Lo
 
         public List<RegimenDetail> findByRegimenIdAndMedicineIdIn(Long regimenId, Set<Long> medicineId);
 
+        public List<RegimenDetail> findByRegimenIdAndMedicineNameIn(Long regimenId, Set<String> medicineId);
+
         @Query("SELECT rd FROM RegimenDetail rd" +
                         " JOIN FETCH rd.regimen r" +
                         " WHERE r.status = :regimentStatus" +
