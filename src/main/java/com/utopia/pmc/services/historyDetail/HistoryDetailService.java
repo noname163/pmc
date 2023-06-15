@@ -8,5 +8,6 @@ import com.utopia.pmc.data.entities.History;
 
 public interface HistoryDetailService {
     public void createHistoryDetail(History historyId, Set<Long> medicineIds);
+    public void createHistoryDetailByMedicineName(History historyId, Set<String> medicineNames);
     public List<HistoryDetailRespone> getHistoryDetailRespones(Long historyId);
 }

@@ -17,10 +17,8 @@ import org.springframework.stereotype.Service;
 import com.utopia.pmc.data.constants.others.Validation;
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
 import com.utopia.pmc.data.database.DailyData;
-import com.utopia.pmc.data.dto.request.regimen.EditRegimenRequest;
 import com.utopia.pmc.data.dto.request.regimen.RegimenRequest;
 import com.utopia.pmc.data.dto.request.regimendetail.EditRegimenDetailRequest;
-import com.utopia.pmc.data.dto.request.regimendetail.RegimenDetailNewMedicineRequest;
 import com.utopia.pmc.data.dto.request.regimendetail.RegimenDetailRequest;
 import com.utopia.pmc.data.dto.response.regimendetail.RegimenDetailResponse;
 import com.utopia.pmc.data.entities.Regimen;
@@ -165,6 +163,20 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
     }
 
     @Override
+    public void reduceMedicineQuantityByName(Long regimenId, Set<String> medicineName) {
+        List<RegimenDetail> regimenDetails = regimentDetailRepository.findByRegimenIdAndMedicineNameIn(regimenId,
+                medicineName);
+
+        for (RegimenDetail regimenDetail : regimenDetails) {
+            Integer medicineQuantity = regimenDetail.getNumberOfMedicine();
+            Integer newMedicineQuantity = medicineQuantity - regimenDetail.getTakenQuantity();
+            regimenDetail.setNumberOfMedicine(newMedicineQuantity);
+        }
+
+        regimentDetailRepository.saveAll(regimenDetails);
+    }
+
+    @Override
     public RegimenDetailResponse getRegimenDetailResponse(Long regimenDetailId) {
 
         RegimenDetail regimenDetail = regimentDetailRepository.findById(regimenDetailId)
@@ -182,14 +194,11 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
                         message.objectNotFoundByIdMessage(
                                 "Regimen detail",
                                 editRegimenRequest.getRegimenDetailId())));
-        if (!regimenDetail.getMedicine().getName().equals(editRegimenRequest.getMedicineName())) {
-            Medicine medicine = medicineRepository
-                    .findByName(editRegimenRequest.getMedicineName())
-                    .orElseThrow(() -> new BadRequestException(
-                            message.objectNotFoundByIdMessage("Medicine",
-                                    editRegimenRequest.getMedicineName())));
-            regimenDetail.setMedicine(medicine);
-        }
+
+        regimenDetail.setMedicineName(editRegimenRequest.getMedicineName());
+        regimenDetail.setMedicineUrl(editRegimenRequest.getMedicineUrl());
+        regimenDetail.setMedicineForm(editRegimenRequest.getMedicineForm());
+
         regimenDetail.setFirstTime(regimenFunction.convertStringToLocalTime(editRegimenRequest.getFirstTime()));
         regimenDetail.setSecondTime(regimenFunction.convertStringToLocalTime(editRegimenRequest.getSecondTime()));
         regimenDetail.setThirdTime(regimenFunction.convertStringToLocalTime(editRegimenRequest.getThirdTime()));
@@ -198,6 +207,43 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
         regimentDetailRepository.save(regimenDetail);
     }
 
-    
+    @Transactional
+    @Override
+    public void createRegimenDetailsWithoutMedicine(RegimenRequest regimenRequest) {
+        List<RegimenDetailRequest> regimenDetailRequests = regimenRequest.getRegimentDetailRequests();
+
+        if (regimenDetailRequests.isEmpty()) {
+            throw new BadRequestException(message.emptyList("Regimen Request"));
+        }
+
+        Long regimentId = regimenRequest.getId();
+        Regimen regimen = regimentRepository.findById(regimentId)
+                .orElseThrow(() -> new BadRequestException(message.objectNotFoundByIdMessage("Regimen", regimentId)));
+        List<RegimenDetail> regimenDetails = regimentDetailMapper.mapDtosToEntities(regimenDetailRequests);
+        LocalTime takenTime = null;
+
+        for (RegimenDetail regimenDetail : regimenDetails) {
+            Integer takenQuantity = regimenDetail.getTakenQuantity();
+            Integer totalMedicine = regimenFunction.calculateMedicineQuantity(takenQuantity, regimen.getDoseRegiment(),
+                    regimen.getPeriod());
+            regimenDetail.setRegimen(regimen);
+            regimenDetail.setNumberOfMedicine(totalMedicine);
+            LocalTime time = regimenFunction.determineTakenTime(regimenDetail);
+            if (time != null) {
+                takenTime = time;
+            }
+        }
+
+        regimentDetailRepository.saveAll(regimenDetails);
+
+        if (takenTime != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Validation.TIME_FORMAT_WITH_SECOND);
+            DailyData.addRegimenDetail(takenTime.format(formatter),
+                    regimentDetailMapper.mapEntityToDtos(regimenDetails));
+        }
+
+        regimen.setRegimentDetails(regimenDetails);
+        regimentRepository.save(regimen);
+    }
 
 }

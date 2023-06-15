@@ -101,11 +101,16 @@ public class fakedata {
                                                 .deviceToken("ExponentPushToken[BTMotuA4e1peQ7jrFyWP62]")
                                                 .status(RegimentStatus.INPROCESS)
                                                 .name("test")
+                                                .takenTime(0)
+                                                .missedTime(0)
                                                 .period(Period.DAY)
                                                 .doseRegiment(7)
                                                 .build();
                                 RegimenDetail regimenDetail = RegimenDetail
                                                 .builder()
+                                                .medicineName("paradon")
+                                                .medicineForm("Pill")
+                                                .medicineUrl("image")
                                                 .firstTime(LocalTime.now().plusMinutes(1))
                                                 .medicine(medicine2)
                                                 .regimen(regimen)

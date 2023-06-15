@@ -30,6 +30,9 @@ public class RegimenDetailMapper {
                                 regimentDetailRequest.getFourthTime());
                 return RegimenDetail
                                 .builder()
+                                .medicineName(regimentDetailRequest.getMedicineName())
+                                .medicineForm(regimentDetailRequest.getMedicineForm())
+                                .medicineUrl(regimentDetailRequest.getMedicineUrl())
                                 .takenQuantity(regimentDetailRequest.getTakenQuantity())
                                 .firstTime(firstTime)
                                 .secondTime(secondTime)
@@ -42,8 +45,11 @@ public class RegimenDetailMapper {
                 return RegimenDetailResponse
                                 .builder()
                                 .regimenId(regimenDetail.getRegimen().getId())
+                                .regimenDetailId(regimenDetail.getId())
                                 .regimenName(regimenDetail.getRegimen().getName())
-                                .medicineId(regimenDetail.getMedicine().getId())
+                                .medicineName(regimenDetail.getMedicineName())
+                                .medicineForm(regimenDetail.getMedicineForm())
+                                .medicineUrl(regimenDetail.getMedicineUrl())
                                 .numberOfMedicine(regimenDetail.getNumberOfMedicine())
                                 .notificationStatus(NotificationStatus.SENDING)
                                 .takenQuantity(regimenDetail.getTakenQuantity())

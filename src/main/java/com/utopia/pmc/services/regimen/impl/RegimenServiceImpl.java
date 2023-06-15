@@ -57,10 +57,12 @@ public class RegimenServiceImpl implements RegimenService {
         }
         regiment.setUser(user);
         regiment.setStatus(status);
+        regiment.setTakenTime(0);
+        regiment.setMissedTime(0);
 
         regiment = regimentRepository.save(regiment);
         regimentRequest.setId(regiment.getId());
-        regimentDetailService.createRegimentDetails(regimentRequest);
+        regimentDetailService.createRegimenDetailsWithoutMedicine(regimentRequest);
 
         Regimen result = regimentRepository.findById(regiment.getId())
                 .orElseThrow(() -> new BadRequestException("Errors as create new regiment"));
@@ -111,9 +113,10 @@ public class RegimenServiceImpl implements RegimenService {
         if (takenStatus.equals(TakenStatus.TAKEN)) {
             int previousTakenTime = regimen.getTakenTime();
             regimen.setTakenTime(previousTakenTime + 1);
+        } else {
+            int previousMissedTime = regimen.getMissedTime();
+            regimen.setMissedTime(previousMissedTime + 1);
         }
-        int previousMissedTime = regimen.getMissedTime();
-        regimen.setMissedTime(previousMissedTime + 1);
 
         regimentRepository.save(regimen);
     }
@@ -144,7 +147,5 @@ public class RegimenServiceImpl implements RegimenService {
                         message.objectNotFoundByIdMessage("Regimen", regimenId)));
 
     }
-
-    
 
 }

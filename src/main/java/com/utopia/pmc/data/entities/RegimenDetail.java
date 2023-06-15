@@ -32,9 +32,15 @@ public class RegimenDetail {
     @SequenceGenerator(name = "regiment_detail_sequence", sequenceName = "regiment_detail_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "regiment_detail_sequence")
     private long id;
+    @Column(name = "medicine_name")
+    private String medicineName;
+    @Column(name = "medicine_form")
+    private String medicineForm;
+    @Column(name = "medicine_url")
+    private String medicineUrl;
     @Column(name = "taken_quantity")
     private Integer takenQuantity;
-    @Column(name =  "number_of_medicine")
+    @Column(name = "number_of_medicine")
     private Integer numberOfMedicine;
     @Column(name = "first_time")
     private LocalTime firstTime;

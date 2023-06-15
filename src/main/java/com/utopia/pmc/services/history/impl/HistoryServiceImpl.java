@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import javax.persistence.Transient;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.utopia.pmc.data.dto.request.history.HistoryRequest;
+import com.utopia.pmc.data.dto.request.history.HistoryRequestWithMedicineName;
 import com.utopia.pmc.data.dto.response.history.HistoryResponse;
 import com.utopia.pmc.data.entities.History;
 import com.utopia.pmc.data.entities.Regimen;
@@ -67,6 +67,7 @@ public class HistoryServiceImpl implements HistoryService {
 
         history = historyRepository.save(history);
         historyDetailService.createHistoryDetail(history, historyRequest.getMedicineIds());
+
         regimenService.countTakenTimeOrMissedTime(regimen, historyRequest.getTakenStatus());
     }
 
@@ -83,6 +84,33 @@ public class HistoryServiceImpl implements HistoryService {
         }
 
         return historyMapper.mapEntityToDtos(histories);
+    }
+
+    @Transactional
+    @Override
+    public void createHistoryWithMedicineName(HistoryRequestWithMedicineName historyRequest) {
+        User user = securityContextService.getCurrentUser();
+
+        if (user == null) {
+            throw new BadRequestException(message.invalidUser());
+        }
+
+        Regimen regimen = regimenRepository
+                .findById(historyRequest.getRegimentId())
+                .orElseThrow(() -> new BadRequestException(
+                        message.objectNotFoundByIdMessage("Regimen", historyRequest.getRegimentId())));
+
+        History history = historyMapper.mapDtoToEntity(historyRequest);
+        history.setRegiment(regimen);
+        history.setUser(user);
+        history.setTotalMedicine(regimen.getRegimentDetails().size());
+        history.setDateTaken(LocalDate.now());
+        history.setTimeTaken(LocalTime.now());
+
+        history = historyRepository.save(history);
+        historyDetailService.createHistoryDetailByMedicineName(history, historyRequest.getMedicineName());
+
+        regimenService.countTakenTimeOrMissedTime(regimen, historyRequest.getTakenStatus());
     }
 
 }

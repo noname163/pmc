@@ -6,16 +6,18 @@ import java.util.Map;
 import java.util.Set;
 
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
-import com.utopia.pmc.data.dto.request.regimen.EditRegimenRequest;
 import com.utopia.pmc.data.dto.request.regimen.RegimenRequest;
 import com.utopia.pmc.data.dto.request.regimendetail.EditRegimenDetailRequest;
-import com.utopia.pmc.data.dto.request.regimendetail.RegimenDetailNewMedicineRequest;
 import com.utopia.pmc.data.dto.response.regimendetail.RegimenDetailResponse;
 
 public interface RegimenDetailService {
     public void createRegimentDetails(RegimenRequest regimentRequest);
 
+    public void createRegimenDetailsWithoutMedicine(RegimenRequest regimenRequest);
+
     public void reduceMedicineQuantity(Long regimenId, Set<Long> medicineId);
+    
+    public void reduceMedicineQuantityByName(Long regimenId, Set<String> medicineName);
 
     public void editRegimenDetail(EditRegimenDetailRequest editRegimenDetailRequest);
 

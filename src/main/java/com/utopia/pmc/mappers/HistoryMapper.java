@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import com.utopia.pmc.data.dto.request.history.HistoryRequest;
+import com.utopia.pmc.data.dto.request.history.HistoryRequestWithMedicineName;
 import com.utopia.pmc.data.dto.response.history.HistoryResponse;
 import com.utopia.pmc.data.entities.History;
 
@@ -18,7 +19,15 @@ public class HistoryMapper {
                 .numberOfTaken(historyRequest.getMedicineIds().size())
                 .build();
     }
+    public History mapDtoToEntity(HistoryRequestWithMedicineName historyRequest) {
+        return History
+                .builder()
+                .takenStatus(historyRequest.getTakenStatus())
+                .numberOfTaken(historyRequest.getMedicineName().size())
+                .build();
+    }
 
+    
     public HistoryResponse mapEntityToDto(History history) {
         return HistoryResponse
                 .builder()

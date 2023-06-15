@@ -14,13 +14,28 @@ import lombok.Setter;
 @Setter
 public class RegimenDetailResponse {
     private Long regimenId;
+    
+    private Long regimenDetailId;
+    
     private Integer takenQuantity;
+
     private Integer numberOfMedicine;
+
     private LocalTime firstTime;
+
     private LocalTime secondTime;
+
     private LocalTime thirdTime;
+
     private LocalTime fourthTime;
+
     private Long medicineId;
+
+    private String medicineName;
+
+    private String medicineForm;
+    
+    private String medicineUrl;
     @JsonIgnore
     private String deviceToken;
     @JsonIgnore

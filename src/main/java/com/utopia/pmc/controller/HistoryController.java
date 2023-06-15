@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.utopia.pmc.data.dto.request.history.HistoryRequest;
+import com.utopia.pmc.data.dto.request.history.HistoryRequestWithMedicineName;
 import com.utopia.pmc.data.dto.response.history.HistoryDetailRespone;
 import com.utopia.pmc.data.dto.response.history.HistoryResponse;
 import com.utopia.pmc.exceptions.BadRequestException;
@@ -42,8 +43,8 @@ public class HistoryController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = BadRequestException.class)) })
     })
     @PostMapping
-    public ResponseEntity<Void> createHistory(@Valid @RequestBody HistoryRequest historyRequest) {
-        historyService.createHistory(historyRequest);
+    public ResponseEntity<Void> createHistory(@Valid @RequestBody HistoryRequestWithMedicineName historyRequest) {
+        historyService.createHistoryWithMedicineName(historyRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
