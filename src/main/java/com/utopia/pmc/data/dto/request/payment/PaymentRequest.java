@@ -8,9 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PaymentRequest {
-    private Long userId;
-    private String orderType;
-    private Long amount;
+    private Long paymentId;
     private String bankCode;
     private String language;
 }

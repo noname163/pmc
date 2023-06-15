@@ -14,7 +14,7 @@ import com.utopia.pmc.data.entities.RegimenDetail;
 public class RegimenFunction {
 
     @Autowired
-    private ConvertStringToLocalTime convertStringToLocalTime;
+    private ConvertStringToLocalDateTime convertStringToLocalTime;
 
     public LocalTime determineTakenTime(RegimenDetail regimenDetail) {
         LocalTime currentTime = LocalTime.now();

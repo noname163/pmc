@@ -1,14 +1,12 @@
 package com.utopia.pmc.services.payment.impl;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -18,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,33 +25,50 @@ import com.utopia.pmc.config.VNPayConfig;
 import com.utopia.pmc.data.constants.statuses.TransactionStatus;
 import com.utopia.pmc.data.dto.request.payment.PaymentRequest;
 import com.utopia.pmc.data.dto.response.payment.PaymentResponse;
+import com.utopia.pmc.data.dto.response.transaction.TransactionResponse;
+import com.utopia.pmc.data.entities.PaymentPlan;
 import com.utopia.pmc.data.entities.Transaction;
 import com.utopia.pmc.data.entities.User;
+import com.utopia.pmc.data.repositories.PaymentPlanRepository;
 import com.utopia.pmc.data.repositories.TransactionRepository;
 import com.utopia.pmc.exceptions.BadRequestException;
 import com.utopia.pmc.exceptions.message.Message;
+import com.utopia.pmc.mappers.TransactionMapper;
 import com.utopia.pmc.services.authenticate.SecurityContextService;
 import com.utopia.pmc.services.payment.PaymentService;
+import com.utopia.pmc.services.user.UserService;
+import com.utopia.pmc.utils.ConvertStringToLocalDateTime;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
-    private SecurityContextService securityContextService;
-    @Autowired
     private TransactionRepository transactionRepository;
     @Autowired
+    private PaymentPlanRepository paymentPlanRepository;
+    @Autowired
+    private SecurityContextService securityContextService;
+    @Autowired
+    private UserService userService;
+    @Autowired
     private Message message;
+    @Autowired
+    private ConvertStringToLocalDateTime convertStringToLocalDateTime;
+    @Autowired
+    private TransactionMapper transactionMapper;
 
+    @Transactional
     @Override
     public PaymentResponse createdPayment(PaymentRequest paymentRequest) throws UnsupportedEncodingException {
         User user = securityContextService.getCurrentUser();
-        String orderType = paymentRequest.getOrderType();
-        long amount = paymentRequest.getAmount() * 100;
+        PaymentPlan paymentPlan = paymentPlanRepository.findById(paymentRequest.getPaymentId())
+                .orElseThrow(() -> new BadRequestException(
+                        message.objectNotFoundByIdMessage("Payment plan", paymentRequest.getPaymentId())));
+        String orderType = paymentPlan.getName();
+        long amount = (long) (paymentPlan.getMoney() * 100);
         String bankCode = paymentRequest.getBankCode();
 
         String vnp_TxnRef = VNPayConfig.getRandomNumber(8);
-        // String vnp_IpAddr = VNPayConfig.getIpAddress(req);
         String vnp_TmnCode = VNPayConfig.vnp_TmnCode;
 
         Map<String, String> vnp_Params = new HashMap<>();
@@ -75,7 +92,6 @@ public class PaymentServiceImpl implements PaymentService {
             vnp_Params.put("vnp_Locale", "vn");
         }
         vnp_Params.put("vnp_ReturnUrl", VNPayConfig.vnp_Returnurl);
-        // vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -113,16 +129,20 @@ public class PaymentServiceImpl implements PaymentService {
         String vnp_SecureHash = VNPayConfig.hmacSHA512(VNPayConfig.vnp_HashSecret, hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = VNPayConfig.vnp_PayUrl + "?" + queryUrl;
+        // set transaction
+        LocalDate createdDate = convertStringToLocalDateTime.convertStringToLocalDate(vnp_CreateDate);
+        LocalDate expireDate = convertStringToLocalDateTime.convertStringToLocalDate(vnp_ExpireDate);
+
         Transaction transaction = Transaction
                 .builder()
                 .amount(amount)
-                .transactioncreatedDate(vnp_CreateDate)
+                .transactioncreatedDate(createdDate)
                 .user(user)
                 .transactionId(vnp_TxnRef)
                 .bankCode(bankCode)
                 .transactionStatus(TransactionStatus.PENDING)
                 .paymentPlan(orderType)
-                .expireDate(vnp_ExpireDate)
+                .expireDate(expireDate)
                 .build();
 
         PaymentResponse paymentResponse = PaymentResponse
@@ -132,69 +152,45 @@ public class PaymentServiceImpl implements PaymentService {
                 .data(paymentUrl)
                 .build();
         transactionRepository.save(transaction);
+
         return paymentResponse;
     }
 
+    @Transactional
     @Override
-    public PaymentResponse checkPaymentStatus(String orderId, String responeCode,String transactionNo, String transDate) throws Exception {
+    public TransactionResponse checkPaymentStatus(String orderId, String responeCode, String transactionNo,
+            String transDate) throws Exception {
+
         Transaction transaction = transactionRepository.findByTransactionId(orderId)
                 .orElseThrow(() -> new BadRequestException(message.objectNotFoundByIdMessage("Transaction", orderId)));
-        String vnp_RequestId = VNPayConfig.getRandomNumber(8);
-        String vnp_Version = "2.1.0";
-        String vnp_Command = "querydr";
-        String vnp_TmnCode = VNPayConfig.vnp_TmnCode;
-        String vnp_TxnRef = orderId;
-        String vnp_OrderInfo = "Kiem tra ket qua GD OrderId:" + vnp_TxnRef;
-        String vnp_TransactionNo = transactionNo;
+
+        PaymentPlan paymentPlan = paymentPlanRepository.findByName(transaction.getPaymentPlan())
+                .orElseThrow(() -> new BadRequestException(
+                        message.objectNotFoundByIdMessage("Payment plan", transaction.getPaymentPlan())));
+
         String vnp_TransDate = transDate;
+        TransactionStatus transactionStatus = TransactionStatus.SUCCESS;
 
-        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-        String vnp_CreateDate = formatter.format(cld.getTime());
-
-        // String vnp_IpAddr = Config.getIpAddress(req);
-
-        Map vnp_Params = new HashMap<>();
-
-        vnp_Params.put("vnp_RequestId", vnp_RequestId);
-        vnp_Params.put("vnp_Version", vnp_Version);
-        vnp_Params.put("vnp_Command", vnp_Command);
-        vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
-        vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
-        vnp_Params.put("vnp_OrderInfo", vnp_OrderInfo);
-        vnp_Params.put("vnp_TransactionNo", vnp_TransactionNo);
-        vnp_Params.put("vnp_TransactionDate", vnp_TransDate);
-        vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
-        // vnp_Params.addProperty("vnp_IpAddr", vnp_IpAddr);
-
-        String hash_Data = vnp_RequestId + "|" + vnp_Version + "|" + vnp_Command + "|" + vnp_TmnCode + "|" + vnp_TxnRef
-                + "|" + vnp_TransDate + "|" + vnp_CreateDate + "|" + "|" + vnp_OrderInfo;
-
-        String vnp_SecureHash = VNPayConfig.hmacSHA512(VNPayConfig.vnp_HashSecret, hash_Data.toString());
-
-        vnp_Params.put("vnp_SecureHash", vnp_SecureHash);
+        if (!responeCode.equals("00")) {
+            transactionStatus = TransactionStatus.FAIL;
+        }
 
         URL url = new URL(VNPayConfig.vnp_apiUrl);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("POST");
         con.setRequestProperty("Content-Type", "application/json");
         con.setDoOutput(true);
-        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        wr.writeBytes(vnp_Params.toString());
-        wr.flush();
-        wr.close();
-        int responseCode = con.getResponseCode();
-        System.out.println("nSending 'POST' request to URL : " + url);
-        System.out.println("Post Data : " + vnp_Params);
-        System.out.println("Response Code : " + responseCode);
-        transaction.setTransactionPaymentDate(vnp_CreateDate);
-        transaction.setTransactionStatus(TransactionStatus.SUCCESS);
+
+        LocalDate transLocalDate = convertStringToLocalDateTime.convertStringToLocalDate(vnp_TransDate);
+
+        transaction.setTransactionPaymentDate(transLocalDate);
+        transaction.setTransactionStatus(transactionStatus);
         transactionRepository.save(transaction);
-        return PaymentResponse
-                .builder()
-                .code(String.valueOf(responseCode))
-                .data(vnp_OrderInfo)
-                .build();
+        
+        User user = transaction.getUser();
+        userService.upgradePaymenPlan(user, paymentPlan);
+
+        return transactionMapper.mapEntityToDto(transaction);
     }
 
 }

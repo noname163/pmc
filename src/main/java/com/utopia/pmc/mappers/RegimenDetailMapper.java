@@ -12,12 +12,12 @@ import com.utopia.pmc.data.constants.statuses.NotificationStatus;
 import com.utopia.pmc.data.dto.request.regimendetail.RegimenDetailRequest;
 import com.utopia.pmc.data.dto.response.regimendetail.RegimenDetailResponse;
 import com.utopia.pmc.data.entities.RegimenDetail;
-import com.utopia.pmc.utils.ConvertStringToLocalTime;
+import com.utopia.pmc.utils.ConvertStringToLocalDateTime;
 
 @Component
 public class RegimenDetailMapper {
         @Autowired
-        private ConvertStringToLocalTime convertStringToLocalTime;
+        private ConvertStringToLocalDateTime convertStringToLocalTime;
 
         public RegimenDetail mapDtoToEntity(RegimenDetailRequest regimentDetailRequest) {
                 LocalTime firstTime = convertStringToLocalTime.convertStringToLocalTime(Validation.TIME_FORMAT,
