@@ -40,6 +40,8 @@ public class RegimenDetailRequest {
     @NotBlank(message = "Medicine url is required")
     private String medicineUrl;
 
+    private String medicineNote;
+
     @JsonIgnore
     private Long regimentId;
 
