@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.utopia.pmc.data.dto.request.payment.PaymentRequest;
 import com.utopia.pmc.data.dto.response.payment.PaymentResponse;
+import com.utopia.pmc.data.dto.response.transaction.TransactionResponse;
 import com.utopia.pmc.exceptions.BadRequestException;
 import com.utopia.pmc.exceptions.ForbiddenException;
 import com.utopia.pmc.services.payment.PaymentService;
@@ -48,14 +49,14 @@ public class PaymentController {
     @Operation(summary = "Check payment")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Check successfull.", content = {
-                    @Content(mediaType = "application/json", schema = @Schema(implementation = PaymentResponse.class))}),
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = TransactionResponse.class))}),
             @ApiResponse(responseCode = "400", description = "User not valid.", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = BadRequestException.class))}),
             @ApiResponse(responseCode = "401", description = "Username or password is incorrect. Please try again", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = ForbiddenException.class))})
     })
     @GetMapping("/transaction")
-    public ResponseEntity<PaymentResponse> transaction(
+    public ResponseEntity<TransactionResponse> transaction(
         @RequestParam(value = "vnp_TxnRef") String orderId,
         @RequestParam(value = "vnp_BankTranNo") String transactionNo,
         @RequestParam(value = "vnp_PayDate") String transDate,

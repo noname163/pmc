@@ -1,5 +1,6 @@
 package com.utopia.pmc.data.entities;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -48,6 +49,8 @@ public class User {
     private Gender gender;
     @Column(name ="role")
     private Role role;
+    @Column(name = "payment_expried_date")
+    private LocalDate paymentExpriedDate;
     @OneToMany(mappedBy = "user")
     private List<Regimen> regiments;
     @OneToMany(mappedBy = "user")

@@ -46,6 +46,8 @@ public class fakedata {
                                 List<User> users = new ArrayList<>();
                                 PaymentPlan paymentPlan = PaymentPlan.builder().name("level1")
                                                 .expriredTime(5)
+                                                .money(120000.0)
+                                                .period(Period.MONTH)
                                                 .numberOfMedicine(100)
                                                 .numberOfRegiment(100).build();
                                 User admin = User.builder()
