@@ -38,6 +38,8 @@ public class RegimenDetail {
     private String medicineForm;
     @Column(name = "medicine_url")
     private String medicineUrl;
+    @Column(name = "medicine_note")
+    private String medicineNote;
     @Column(name = "taken_quantity")
     private Integer takenQuantity;
     @Column(name = "number_of_medicine")

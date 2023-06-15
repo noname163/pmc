@@ -32,6 +32,7 @@ public class RegimenDetailMapper {
                                 .builder()
                                 .medicineName(regimentDetailRequest.getMedicineName())
                                 .medicineForm(regimentDetailRequest.getMedicineForm())
+                                .medicineNote(regimentDetailRequest.getMedicineNote())
                                 .medicineUrl(regimentDetailRequest.getMedicineUrl())
                                 .takenQuantity(regimentDetailRequest.getTakenQuantity())
                                 .firstTime(firstTime)
