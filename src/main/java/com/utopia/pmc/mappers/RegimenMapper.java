@@ -36,6 +36,7 @@ public class RegimenMapper {
     public RegimenResponse mapEntityToDtoRegimenResponse(Regimen regiment) {
         return RegimenResponse
                 .builder()
+                .regimenId(regiment.getId())
                 .regimenName(regiment.getName())
                 .dosageRegimen(regiment.getDoseRegiment())
                 .period(regiment.getPeriod())
