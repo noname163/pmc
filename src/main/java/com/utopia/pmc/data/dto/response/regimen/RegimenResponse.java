@@ -13,6 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RegimenResponse {
+    private Long regimenId;
     private String regimenName;
     private String image;
     private Integer dosageRegimen;
