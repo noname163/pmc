@@ -10,6 +10,7 @@ import lombok.Setter;
 public class SearchMedicineResponse {
     private Long id;
     private String name;
+    private String imageUrl;
     private String medicineForm;
     private String consumerWay;
 
