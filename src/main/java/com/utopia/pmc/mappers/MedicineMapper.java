@@ -29,6 +29,7 @@ public class MedicineMapper {
         return SearchMedicineResponse
                 .builder()
                 .id(medicine.getId())
+                .imageUrl(medicine.getImage())
                 .name(medicine.getName())
                 .medicineForm(medicine.getDosageForm().getForm())
                 .consumerWay(medicine.getConsumerWay().toString())
