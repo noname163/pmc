@@ -34,11 +34,12 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         if (request.getRequestURI().startsWith("/swagger-ui")
                 || request.getRequestURI().startsWith("/v3/api-docs")
-                || request.getRequestURI().startsWith("/api/user")
                 || request.getRequestURI().startsWith("/api/authentication")
-                || request.getRequestURI().startsWith("/api/payment/transaction")
+                || request.getRequestURI().startsWith("/api/transaction/transaction")
                 || request.getMethod().equals("GET")
-                        && request.getRequestURI().startsWith("/api/medicine")) {
+                        && request.getRequestURI().startsWith("/api/medicine")
+                || request.getMethod().equals("POST")
+                        && request.getRequestURI().startsWith("/api/user")) {
             filterChain.doFilter(request, response);
         } else {
             final Optional<String> requestTokenHeaderOpt = getJwtFromRequest(request);
