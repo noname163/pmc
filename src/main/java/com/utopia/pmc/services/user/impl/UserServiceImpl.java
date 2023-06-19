@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.utopia.pmc.data.constants.others.Period;
 import com.utopia.pmc.data.constants.others.Role;
 import com.utopia.pmc.data.dto.request.user.NewUserRequest;
+import com.utopia.pmc.data.dto.response.user.UserProfileResponse;
 import com.utopia.pmc.data.entities.PaymentPlan;
 import com.utopia.pmc.data.entities.User;
 import com.utopia.pmc.data.repositories.UserRepository;
@@ -50,7 +51,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void upgradePaymenPlan(User user, PaymentPlan paymentPlan) {
-        
+
         user.setPaymentPlan(paymentPlan);
         LocalDate currentDate = LocalDate.now();
         Integer expriedTime = paymentPlan.getExpriredTime();
@@ -72,6 +73,15 @@ public class UserServiceImpl implements UserService {
 
         }
         userRepository.save(user);
+    }
+
+    @Override
+    public UserProfileResponse getInformationOfCurrentUser() {
+        User currentUser = securityContextService.getCurrentUser();
+        if (currentUser == null) {
+            throw new BadRequestException(message.invalidUser());
+        }
+        return userMapper.mapEntityToDto(currentUser);
     }
 
 }

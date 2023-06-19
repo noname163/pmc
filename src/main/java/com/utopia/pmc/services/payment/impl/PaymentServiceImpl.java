@@ -56,7 +56,6 @@ public class PaymentServiceImpl implements PaymentService {
     private ConvertStringToLocalDateTime convertStringToLocalDateTime;
     @Autowired
     private TransactionMapper transactionMapper;
-
     @Transactional
     @Override
     public PaymentResponse createdPayment(PaymentRequest paymentRequest) throws UnsupportedEncodingException {
@@ -183,6 +182,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         LocalDate transLocalDate = convertStringToLocalDateTime.convertStringToLocalDate(vnp_TransDate);
 
+        transaction.setTransactionId(orderId);
         transaction.setTransactionPaymentDate(transLocalDate);
         transaction.setTransactionStatus(transactionStatus);
         transactionRepository.save(transaction);

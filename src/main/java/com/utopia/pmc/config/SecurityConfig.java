@@ -43,7 +43,6 @@ public class SecurityConfig {
             HttpSecurity httpSecurity, AuthenticationFilter authenticationFilter,
             ExceptionHandlerFilter exceptionHandlerFilter) throws Exception {
         httpSecurity.csrf().disable().cors();
-        httpSecurity.authorizeRequests().antMatchers(HttpMethod.GET, "/api/medicine/**").permitAll().anyRequest().authenticated();
         httpSecurity.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         httpSecurity.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
         httpSecurity.addFilterBefore(exceptionHandlerFilter, AuthenticationFilter.class);
@@ -53,6 +52,6 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().antMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api/authentication",
-                "/api/user", "/api/payment/transaction");
+                "/api/user", "/transaction_page","/test.html");
     }
 }

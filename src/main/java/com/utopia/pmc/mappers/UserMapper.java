@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import com.utopia.pmc.data.dto.request.user.NewUserRequest;
+import com.utopia.pmc.data.dto.response.user.UserProfileResponse;
 import com.utopia.pmc.data.entities.User;
 
 @Component
@@ -15,6 +16,16 @@ public class UserMapper {
                 .email(newUserRequest.getEmail())
                 .phone(newUserRequest.getPhone())
                 .build();
+    }
+
+    public UserProfileResponse mapEntityToDto(User user){
+        return UserProfileResponse
+        .builder()
+        .email(user.getEmail())
+        .phoneNumber(user.getPhone())
+        .expriedDate(user.getPaymentExpriedDate())
+        .planName(user.getPaymentPlan().getName())
+        .build();
     }
 
     public List<User> mapDtosToEntities(List<NewUserRequest> newUserRequests) {
