@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.utopia.pmc.data.dto.request.user.UserLoginRequest;
 import com.utopia.pmc.data.dto.response.user.UserLoginResponse;
+import com.utopia.pmc.data.dto.response.user.UserProfileResponse;
 import com.utopia.pmc.exceptions.BadRequestException;
 import com.utopia.pmc.exceptions.ForbiddenException;
 import com.utopia.pmc.services.authenticate.AuthenticationService;
@@ -44,4 +46,5 @@ public class AuthenticationController {
                 authenticationService.login(userLoginRequest)
         );
     }
+
 }
