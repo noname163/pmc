@@ -13,5 +13,6 @@ import com.utopia.pmc.data.entities.User;
 public interface RegimenRepository extends JpaRepository<Regimen, Long> {
     public List<Regimen> findByStatus(RegimentStatus regimentStatus);
     public List<Regimen> findByUser(User user);
+    public List<Regimen> findByUserAndStatusNot(User user, RegimentStatus status);
     public Integer countByUserId(Long userId);
 }

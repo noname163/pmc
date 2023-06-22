@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -62,7 +63,7 @@ public class RegimenDetailController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = NotFoundException.class)) })
     })
     @PutMapping()
-    public ResponseEntity<Void> editRegimenDetail(EditRegimenDetailRequest editRegimenDetailRequest) {
+    public ResponseEntity<Void> editRegimenDetail(@RequestBody EditRegimenDetailRequest editRegimenDetailRequest) {
         regimenDetailService.editRegimenDetail(editRegimenDetailRequest);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
