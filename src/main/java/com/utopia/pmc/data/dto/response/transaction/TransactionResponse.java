@@ -1,7 +1,9 @@
 package com.utopia.pmc.data.dto.response.transaction;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.utopia.pmc.data.constants.statuses.TransactionStatus;
 
 import lombok.Builder;
@@ -11,7 +13,8 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class TransactionResponse {
+@JsonSerialize
+public class TransactionResponse implements Serializable {
     private LocalDate transactioncreatedDate;
     private LocalDate transactionPaymentDate;
     private TransactionStatus transactionStatus;
