@@ -2,7 +2,6 @@ package com.utopia.pmc.services.regimen.impl;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.utopia.pmc.data.constants.others.Period;
 import com.utopia.pmc.data.constants.statuses.RegimentStatus;
 import com.utopia.pmc.data.constants.statuses.TakenStatus;
-import com.utopia.pmc.data.database.DailyData;
 import com.utopia.pmc.data.dto.request.regimen.EditRegimenRequest;
 import com.utopia.pmc.data.dto.request.regimen.RegimenRequest;
 import com.utopia.pmc.data.dto.response.regimen.RegimenResponse;
@@ -74,8 +72,7 @@ public class RegimenServiceImpl implements RegimenService {
     public List<RegimenResponse> getRegimenOfCurrentUser() {
         User user = securityContextService.getCurrentUser();
         securityContextService.validateCurrentUser(user);
-
-        List<Regimen> regimens = regimentRepository.findByUser(user);
+        List<Regimen> regimens = regimentRepository.findByUserAndStatusNot(user,RegimentStatus.DISABLE );
 
         if (regimens.isEmpty()) {
             throw new BadRequestException(message.emptyList("Regimen"));
