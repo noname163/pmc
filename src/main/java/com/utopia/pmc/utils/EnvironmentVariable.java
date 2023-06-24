@@ -12,6 +12,6 @@ public class EnvironmentVariable {
     private String jwtSecret;
     @Value("${jwt.expires-time}")
     private long expiresTime;
-    @Value("${base.url}")
-    private String baseurl;
+    // @Value("${app.base-url}")
+    // private String baseurl;
 }
