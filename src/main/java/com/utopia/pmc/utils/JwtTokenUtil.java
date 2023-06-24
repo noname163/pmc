@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.utopia.pmc.data.entities.User;
@@ -16,15 +16,14 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtTokenUtil {
-    @Value("${jwt.secret-key}")
-    private String jwtSecret;
-    @Value("${jwt.expires-time}")
-    private long expiresTime;
+    @Autowired
+    private EnvironmentVariable environmentVariable;
 
     private String doGenerateToken(Map<String, Object> claims, String subject, Integer expriesTime) {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiresTime * expriesTime))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
+                .setExpiration(
+                        new Date(System.currentTimeMillis() + environmentVariable.getExpiresTime() * expriesTime))
+                .signWith(SignatureAlgorithm.HS512, environmentVariable.getJwtSecret()).compact();
     }
 
     public String generateJwtToken(User user, Integer expiresTime) {
@@ -36,7 +35,7 @@ public class JwtTokenUtil {
     }
 
     public Jws<Claims> getJwsClaims(String token) {
-        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+        return Jwts.parser().setSigningKey(environmentVariable.getJwtSecret()).parseClaimsJws(token);
     }
 
     public String getUsernameFromClaims(Claims claims) {

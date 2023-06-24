@@ -19,6 +19,7 @@ import java.util.TimeZone;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.utopia.pmc.config.VNPayConfig;
@@ -38,10 +39,13 @@ import com.utopia.pmc.services.authenticate.SecurityContextService;
 import com.utopia.pmc.services.payment.PaymentService;
 import com.utopia.pmc.services.user.UserService;
 import com.utopia.pmc.utils.ConvertStringToLocalDateTime;
+import com.utopia.pmc.utils.EnvironmentVariable;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
+    @Autowired
+    private EnvironmentVariable environmentVariable;
     @Autowired
     private TransactionRepository transactionRepository;
     @Autowired
@@ -56,6 +60,7 @@ public class PaymentServiceImpl implements PaymentService {
     private ConvertStringToLocalDateTime convertStringToLocalDateTime;
     @Autowired
     private TransactionMapper transactionMapper;
+
     @Transactional
     @Override
     public PaymentResponse createdPayment(PaymentRequest paymentRequest) throws UnsupportedEncodingException {
@@ -90,7 +95,8 @@ public class PaymentServiceImpl implements PaymentService {
         } else {
             vnp_Params.put("vnp_Locale", "vn");
         }
-        vnp_Params.put("vnp_ReturnUrl", VNPayConfig.vnp_Returnurl);
+        String vpn_ReturnUrl = environmentVariable.getBaseurl() + "transaction_page";
+        vnp_Params.put("vnp_ReturnUrl", vpn_ReturnUrl);
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -186,7 +192,7 @@ public class PaymentServiceImpl implements PaymentService {
         transaction.setTransactionPaymentDate(transLocalDate);
         transaction.setTransactionStatus(transactionStatus);
         transactionRepository.save(transaction);
-        
+
         User user = transaction.getUser();
         userService.upgradePaymenPlan(user, paymentPlan);
 

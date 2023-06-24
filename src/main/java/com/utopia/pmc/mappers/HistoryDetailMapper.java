@@ -13,7 +13,7 @@ public class HistoryDetailMapper {
     public HistoryDetailRespone mapEntityToDto(HistoryDetail historyDetail) {
         return HistoryDetailRespone
                 .builder()
-                .medicineName(historyDetail.getRegimenDetail().getMedicine().getName())
+                .medicineName(historyDetail.getRegimenDetail().getMedicineName())
                 .takenQuantity(historyDetail.getRegimenDetail().getTakenQuantity())
                 .regimenDetailId(historyDetail.getRegimenDetail().getId())
                 .build();
