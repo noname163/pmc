@@ -95,7 +95,8 @@ public class PaymentServiceImpl implements PaymentService {
         } else {
             vnp_Params.put("vnp_Locale", "vn");
         }
-        String vpn_ReturnUrl = "https://pmc-api.azurewebsites.net/" + "transaction_page";
+
+        String vpn_ReturnUrl = environmentVariable.getBaseurl() + "transaction_page";
         vnp_Params.put("vnp_ReturnUrl", vpn_ReturnUrl);
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
