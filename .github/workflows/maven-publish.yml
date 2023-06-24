@@ -55,3 +55,21 @@ jobs:
             pull_number: pr.data.number,
             commit_title: 'Automerge changes from develop to main',
           });
+          - name: Upload artifact for deployment job
+          uses: actions/upload-artifact@v2
+          with:
+            name: java-app
+            path: '${{ github.workspace }}/target/*.jar'
+  
+    - name: Download artifact from build job
+      uses: actions/download-artifact@v2
+      with:
+        name: java-app
+  
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'pmc-api'
+        slot-name: 'Production'
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_078C7FAA2AB242AC91488073B8F29555 }}
+        package: '*.jar'
