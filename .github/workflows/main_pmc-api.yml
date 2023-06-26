@@ -1,16 +1,14 @@
 name: Build and deploy JAR app to Azure Web App - pmc-api
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
     types:
       - closed
     branches:
       - develop
-    status:
-      - success
-  push:
-    branches:
-      - main
 
 
 jobs:
