@@ -6,6 +6,8 @@ on:
       - closed
     branches:
       - develop
+    status:
+      - success
   push:
     branches:
       - main
