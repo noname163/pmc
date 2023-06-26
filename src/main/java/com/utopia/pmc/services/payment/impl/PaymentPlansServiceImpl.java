@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.utopia.pmc.data.constants.statuses.RegimentStatus;
 import com.utopia.pmc.data.dto.response.payment.PaymentPlanResponse;
 import com.utopia.pmc.data.entities.PaymentPlan;
 import com.utopia.pmc.data.entities.Regimen;
@@ -33,7 +34,7 @@ public class PaymentPlansServiceImpl implements PaymentPlansService {
 
     @Override
     public void checkUserPlan(User user) {
-        List<Regimen> regiments = regimentRepository.findByUser(user);
+        List<Regimen> regiments = regimentRepository.findByUserAndStatusNot(user, RegimentStatus.DISABLE);
         List<RegimenDetail> regimentDetails = regimentDetailRepository.findByRegimenIn(regiments);
         Integer totalOfRegiment = regiments.size();
         Integer totalMedicine = regimentDetails.size();
