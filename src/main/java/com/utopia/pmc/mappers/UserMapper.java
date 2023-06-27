@@ -18,14 +18,14 @@ public class UserMapper {
                 .build();
     }
 
-    public UserProfileResponse mapEntityToDto(User user){
+    public UserProfileResponse mapEntityToDto(User user) {
         return UserProfileResponse
-        .builder()
-        .email(user.getEmail())
-        .phoneNumber(user.getPhone())
-        .expriedDate(user.getPaymentExpriedDate())
-        .planName(user.getPaymentPlan().getName())
-        .build();
+                .builder()
+                .email(user.getEmail())
+                .phoneNumber(user.getPhone())
+                .expriedDate(user.getPaymentExpriedDate())
+                .planName(user.getPaymentPlan() != null ? user.getPaymentPlan().getName() : null)
+                .build();
     }
 
     public List<User> mapDtosToEntities(List<NewUserRequest> newUserRequests) {
