@@ -53,6 +53,9 @@ public class RegimenServiceImpl implements RegimenService {
             regiment.setCreatedDate(LocalDate.now());
             status = RegimentStatus.INPROCESS;
         }
+        if (regimentRequest.getStartNow() != true && regimentRequest.getStartDate() == null) {
+            throw new BadRequestException(message.badValue("Start date"));
+        }
         regiment.setUser(user);
         regiment.setStatus(status);
         regiment.setTakenTime(0);
@@ -72,7 +75,7 @@ public class RegimenServiceImpl implements RegimenService {
     public List<RegimenResponse> getRegimenOfCurrentUser() {
         User user = securityContextService.getCurrentUser();
         securityContextService.validateCurrentUser(user);
-        List<Regimen> regimens = regimentRepository.findByUserAndStatusNot(user,RegimentStatus.DISABLE );
+        List<Regimen> regimens = regimentRepository.findByUserAndStatusNot(user, RegimentStatus.DISABLE);
 
         if (regimens.isEmpty()) {
             throw new BadRequestException(message.emptyList("Regimen"));

@@ -4,6 +4,7 @@ package com.utopia.pmc.data.dto.response.regimen;
 import java.time.LocalDate;
 
 import com.utopia.pmc.data.constants.others.Period;
+import com.utopia.pmc.data.constants.statuses.RegimentStatus;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class RegimenResponse {
     private Integer dosageRegimen;
     private Period period;
     private LocalDate startDate;
+    private RegimentStatus status;
     private Integer takenTime;
     private Integer missedTime;
     private Integer totalTypeMedicine;
