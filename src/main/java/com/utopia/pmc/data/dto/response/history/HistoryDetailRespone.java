@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 public class HistoryDetailRespone {
     private Long regimenDetailId;
+    private String regimenImage;
     private String medicineName;
     private Integer takenQuantity;
 }

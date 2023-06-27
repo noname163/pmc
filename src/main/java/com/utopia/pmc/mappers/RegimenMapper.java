@@ -41,6 +41,7 @@ public class RegimenMapper {
                 .dosageRegimen(regiment.getDoseRegiment())
                 .period(regiment.getPeriod())
                 .image(regiment.getImage())
+                .status(regiment.getStatus())
                 .startDate(regiment.getStartDate() == null ? null : regiment.getStartDate())
                 .takenTime(regiment.getTakenTime())
                 .missedTime(regiment.getMissedTime())
