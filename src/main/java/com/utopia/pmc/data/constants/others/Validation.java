@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Validation {
     public static final String DATE_FORMAT = "dd/MM/yyyy";
+    public static final String DATE_TIME_FORMAT = "yyyyMMddHHmmss";
     public static final String TIME_FORMAT = "HH:mm";
     public static final String TIME_FORMAT_WITH_SECOND = "HH:mm:ss";
     public static final String PHONE_REGEX = "^\\d{10}$";
