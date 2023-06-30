@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.utopia.pmc.data.constants.others.Period;
 import com.utopia.pmc.data.constants.others.Role;
 import com.utopia.pmc.data.dto.request.user.NewUserRequest;
+import com.utopia.pmc.data.dto.request.user.UserEditInforRequest;
 import com.utopia.pmc.data.dto.response.user.UserProfileResponse;
 import com.utopia.pmc.data.entities.PaymentPlan;
 import com.utopia.pmc.data.entities.User;
@@ -82,6 +83,18 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException(message.invalidUser());
         }
         return userMapper.mapEntityToDto(currentUser);
+    }
+
+    @Override
+    public void editUser(UserEditInforRequest userEditInforRequest) {
+        User user = securityContextService.getCurrentUser();
+
+        user.setUsername(userEditInforRequest.getUsername());
+        user.setAge(userEditInforRequest.getAge());
+        user.setEmail(userEditInforRequest.getEmail());
+        user.setGender(userEditInforRequest.getGender());
+
+        userRepository.save(user);
     }
 
 }
