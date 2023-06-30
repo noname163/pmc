@@ -15,4 +15,5 @@ public interface RegimenService {
     public void finishedRegimen(Long regimenId);
     public void deleteRegimen(Long regimenId);
     public void countTakenTimeOrMissedTime(Regimen regimen, TakenStatus takenStatus);
+    public void setIsAlert(Long regimenId);
 }

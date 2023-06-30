@@ -58,6 +58,8 @@ public class Regimen {
     private LocalDate startDate;
     @Column(name="device_token")
     private String deviceToken;
+    @Column(name = "is_alert")
+    private Boolean isAlert;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

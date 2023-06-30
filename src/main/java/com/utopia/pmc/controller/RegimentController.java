@@ -96,4 +96,16 @@ public class RegimentController {
                 regimentService.deleteRegimen(regimenId);
                 return ResponseEntity.status(HttpStatus.ACCEPTED).build();
         }
+
+        @Operation(summary = "Set alert regimen")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Set alert successfull."),
+                        @ApiResponse(responseCode = "400", description = "User information not valid.", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(implementation = BadRequestException.class)) })
+        })
+        @PatchMapping("/set-alert/{regimenId}")
+        public ResponseEntity<Void> setIsAlert(@PathVariable Long regimenId) {
+                regimentService.setIsAlert(regimenId);
+                return ResponseEntity.status(HttpStatus.OK).build();
+        }
 }
