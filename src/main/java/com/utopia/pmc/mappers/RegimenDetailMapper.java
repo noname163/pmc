@@ -51,6 +51,7 @@ public class RegimenDetailMapper {
                                 .medicineName(regimenDetail.getMedicineName())
                                 .medicineForm(regimenDetail.getMedicineForm())
                                 .medicineUrl(regimenDetail.getMedicineUrl())
+                                .medicineNote(regimenDetail.getMedicineNote())
                                 .numberOfMedicine(regimenDetail.getNumberOfMedicine())
                                 .notificationStatus(NotificationStatus.SENDING)
                                 .takenQuantity(regimenDetail.getTakenQuantity())

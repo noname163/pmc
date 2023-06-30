@@ -7,15 +7,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.utopia.pmc.data.dto.request.user.NewUserRequest;
-import com.utopia.pmc.data.dto.response.transaction.TransactionResponse;
+import com.utopia.pmc.data.dto.request.user.UserEditInforRequest;
 import com.utopia.pmc.data.dto.response.user.UserProfileResponse;
 import com.utopia.pmc.exceptions.BadRequestException;
-import com.utopia.pmc.exceptions.ForbiddenException;
 import com.utopia.pmc.services.user.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -55,5 +55,18 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(
             userService.getInformationOfCurrentUser()
         );
+    }
+
+     @Operation(summary = "Edit current user information")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Edit successfull.", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = UserEditInforRequest.class))}),
+            @ApiResponse(responseCode = "400", description = "User not valid.", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = BadRequestException.class))})
+    })
+    @PutMapping()
+    public ResponseEntity<Void> editUserInformation(@Valid @RequestBody UserEditInforRequest userEditInforRequest){
+        userService.editUser(userEditInforRequest);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
