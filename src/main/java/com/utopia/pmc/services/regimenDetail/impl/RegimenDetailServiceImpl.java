@@ -198,6 +198,7 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
         regimenDetail.setMedicineName(editRegimenRequest.getMedicineName());
         regimenDetail.setMedicineUrl(editRegimenRequest.getMedicineUrl());
         regimenDetail.setMedicineForm(editRegimenRequest.getMedicineForm());
+        regimenDetail.setMedicineNote(editRegimenRequest.getMedicineNote());
 
         regimenDetail.setFirstTime(regimenFunction.convertStringToLocalTime(editRegimenRequest.getFirstTime()));
         regimenDetail.setSecondTime(regimenFunction.convertStringToLocalTime(editRegimenRequest.getSecondTime()));

@@ -24,6 +24,10 @@ public class UserMapper {
                 .email(user.getEmail())
                 .phoneNumber(user.getPhone())
                 .expriedDate(user.getPaymentExpriedDate())
+                .age(user.getAge() != null ? user.getAge() : null)
+                .username(user.getUsername() != null ? user.getUsername() : null)
+                .image(user.getImage() != null ? user.getImage() : null)
+                .gender(user.getGender()!=null ? user.getGender() : null)
                 .planName(user.getPaymentPlan() != null ? user.getPaymentPlan().getName() : null)
                 .build();
     }
