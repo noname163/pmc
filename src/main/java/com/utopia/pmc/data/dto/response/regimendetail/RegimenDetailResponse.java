@@ -36,6 +36,8 @@ public class RegimenDetailResponse {
     private String medicineForm;
     
     private String medicineUrl;
+
+    private String medicineNote;
     @JsonIgnore
     private String deviceToken;
     @JsonIgnore

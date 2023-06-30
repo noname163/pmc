@@ -1,13 +1,10 @@
 package com.utopia.pmc.data.dto.request.user;
 
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import com.utopia.pmc.data.constants.others.Gender;
 import com.utopia.pmc.data.constants.others.Validation;
 
 import lombok.Builder;

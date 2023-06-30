@@ -7,6 +7,9 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -23,6 +26,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.utopia.pmc.config.VNPayConfig;
+import com.utopia.pmc.data.constants.others.Validation;
 import com.utopia.pmc.data.constants.statuses.TransactionStatus;
 import com.utopia.pmc.data.dto.request.payment.PaymentRequest;
 import com.utopia.pmc.data.dto.response.payment.PaymentResponse;
@@ -98,13 +102,15 @@ public class PaymentServiceImpl implements PaymentService {
         String vpn_ReturnUrl = "https://pmc-api.azurewebsites.net/" + "transaction_page";
         vnp_Params.put("vnp_ReturnUrl", vpn_ReturnUrl);
 
-        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-        String vnp_CreateDate = formatter.format(cld.getTime());
+        LocalDateTime currentTime = LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
+       
+        DateTimeFormatter localDateFormat = DateTimeFormatter.ofPattern(Validation.DATE_TIME_FORMAT);
+        
+
+        String vnp_CreateDate = currentTime.format(localDateFormat);
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
 
-        cld.add(Calendar.MINUTE, 15);
-        String vnp_ExpireDate = formatter.format(cld.getTime());
+        String vnp_ExpireDate = currentTime.plusMinutes(15l).format(localDateFormat);
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
         List fieldNames = new ArrayList(vnp_Params.keySet());
@@ -135,8 +141,8 @@ public class PaymentServiceImpl implements PaymentService {
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = VNPayConfig.vnp_PayUrl + "?" + queryUrl;
         // set transaction
-        LocalDate createdDate = convertStringToLocalDateTime.convertStringToLocalDate(vnp_CreateDate);
-        LocalDate expireDate = convertStringToLocalDateTime.convertStringToLocalDate(vnp_ExpireDate);
+        LocalDateTime createdDate = convertStringToLocalDateTime.convertStringToLocalDateTime(vnp_CreateDate);
+        LocalDateTime expireDate = convertStringToLocalDateTime.convertStringToLocalDateTime(vnp_ExpireDate);
 
         Transaction transaction = Transaction
                 .builder()

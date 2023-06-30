@@ -2,6 +2,7 @@ package com.utopia.pmc.utils;
 
 import java.nio.Buffer;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
@@ -17,6 +18,22 @@ public class ConvertStringToLocalDateTime {
         return LocalTime.parse(time, formatter);
     }
 
+    public LocalDateTime convertStringToLocalDateTime(String date) {
+        String year = date.substring(0, 4);
+        String month = date.substring(4, 6);
+        String day = date.substring(6, 8);
+        String hour = date.substring(8, 10);
+        String minues = date.substring(10, 12);
+        String second = date.substring(12, 14);
+        return LocalDateTime.of(
+                Integer.parseInt(year),
+                Integer.parseInt(month),
+                Integer.parseInt(day),
+                Integer.parseInt(hour),
+                Integer.parseInt(minues),
+                Integer.parseInt(second));
+
+    }
     public LocalDate convertStringToLocalDate(String date) {
         String year = date.substring(0, 4);
         String month = date.substring(4, 6);
@@ -25,5 +42,6 @@ public class ConvertStringToLocalDateTime {
                 Integer.parseInt(year),
                 Integer.parseInt(month),
                 Integer.parseInt(day));
+
     }
 }
