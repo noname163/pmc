@@ -43,6 +43,8 @@ public class User {
     private String email;
     @Column(name ="phone")
     private String phone;
+    @Column(name ="image_url")
+    private String image;
     @Column(name ="age")
     private Integer age;
     @Column(name = "gender")
