@@ -30,4 +30,5 @@ public class UserEditInforRequest {
     private Integer age;
     @NotNull(message = "Gender is require")
     private Gender gender;
+    private String image;
 }

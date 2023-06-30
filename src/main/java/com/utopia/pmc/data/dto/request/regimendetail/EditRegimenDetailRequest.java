@@ -26,6 +26,8 @@ public class EditRegimenDetailRequest {
     
     @NotBlank(message = "Medicine image is required")
     private String medicineUrl;
+
+    private String medicineNote;
     
     @JsonFormat(pattern = Validation.TIME_FORMAT)
     private String firstTime;
