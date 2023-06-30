@@ -104,6 +104,7 @@ public class fakedata {
                                                 .takenTime(0)
                                                 .missedTime(0)
                                                 .period(Period.DAY)
+                                                .isAlert(true)
                                                 .doseRegiment(7)
                                                 .build();
                                 RegimenDetail regimenDetail = RegimenDetail

@@ -32,9 +32,11 @@ public class RegimenFunction {
         }
         return null;
     }
-    public LocalTime determineTakenTime(LocalTime firstTime, LocalTime secondTime, LocalTime thirdTime, LocalTime fourthTime) {
+
+    public LocalTime determineTakenTime(LocalTime firstTime, LocalTime secondTime, LocalTime thirdTime,
+            LocalTime fourthTime) {
         LocalTime currentTime = LocalTime.now();
-        
+
         if (firstTime != null && currentTime.compareTo(firstTime.plusMinutes(5)) <= 0) {
             return firstTime;
         }
@@ -50,22 +52,35 @@ public class RegimenFunction {
         return null;
     }
 
-    public Integer calculateMedicineQuantity(Integer takenQuantity, Integer doseRegimen, Period period) {
+    public int calculateMedicineQuantity(int takenQuantity, int takenTimePerDay, int doseRegimen, Period period) {
         switch (period) {
             case DAY:
-                return takenQuantity * doseRegimen;
+                return (takenQuantity * takenTimePerDay) * doseRegimen;
             case WEEK:
-                return takenQuantity * (doseRegimen * 7);
+                return (takenQuantity * takenTimePerDay) * (doseRegimen * 7);
             case MONTH:
-                return takenQuantity * (doseRegimen * LocalDate.now().getDayOfMonth());
+                return (takenQuantity * takenTimePerDay) * (doseRegimen * LocalDate.now().getDayOfMonth());
             default:
-                return takenQuantity * (doseRegimen * LocalDate.now().getDayOfYear());
+                return (takenQuantity * takenTimePerDay) * (doseRegimen * LocalDate.now().getDayOfYear());
 
         }
 
     }
 
-    public LocalTime convertStringToLocalTime(String time){
+    public int calculateTakenTimePerDay(RegimenDetail regimenDetail) {
+        int result = 0;
+        if (regimenDetail.getFirstTime() != null)
+            result++;
+        if (regimenDetail.getSecondTime() != null)
+            result++;
+        if (regimenDetail.getThirdTime() != null)
+            result++;
+        if (regimenDetail.getFourthTime() != null)
+            result++;
+        return result;
+    }
+
+    public LocalTime convertStringToLocalTime(String time) {
         return convertStringToLocalTime.convertStringToLocalTime(Validation.TIME_FORMAT, time);
     }
 

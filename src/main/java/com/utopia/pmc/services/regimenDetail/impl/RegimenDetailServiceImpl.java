@@ -92,7 +92,10 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
             if (regimenFunction.determineTakenTime(regimentDetail) != null) {
                 takenTime = regimenFunction.determineTakenTime(regimentDetail);
             }
-            Integer totalMedicine = regimenFunction.calculateMedicineQuantity(takenQuantity, regiment.getDoseRegiment(),
+            int takenTimePerDay = regimenFunction.calculateTakenTimePerDay(regimentDetail);
+            Integer totalMedicine = regimenFunction.calculateMedicineQuantity(takenQuantity,
+                    takenTimePerDay,
+                    regiment.getDoseRegiment(),
                     regiment.getPeriod());
 
             regimentDetail.setNumberOfMedicine(totalMedicine);
@@ -225,7 +228,10 @@ public class RegimenDetailServiceImpl implements RegimenDetailService {
 
         for (RegimenDetail regimenDetail : regimenDetails) {
             Integer takenQuantity = regimenDetail.getTakenQuantity();
-            Integer totalMedicine = regimenFunction.calculateMedicineQuantity(takenQuantity, regimen.getDoseRegiment(),
+            int takenTimePerDay = regimenFunction.calculateTakenTimePerDay(regimenDetail);
+            Integer totalMedicine = regimenFunction.calculateMedicineQuantity(takenQuantity,
+                    takenTimePerDay,
+                    regimen.getDoseRegiment(),
                     regimen.getPeriod());
             regimenDetail.setRegimen(regimen);
             regimenDetail.setNumberOfMedicine(totalMedicine);

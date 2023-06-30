@@ -56,6 +56,7 @@ public class RegimenServiceImpl implements RegimenService {
         if (regimentRequest.getStartNow() != true && regimentRequest.getStartDate() == null) {
             throw new BadRequestException(message.badValue("Start date"));
         }
+        regiment.setIsAlert(true);
         regiment.setUser(user);
         regiment.setStatus(status);
         regiment.setTakenTime(0);
@@ -146,6 +147,19 @@ public class RegimenServiceImpl implements RegimenService {
                 .orElseThrow(() -> new BadRequestException(
                         message.objectNotFoundByIdMessage("Regimen", regimenId)));
 
+    }
+
+    @Override
+    public void setIsAlert(Long regimenId) {
+        Regimen regimen = getRegimenById(regimenId);
+
+        User currentUser = regimen.getUser();
+        securityContextService.validateCurrentUser(currentUser);
+
+        Boolean currentAlert = regimen.getIsAlert();
+        regimen.setIsAlert(!currentAlert);
+
+        regimentRepository.save(regimen);
     }
 
 }
