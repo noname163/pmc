@@ -24,4 +24,5 @@ public class RegimenResponse {
     private Integer takenTime;
     private Integer missedTime;
     private Integer totalTypeMedicine;
+    private Boolean isAlert;
 }

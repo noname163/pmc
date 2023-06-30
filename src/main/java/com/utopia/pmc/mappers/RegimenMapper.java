@@ -45,6 +45,7 @@ public class RegimenMapper {
                 .startDate(regiment.getStartDate() == null ? null : regiment.getStartDate())
                 .takenTime(regiment.getTakenTime())
                 .missedTime(regiment.getMissedTime())
+                .isAlert(regiment.getIsAlert())
                 .totalTypeMedicine(regiment.getRegimentDetails().size())
                 .build();
     }
