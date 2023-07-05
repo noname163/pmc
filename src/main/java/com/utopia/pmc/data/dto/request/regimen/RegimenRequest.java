@@ -38,7 +38,6 @@ public class RegimenRequest {
 
     private LocalDate startDate;
 
-    @NotBlank(message = "Device token is required")
     private String deviceToken;
 
     @NotNull(message = "Regimen detail is required")
