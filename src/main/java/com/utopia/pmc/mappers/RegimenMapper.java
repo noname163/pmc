@@ -19,7 +19,7 @@ public class RegimenMapper {
                 .image(regimentRequest.getImage())
                 .doseRegiment(regimentRequest.getDoseRegiment())
                 .startDate(regimentRequest.getStartDate())
-                .deviceToken(regimentRequest.getDeviceToken())
+                .deviceToken(regimentRequest.getDeviceToken() != null ? regimentRequest.getDeviceToken() : "empty")
                 .period(regimentRequest.getPeriod())
                 .build();
     }
