@@ -5,4 +5,5 @@ import com.utopia.pmc.data.dto.response.user.UserLoginResponse;
 
 public interface AuthenticationService {
     public UserLoginResponse login(UserLoginRequest userLoginRequest);
+    public UserLoginResponse refreshToken(String refreshToken);
 }
