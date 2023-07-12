@@ -19,6 +19,8 @@ public class JwtTokenUtil {
     @Autowired
     private EnvironmentVariable environmentVariable;
 
+    
+
     private String doGenerateToken(Map<String, Object> claims, String subject, Integer expriesTime) {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(

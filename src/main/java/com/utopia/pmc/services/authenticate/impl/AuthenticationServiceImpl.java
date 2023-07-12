@@ -15,6 +15,9 @@ import com.utopia.pmc.exceptions.message.Message;
 import com.utopia.pmc.services.authenticate.AuthenticationService;
 import com.utopia.pmc.utils.JwtTokenUtil;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
     @Autowired
@@ -40,6 +43,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String refreshToken = jwtTokenUtil.generateJwtToken(user, 10000);
         return UserLoginResponse.builder().accessToken(accessToken).refreshToken(refreshToken).build();
 
+    }
+
+    @Override
+    public UserLoginResponse refreshToken(String refreshTokenRequest) {
+        Jws<Claims> listClaims = jwtTokenUtil.getJwsClaims(refreshTokenRequest);
+        String phone = jwtTokenUtil.getPhoneFromClaims(listClaims.getBody());
+
+        Optional<User> userOtp = userRepository.findByPhone(phone);
+        if (userOtp.isEmpty()) {
+            throw new BadRequestException(message.objectNotFoundByIdMessage("User", phone));
+        }
+        User user = userOtp.get();
+
+        String accessToken = jwtTokenUtil.generateJwtToken(user, 1000);
+        String refreshToken = jwtTokenUtil.generateJwtToken(user, 10000);
+        
+        return UserLoginResponse.builder().accessToken(accessToken).refreshToken(refreshToken).build();
     }
 
 }
