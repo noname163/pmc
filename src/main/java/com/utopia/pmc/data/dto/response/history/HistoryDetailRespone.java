@@ -11,5 +11,6 @@ public class HistoryDetailRespone {
     private Long regimenDetailId;
     private String regimenImage;
     private String medicineName;
+    private String medicineForm;
     private Integer takenQuantity;
 }
