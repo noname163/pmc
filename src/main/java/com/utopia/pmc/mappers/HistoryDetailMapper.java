@@ -16,6 +16,7 @@ public class HistoryDetailMapper {
                 .medicineName(historyDetail.getRegimenDetail().getMedicineName())
                 .takenQuantity(historyDetail.getRegimenDetail().getTakenQuantity())
                 .regimenImage(historyDetail.getRegimenDetail().getMedicineUrl())
+                .medicineForm(historyDetail.getRegimenDetail().getMedicineForm())
                 .regimenDetailId(historyDetail.getRegimenDetail().getId())
                 .build();
     }
