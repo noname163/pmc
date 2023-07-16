@@ -101,7 +101,8 @@ public class PaymentServiceImpl implements PaymentService {
         }
         String vpn_ReturnUrl = "https://pmc-api.azurewebsites.net/" + "transaction_page";
         vnp_Params.put("vnp_ReturnUrl", vpn_ReturnUrl);
-
+        String vnp_IpAddr = "127.0.0.1";
+        vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
         LocalDateTime currentTime = LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
        
         DateTimeFormatter localDateFormat = DateTimeFormatter.ofPattern(Validation.DATE_TIME_FORMAT);
